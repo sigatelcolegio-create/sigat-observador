@@ -14,1945 +14,1071 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
 <style>
-/* ═══════════════════════════════════════════════════════
-   SIGAT OBSERVADOR DIGITAL — PWA
-   Estilo: Institucional moderno, alto contraste, mobile-first
-   ═══════════════════════════════════════════════════════ */
-
 :root {
-  --bg: #f0f2f5;
-  --surface: #ffffff;
-  --primary: #0d1b3e;
-  --primary-light: #1a3068;
-  --accent: #2d6cdf;
-  --accent-light: #e8f0fe;
-  --success: #1a8a4a;
-  --success-bg: #e6f7ed;
-  --warning: #c47a10;
-  --warning-bg: #fff6e5;
-  --danger: #c62828;
-  --danger-bg: #fce8e8;
-  --text: #1a1a2e;
-  --text-secondary: #5f6b7a;
-  --border: #d8dde4;
-  --radius: 12px;
-  --radius-sm: 8px;
-  --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 4px 12px rgba(0,0,0,0.04);
-  --shadow-lg: 0 4px 16px rgba(0,0,0,0.12);
-  --font: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-  --mono: 'JetBrains Mono', monospace;
-  --safe-top: env(safe-area-inset-top, 0px);
-  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --bg:#f0f2f5;--surface:#fff;--primary:#0d1b3e;--primary-light:#1a3068;
+  --accent:#2d6cdf;--accent-light:#e8f0fe;--success:#1a8a4a;--success-bg:#e6f7ed;
+  --warning:#c47a10;--warning-bg:#fff6e5;--danger:#c62828;--danger-bg:#fce8e8;
+  --text:#1a1a2e;--text-sec:#5f6b7a;--border:#d8dde4;--radius:12px;--radius-sm:8px;
+  --shadow:0 1px 3px rgba(0,0,0,.08),0 4px 12px rgba(0,0,0,.04);
+  --font:'DM Sans',-apple-system,BlinkMacSystemFont,sans-serif;
+  --mono:'JetBrains Mono',monospace;
+  --safe-top:env(safe-area-inset-top,0px);--safe-bottom:env(safe-area-inset-bottom,0px);
 }
+*{margin:0;padding:0;box-sizing:border-box}
+html{font-size:16px;height:100%;-webkit-text-size-adjust:100%}
+body{font-family:var(--font);background:var(--bg);color:var(--text);height:100%;overflow:hidden;-webkit-font-smoothing:antialiased}
 
-* { margin: 0; padding: 0; box-sizing: border-box; }
-html { font-size: 16px; height: 100%; -webkit-text-size-adjust: 100%; }
-body {
-  font-family: var(--font);
-  background: var(--bg);
-  color: var(--text);
-  height: 100%;
-  overflow: hidden;
-  -webkit-font-smoothing: antialiased;
-}
+#app{height:100%;display:flex;flex-direction:column}
+.screen{display:none;flex-direction:column;height:100%;opacity:0;transition:opacity .2s}
+.screen.active{display:flex;opacity:1}
 
-/* ─── APP SHELL ──── */
-#app {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-}
+.header{background:var(--primary);color:#fff;padding:calc(var(--safe-top)+12px) 16px 12px;display:flex;align-items:center;gap:12px;flex-shrink:0;z-index:10;position:relative}
+.header h1{font-size:1.05rem;font-weight:600;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.header-sub{font-size:.72rem;opacity:.7;font-weight:400}
+.btn-back{background:rgba(255,255,255,.1);border:none;color:#fff;width:36px;height:36px;border-radius:50%;font-size:1.2rem;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.btn-back:active{background:rgba(255,255,255,.2)}
+.header-right{display:flex;gap:8px;align-items:center}
 
-.screen {
-  display: none;
-  flex-direction: column;
-  height: 100%;
-  opacity: 0;
-  transition: opacity 0.2s ease;
-}
-.screen.active {
-  display: flex;
-  opacity: 1;
-}
+.conn-badge{position:fixed;top:calc(var(--safe-top)+8px);right:12px;z-index:100;font-size:.62rem;font-weight:600;padding:3px 8px;border-radius:20px;letter-spacing:.3px;text-transform:uppercase;pointer-events:none;transition:all .3s}
+.conn-badge.online{background:var(--success-bg);color:var(--success)}
+.conn-badge.offline{background:var(--danger-bg);color:var(--danger)}
 
-/* ─── HEADER ──── */
-.header {
-  background: var(--primary);
-  color: white;
-  padding: calc(var(--safe-top) + 12px) 16px 12px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex-shrink: 0;
-  position: relative;
-  z-index: 10;
-}
-.header h1 {
-  font-size: 1.1rem;
-  font-weight: 600;
-  flex: 1;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.header-sub {
-  font-size: 0.75rem;
-  opacity: 0.7;
-  font-weight: 400;
-}
-.btn-back {
-  background: rgba(255,255,255,0.1);
-  border: none;
-  color: white;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  font-size: 1.2rem;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-.btn-back:active { background: rgba(255,255,255,0.2); }
+.sync-bar{background:var(--warning-bg);color:var(--warning);font-size:.8rem;font-weight:500;padding:8px 16px;display:none;align-items:center;gap:8px;flex-shrink:0;cursor:pointer}
+.sync-bar.visible{display:flex}
+@keyframes spin{to{transform:rotate(360deg)}}
+.sync-spinner{width:14px;height:14px;border:2px solid var(--warning);border-top-color:transparent;border-radius:50%;animation:spin .8s linear infinite}
 
-/* ─── CONNECTION BADGE ──── */
-.conn-badge {
-  position: fixed;
-  top: calc(var(--safe-top) + 8px);
-  right: 12px;
-  z-index: 100;
-  font-size: 0.65rem;
-  font-weight: 600;
-  padding: 3px 8px;
-  border-radius: 20px;
-  letter-spacing: 0.3px;
-  text-transform: uppercase;
-  pointer-events: none;
-  transition: all 0.3s ease;
-}
-.conn-badge.online { background: var(--success-bg); color: var(--success); }
-.conn-badge.offline { background: var(--danger-bg); color: var(--danger); }
+.scroll-area{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:16px;padding-bottom:calc(var(--safe-bottom)+24px)}
 
-/* ─── SYNC BAR ──── */
-.sync-bar {
-  background: var(--warning-bg);
-  color: var(--warning);
-  font-size: 0.8rem;
-  font-weight: 500;
-  padding: 8px 16px;
-  display: none;
-  align-items: center;
-  gap: 8px;
-  flex-shrink: 0;
-  cursor: pointer;
-}
-.sync-bar.visible { display: flex; }
-.sync-bar .sync-spinner {
-  width: 14px; height: 14px;
-  border: 2px solid var(--warning);
-  border-top-color: transparent;
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
-}
-@keyframes spin { to { transform: rotate(360deg); } }
+.card{background:var(--surface);border-radius:var(--radius);padding:16px;margin-bottom:12px;box-shadow:var(--shadow)}
+.card-title{font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--text-sec);margin-bottom:10px}
 
-/* ─── SCROLL AREA ──── */
-.scroll-area {
-  flex: 1;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-  padding: 16px;
-  padding-bottom: calc(var(--safe-bottom) + 24px);
-}
+.btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:14px 20px;border:none;border-radius:var(--radius);font-family:var(--font);font-size:1rem;font-weight:600;cursor:pointer;transition:transform .1s,opacity .15s;-webkit-tap-highlight-color:transparent}
+.btn:active{transform:scale(.98)}.btn:disabled{opacity:.5;pointer-events:none}
+.btn-primary{background:var(--accent);color:#fff}
+.btn-primary:active{background:#2358b8}
+.btn-success{background:var(--success);color:#fff}
+.btn-danger{background:var(--danger);color:#fff}
+.btn-outline{background:transparent;border:1.5px solid var(--border);color:var(--text)}
+.btn-sm{padding:10px 14px;font-size:.88rem}
 
-/* ─── CARDS ──── */
-.card {
-  background: var(--surface);
-  border-radius: var(--radius);
-  padding: 16px;
-  margin-bottom: 12px;
-  box-shadow: var(--shadow);
-}
-.card-title {
-  font-size: 0.75rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  color: var(--text-secondary);
-  margin-bottom: 10px;
-}
+.btn-large{background:var(--surface);border:1.5px solid var(--border);color:var(--text);padding:18px 20px;border-radius:var(--radius);font-size:1rem;text-align:left;justify-content:flex-start;margin-bottom:10px}
+.btn-large:active{background:var(--accent-light);border-color:var(--accent)}
+.btn-large .btn-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0}
+.btn-large .btn-label{font-weight:600}.btn-large .btn-desc{font-size:.8rem;color:var(--text-sec);font-weight:400;margin-top:2px}
 
-/* ─── BUTTONS ──── */
-.btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  width: 100%;
-  padding: 14px 20px;
-  border: none;
-  border-radius: var(--radius);
-  font-family: var(--font);
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: transform 0.1s, opacity 0.15s;
-  -webkit-tap-highlight-color: transparent;
-}
-.btn:active { transform: scale(0.98); }
-.btn:disabled { opacity: 0.5; pointer-events: none; }
+.form-group{margin-bottom:14px}
+.form-label{display:block;font-size:.8rem;font-weight:600;color:var(--text-sec);margin-bottom:6px}
+.form-label.required::after{content:' *';color:var(--danger)}
+input[type="text"],input[type="password"],input[type="date"],input[type="time"],select,textarea{width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:var(--font);font-size:1rem;color:var(--text);background:var(--surface);transition:border-color .15s;-webkit-appearance:none;appearance:none}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(45,108,223,.12)}
+select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M2 4l4 4 4-4' fill='none' stroke='%235f6b7a' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:36px}
+textarea{resize:vertical;min-height:80px;line-height:1.5}
 
-.btn-primary { background: var(--accent); color: white; }
-.btn-primary:active { background: #2358b8; }
+.search-box{position:relative;margin-bottom:14px}
+.search-box input{padding-left:40px}
+.search-box::before{content:'🔍';position:absolute;left:13px;top:50%;transform:translateY(-50%);font-size:.9rem}
 
-.btn-large {
-  background: var(--surface);
-  border: 1.5px solid var(--border);
-  color: var(--text);
-  padding: 18px 20px;
-  border-radius: var(--radius);
-  font-size: 1rem;
-  text-align: left;
-  justify-content: flex-start;
-  margin-bottom: 10px;
-}
-.btn-large:active { background: var(--accent-light); border-color: var(--accent); }
-.btn-large .btn-icon {
-  width: 40px; height: 40px;
-  border-radius: 10px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 1.3rem;
-  flex-shrink: 0;
-}
-.btn-large .btn-label { font-weight: 600; }
-.btn-large .btn-desc { font-size: 0.8rem; color: var(--text-secondary); font-weight: 400; margin-top: 2px; }
+.radio-pills{display:flex;gap:8px;flex-wrap:wrap}
+.radio-pill{flex:1;min-width:0}
+.radio-pill input{display:none}
+.radio-pill label{display:block;text-align:center;padding:10px 8px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:.82rem;font-weight:500;cursor:pointer;transition:all .15s;white-space:nowrap}
+.radio-pill input:checked+label{background:var(--accent);color:#fff;border-color:var(--accent)}
+.radio-pill input:checked+label.pill-grave{background:var(--warning);border-color:var(--warning)}
+.radio-pill input:checked+label.pill-gravisima{background:var(--danger);border-color:var(--danger)}
+.radio-pill input:checked+label.pill-logro{background:var(--success);border-color:var(--success)}
 
-.btn-danger { background: var(--danger); color: white; }
-.btn-outline {
-  background: transparent;
-  border: 1.5px solid var(--border);
-  color: var(--text);
-}
+/* Tabs */
+.tabs{display:flex;border-bottom:2px solid var(--border);margin-bottom:16px;flex-shrink:0;padding:0 16px;background:var(--surface)}
+.tab-btn{flex:1;padding:12px 8px;border:none;background:none;font-family:var(--font);font-size:.82rem;font-weight:600;color:var(--text-sec);cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;transition:all .15s}
+.tab-btn.active{color:var(--accent);border-bottom-color:var(--accent)}
 
-/* ─── FORMS ──── */
-.form-group { margin-bottom: 14px; }
-.form-label {
-  display: block;
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: var(--text-secondary);
-  margin-bottom: 6px;
-}
-.form-label.required::after { content: ' *'; color: var(--danger); }
+/* Student list items */
+.student-item{display:flex;align-items:center;gap:12px;padding:14px;background:var(--surface);border-radius:var(--radius-sm);margin-bottom:8px;cursor:pointer;border:1.5px solid transparent;transition:border-color .15s}
+.student-item:active{border-color:var(--accent);background:var(--accent-light)}
+.student-avatar{width:40px;height:40px;border-radius:50%;background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem;flex-shrink:0}
+.student-name{font-weight:600;font-size:.95rem}
+.student-meta{font-size:.78rem;color:var(--text-sec);margin-top:2px}
 
-input[type="text"], input[type="password"], input[type="date"], input[type="time"],
-select, textarea {
-  width: 100%;
-  padding: 12px 14px;
-  border: 1.5px solid var(--border);
-  border-radius: var(--radius-sm);
-  font-family: var(--font);
-  font-size: 1rem;
-  color: var(--text);
-  background: var(--surface);
-  transition: border-color 0.15s;
-  -webkit-appearance: none;
-  appearance: none;
-}
-input:focus, select:focus, textarea:focus {
-  outline: none;
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(45,108,223,0.12);
-}
-select {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M2 4l4 4 4-4' fill='none' stroke='%235f6b7a' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 14px center;
-  padding-right: 36px;
-}
-textarea { resize: vertical; min-height: 80px; line-height: 1.5; }
+/* Faults list */
+.fault-item{padding:10px 14px;border:1px solid var(--border);border-radius:var(--radius-sm);margin-bottom:6px;cursor:pointer;font-size:.85rem;line-height:1.4;transition:all .15s}
+.fault-item:active,.fault-item.selected{border-color:var(--accent);background:var(--accent-light)}
+.fault-badge{display:inline-block;font-size:.65rem;font-weight:700;padding:2px 6px;border-radius:4px;margin-right:6px;text-transform:uppercase;vertical-align:middle}
+.fault-badge.leve{background:#e3f2fd;color:#0d47a1}
+.fault-badge.grave{background:var(--warning-bg);color:var(--warning)}
+.fault-badge.gravisima{background:var(--danger-bg);color:var(--danger)}
+.faults-container{max-height:200px;overflow-y:auto;border:1px solid var(--border);border-radius:var(--radius-sm);padding:8px}
+.cat-filter{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.cat-btn{padding:6px 12px;border:1px solid var(--border);border-radius:20px;background:var(--surface);font-size:.75rem;font-weight:600;cursor:pointer;font-family:var(--font)}
+.cat-btn.active{background:var(--primary);color:#fff;border-color:var(--primary)}
 
-/* ─── SEARCH ──── */
-.search-box {
-  position: relative;
-  margin-bottom: 14px;
-}
-.search-box input {
-  padding-left: 40px;
-}
-.search-box::before {
-  content: '🔍';
-  position: absolute;
-  left: 13px;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 0.9rem;
-}
+/* Observation history */
+.obs-item{padding:14px;background:var(--surface);border-radius:var(--radius-sm);margin-bottom:8px;border-left:4px solid var(--border)}
+.obs-item.tipo-i{border-left-color:var(--accent)}.obs-item.tipo-ii{border-left-color:var(--warning)}.obs-item.tipo-iii{border-left-color:var(--danger)}.obs-item.logro{border-left-color:var(--success)}
+.obs-item.pendiente{border-left-style:dashed}
+.obs-date{font-size:.72rem;color:var(--text-sec);font-family:var(--mono)}
+.obs-type{display:inline-block;font-size:.65rem;font-weight:600;padding:2px 7px;border-radius:4px;margin:4px 4px 4px 0;text-transform:uppercase}
+.obs-type.tipo-i{background:var(--accent-light);color:var(--accent)}.obs-type.tipo-ii{background:var(--warning-bg);color:var(--warning)}.obs-type.tipo-iii{background:var(--danger-bg);color:var(--danger)}.obs-type.logro{background:var(--success-bg);color:var(--success)}
+.obs-cat{background:#f0f2f5;color:var(--text-sec)}
+.obs-desc{font-size:.88rem;margin-top:6px;line-height:1.45}
+.obs-teacher{font-size:.72rem;color:var(--text-sec);margin-top:6px}
+.obs-pending{font-size:.65rem;background:#e0e0e0;color:#666;padding:2px 7px;border-radius:4px;font-weight:600}
 
-/* ─── RADIO PILLS ──── */
-.radio-pills {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-.radio-pill {
-  flex: 1;
-  min-width: 0;
-}
-.radio-pill input { display: none; }
-.radio-pill label {
-  display: block;
-  text-align: center;
-  padding: 10px 8px;
-  border: 1.5px solid var(--border);
-  border-radius: var(--radius-sm);
-  font-size: 0.85rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.15s;
-  white-space: nowrap;
-}
-.radio-pill input:checked + label {
-  background: var(--accent);
-  color: white;
-  border-color: var(--accent);
-}
-.radio-pill input:checked + label.pill-grave {
-  background: var(--warning);
-  border-color: var(--warning);
-}
-.radio-pill input:checked + label.pill-gravisima {
-  background: var(--danger);
-  border-color: var(--danger);
-}
+/* Score */
+.score-display{text-align:center;padding:12px}
+.score-number{font-size:2.5rem;font-weight:700;font-family:var(--mono);line-height:1}
+.score-number.superior{color:var(--success)}.score-number.alto{color:var(--accent)}.score-number.basico{color:var(--warning)}.score-number.bajo{color:var(--danger)}
+.score-label{font-size:.78rem;font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-top:4px}
 
-/* ─── STUDENT LIST ITEMS ──── */
-.student-item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 14px;
-  background: var(--surface);
-  border-radius: var(--radius-sm);
-  margin-bottom: 8px;
-  cursor: pointer;
-  border: 1.5px solid transparent;
-  transition: border-color 0.15s;
-}
-.student-item:active { border-color: var(--accent); background: var(--accent-light); }
-.student-avatar {
-  width: 40px; height: 40px;
-  border-radius: 50%;
-  background: var(--primary);
-  color: white;
-  display: flex; align-items: center; justify-content: center;
-  font-weight: 700;
-  font-size: 0.85rem;
-  flex-shrink: 0;
-}
-.student-name { font-weight: 600; font-size: 0.95rem; }
-.student-meta { font-size: 0.78rem; color: var(--text-secondary); margin-top: 2px; }
+/* Info box */
+.info-box{padding:12px 14px;border-radius:var(--radius-sm);font-size:.82rem;line-height:1.5;margin-bottom:12px}
+.info-box.blue{background:var(--accent-light);color:#0d47a1;border-left:4px solid var(--accent)}
+.info-box.yellow{background:var(--warning-bg);color:var(--warning);border-left:4px solid var(--warning)}
+.info-box.red{background:var(--danger-bg);color:var(--danger);border-left:4px solid var(--danger)}
+.info-box.green{background:var(--success-bg);color:var(--success);border-left:4px solid var(--success)}
 
-/* ─── OBSERVATION HISTORY ITEM ──── */
-.obs-item {
-  padding: 14px;
-  background: var(--surface);
-  border-radius: var(--radius-sm);
-  margin-bottom: 8px;
-  border-left: 4px solid var(--border);
-}
-.obs-item.tipo-i { border-left-color: var(--accent); }
-.obs-item.tipo-ii { border-left-color: var(--warning); }
-.obs-item.tipo-iii { border-left-color: var(--danger); }
-.obs-item.pendiente { border-left-color: #9e9e9e; border-left-style: dashed; }
-.obs-date { font-size: 0.75rem; color: var(--text-secondary); font-family: var(--mono); }
-.obs-type {
-  display: inline-block;
-  font-size: 0.7rem;
-  font-weight: 600;
-  padding: 2px 7px;
-  border-radius: 4px;
-  margin: 4px 4px 4px 0;
-  text-transform: uppercase;
-}
-.obs-type.tipo-i { background: var(--accent-light); color: var(--accent); }
-.obs-type.tipo-ii { background: var(--warning-bg); color: var(--warning); }
-.obs-type.tipo-iii { background: var(--danger-bg); color: var(--danger); }
-.obs-cat { background: #f0f2f5; color: var(--text-secondary); }
-.obs-desc { font-size: 0.88rem; margin-top: 6px; line-height: 1.45; }
-.obs-teacher { font-size: 0.75rem; color: var(--text-secondary); margin-top: 6px; }
-.obs-pending-badge {
-  font-size: 0.7rem;
-  background: #e0e0e0;
-  color: #666;
-  padding: 2px 7px;
-  border-radius: 4px;
-  font-weight: 600;
-}
+/* Toast */
+.toast{position:fixed;bottom:calc(var(--safe-bottom)+20px);left:50%;transform:translateX(-50%) translateY(100px);background:var(--primary);color:#fff;padding:12px 24px;border-radius:30px;font-size:.88rem;font-weight:500;box-shadow:0 4px 16px rgba(0,0,0,.12);z-index:200;transition:transform .3s;white-space:nowrap;max-width:90%;text-align:center}
+.toast.visible{transform:translateX(-50%) translateY(0)}
+.toast.success{background:var(--success)}.toast.error{background:var(--danger)}
 
-/* ─── BEHAVIOR SCORE ──── */
-.score-display {
-  text-align: center;
-  padding: 16px;
-}
-.score-number {
-  font-size: 2.5rem;
-  font-weight: 700;
-  font-family: var(--mono);
-  line-height: 1;
-}
-.score-number.superior { color: var(--success); }
-.score-number.alto { color: var(--accent); }
-.score-number.basico { color: var(--warning); }
-.score-number.bajo { color: var(--danger); }
-.score-label {
-  font-size: 0.8rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-top: 4px;
-}
+/* Loading */
+.loading-overlay{position:fixed;inset:0;background:rgba(255,255,255,.92);display:none;flex-direction:column;align-items:center;justify-content:center;z-index:150;gap:16px}
+.loading-overlay.visible{display:flex}
+.loading-spinner{width:40px;height:40px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite}
+.loading-text{font-size:.9rem;color:var(--text-sec);font-weight:500}
 
-/* ─── TOAST NOTIFICATION ──── */
-.toast {
-  position: fixed;
-  bottom: calc(var(--safe-bottom) + 20px);
-  left: 50%;
-  transform: translateX(-50%) translateY(100px);
-  background: var(--primary);
-  color: white;
-  padding: 12px 24px;
-  border-radius: 30px;
-  font-size: 0.88rem;
-  font-weight: 500;
-  box-shadow: var(--shadow-lg);
-  z-index: 200;
-  transition: transform 0.3s ease;
-  white-space: nowrap;
-  max-width: 90%;
-  text-align: center;
-}
-.toast.visible { transform: translateX(-50%) translateY(0); }
-.toast.success { background: var(--success); }
-.toast.error { background: var(--danger); }
+/* Modal */
+.modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.4);display:none;align-items:flex-end;justify-content:center;z-index:160;padding:0}
+.modal-backdrop.visible{display:flex}
+.modal-sheet{background:var(--surface);border-radius:var(--radius) var(--radius) 0 0;padding:24px;width:100%;max-height:85vh;overflow-y:auto}
+.modal-sheet h3{font-size:1.1rem;margin-bottom:12px}
+.modal-buttons{display:flex;gap:10px;margin-top:16px}
+.modal-buttons .btn{flex:1}
 
-/* ─── LOADING OVERLAY ──── */
-.loading-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(255,255,255,0.92);
-  display: none;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  z-index: 150;
-  gap: 16px;
-}
-.loading-overlay.visible { display: flex; }
-.loading-spinner {
-  width: 40px; height: 40px;
-  border: 3px solid var(--border);
-  border-top-color: var(--accent);
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
-}
-.loading-text { font-size: 0.9rem; color: var(--text-secondary); font-weight: 500; }
+/* Login */
+.login-container{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100%;padding:32px 24px}
+.login-logo{font-size:2.8rem;margin-bottom:8px}
+.login-title{font-size:1.5rem;font-weight:700;color:var(--primary);text-align:center}
+.login-subtitle{font-size:.85rem;color:var(--text-sec);margin-top:4px;margin-bottom:28px;text-align:center}
+.login-form{width:100%;max-width:360px}
+.login-error{background:var(--danger-bg);color:var(--danger);padding:10px 14px;border-radius:var(--radius-sm);font-size:.85rem;margin-bottom:14px;display:none}
+.login-error.visible{display:block}
+.login-footer{margin-top:24px;font-size:.75rem;color:var(--text-sec);text-align:center}
 
-/* ─── LOGIN SCREEN ──── */
-.login-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 100%;
-  padding: 32px 24px;
-}
-.login-logo {
-  font-size: 2.8rem;
-  margin-bottom: 8px;
-}
-.login-title {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--primary);
-  text-align: center;
-}
-.login-subtitle {
-  font-size: 0.85rem;
-  color: var(--text-secondary);
-  margin-top: 4px;
-  margin-bottom: 28px;
-  text-align: center;
-}
-.login-form { width: 100%; max-width: 360px; }
-.login-error {
-  background: var(--danger-bg);
-  color: var(--danger);
-  padding: 10px 14px;
-  border-radius: var(--radius-sm);
-  font-size: 0.85rem;
-  margin-bottom: 14px;
-  display: none;
-}
-.login-error.visible { display: block; }
-.login-footer {
-  margin-top: 24px;
-  font-size: 0.75rem;
-  color: var(--text-secondary);
-  text-align: center;
-}
+/* Empty state */
+.empty-state{text-align:center;padding:40px 20px;color:var(--text-sec)}
+.empty-state .empty-icon{font-size:2.5rem;margin-bottom:12px}
 
-/* ─── EMPTY STATE ──── */
-.empty-state {
-  text-align: center;
-  padding: 40px 20px;
-  color: var(--text-secondary);
-}
-.empty-state .empty-icon { font-size: 2.5rem; margin-bottom: 12px; }
-.empty-state .empty-text { font-size: 0.9rem; }
+/* Protocol step */
+.protocol-step{padding:10px 14px;background:#f8f9fa;border-radius:8px;margin-bottom:6px;font-size:.85rem;line-height:1.5}
 
-/* ─── CONFIRMATION MODAL ──── */
-.modal-backdrop {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.4);
-  display: none;
-  align-items: flex-end;
-  justify-content: center;
-  z-index: 160;
-  padding: 16px;
-}
-.modal-backdrop.visible { display: flex; }
-.modal-sheet {
-  background: var(--surface);
-  border-radius: var(--radius) var(--radius) 0 0;
-  padding: 24px;
-  width: 100%;
-  max-width: 420px;
-  max-height: 80vh;
-  overflow-y: auto;
-}
-.modal-sheet h3 { font-size: 1.1rem; margin-bottom: 12px; }
-.modal-sheet p { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 20px; }
-.modal-buttons { display: flex; gap: 10px; }
-.modal-buttons .btn { flex: 1; }
+/* Utility */
+.mt-8{margin-top:8px}.mt-16{margin-top:16px}.mb-8{margin-bottom:8px}
+.gap-8{gap:8px}.text-center{text-align:center}.text-sm{font-size:.8rem}
+.text-sec{color:var(--text-sec)}.flex-row{display:flex;align-items:center}
+.flex-between{display:flex;justify-content:space-between;align-items:center}
+.hidden{display:none!important}
 
-/* ─── UTILITY ──── */
-.mt-8 { margin-top: 8px; }
-.mt-16 { margin-top: 16px; }
-.mb-8 { margin-bottom: 8px; }
-.gap-8 { gap: 8px; }
-.text-center { text-align: center; }
-.text-sm { font-size: 0.8rem; }
-.text-secondary { color: var(--text-secondary); }
-.flex-row { display: flex; align-items: center; }
-.flex-between { display: flex; justify-content: space-between; align-items: center; }
-.hidden { display: none !important; }
+/* Checkbox filters */
+.filter-checks{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+.filter-check{display:flex;align-items:center;gap:4px;font-size:.78rem;cursor:pointer;padding:4px 8px;border-radius:6px;border:1px solid var(--border);background:var(--surface)}
+.filter-check input{width:16px;height:16px;accent-color:var(--accent)}
+.filter-check.checked{background:var(--accent-light);border-color:var(--accent)}
 </style>
 </head>
 <body>
 
 <div id="app">
-  <!-- ═══════════ CONNECTION BADGE ═══════════ -->
   <div id="connBadge" class="conn-badge online">● En línea</div>
-
-  <!-- ═══════════ LOADING OVERLAY ═══════════ -->
-  <div id="loadingOverlay" class="loading-overlay">
-    <div class="loading-spinner"></div>
-    <div id="loadingText" class="loading-text">Cargando...</div>
-  </div>
-
-  <!-- ═══════════ TOAST ═══════════ -->
+  <div id="loadingOverlay" class="loading-overlay"><div class="loading-spinner"></div><div id="loadingText" class="loading-text">Cargando...</div></div>
   <div id="toast" class="toast"></div>
+  <div id="modalBackdrop" class="modal-backdrop"><div class="modal-sheet" id="modalSheet"></div></div>
 
-  <!-- ═══════════ CONFIRMATION MODAL ═══════════ -->
-  <div id="modalBackdrop" class="modal-backdrop">
-    <div class="modal-sheet">
-      <h3 id="modalTitle"></h3>
-      <p id="modalBody"></p>
-      <div class="modal-buttons">
-        <button class="btn btn-outline" onclick="cerrarModal()">Cancelar</button>
-        <button class="btn btn-primary" id="modalConfirmBtn" onclick="">Confirmar</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ═══════════════════════════════════════════
-       PANTALLA 1: LOGIN
-       ═══════════════════════════════════════════ -->
+  <!-- ═══ PANTALLA: LOGIN ═══ -->
   <div id="screenLogin" class="screen active">
     <div class="login-container">
       <div class="login-logo">🏫</div>
       <div class="login-title">Observador Digital</div>
       <div class="login-subtitle">IED El Triunfo — SIGAT</div>
-
       <div class="login-form">
         <div id="loginError" class="login-error"></div>
-
-        <div class="form-group">
-          <label class="form-label" for="loginUser">Cédula o correo</label>
-          <input type="text" id="loginUser" placeholder="Ej: 1234567890" autocomplete="username" inputmode="numeric">
-        </div>
-
-        <div class="form-group">
-          <label class="form-label" for="loginPass">Contraseña</label>
-          <input type="password" id="loginPass" placeholder="••••••••" autocomplete="current-password">
-        </div>
-
-        <button class="btn btn-primary mt-8" id="btnLogin" onclick="intentarLogin()">
-          Ingresar
-        </button>
+        <div class="form-group"><label class="form-label">Cédula o correo</label><input type="text" id="loginUser" placeholder="Ej: 1234567890" autocomplete="username" inputmode="numeric"></div>
+        <div class="form-group"><label class="form-label">Contraseña</label><input type="password" id="loginPass" placeholder="••••••••" autocomplete="current-password"></div>
+        <button class="btn btn-primary mt-8" onclick="intentarLogin()">Ingresar</button>
       </div>
-
-      <div class="login-footer">
-        Contraseña por defecto: número de cédula
-      </div>
+      <div class="login-footer">Contraseña por defecto: número de cédula</div>
     </div>
   </div>
 
-  <!-- ═══════════════════════════════════════════
-       PANTALLA 2: DASHBOARD
-       ═══════════════════════════════════════════ -->
+  <!-- ═══ PANTALLA: DASHBOARD ═══ -->
   <div id="screenDashboard" class="screen">
     <div class="header">
-      <div style="flex:1">
-        <h1 id="dashGreeting">Observador Digital</h1>
-        <div class="header-sub" id="dashSubtitle"></div>
-      </div>
-      <button class="btn-back" onclick="mostrarMenuConfig()" title="Opciones" style="font-size:1.4rem">⚙</button>
+      <div style="flex:1"><h1 id="dashGreeting">Observador Digital</h1><div class="header-sub" id="dashSubtitle"></div></div>
+      <button class="btn-back" onclick="mostrarConfig()" style="font-size:1.4rem">⚙</button>
     </div>
-
-    <div id="syncBar" class="sync-bar" onclick="sincronizarAhora()">
-      <span>🔶</span>
-      <span id="syncBarText">2 observaciones pendientes — Toca para sincronizar</span>
-    </div>
-
+    <div id="syncBar" class="sync-bar" onclick="sincronizarAhora()"><span class="sync-spinner"></span><span id="syncBarText"></span></div>
     <div class="scroll-area">
-      <button class="btn-large" onclick="irANuevaObservacion()">
-        <div class="btn-icon" style="background:var(--accent-light);color:var(--accent)">✏️</div>
-        <div>
-          <div class="btn-label">Nueva observación</div>
-          <div class="btn-desc">Registrar falta o situación</div>
-        </div>
-      </button>
-
-      <button class="btn-large" onclick="irAHistorial()">
-        <div class="btn-icon" style="background:#f0f2f5;color:var(--text)">📋</div>
-        <div>
-          <div class="btn-label">Historial</div>
-          <div class="btn-desc">Buscar por estudiante</div>
-        </div>
-      </button>
-
-      <button class="btn-large" onclick="sincronizarAhora()">
-        <div class="btn-icon" style="background:var(--success-bg);color:var(--success)">🔄</div>
-        <div>
-          <div class="btn-label">Sincronizar</div>
-          <div class="btn-desc" id="dashSyncStatus">Todo al día</div>
-        </div>
-      </button>
-
+      <button class="btn-large" onclick="irANuevaObs()"><div class="btn-icon" style="background:var(--accent-light);color:var(--accent)">✏️</div><div><div class="btn-label">Nueva observación</div><div class="btn-desc">Registrar falta o situación</div></div></button>
+      <button class="btn-large" onclick="irANuevoLogro()"><div class="btn-icon" style="background:var(--success-bg);color:var(--success)">🌟</div><div><div class="btn-label">Registrar logro</div><div class="btn-desc">Reconocimiento positivo</div></div></button>
+      <button class="btn-large" onclick="irAHistorial()"><div class="btn-icon" style="background:#f0f2f5;color:var(--text)">📋</div><div><div class="btn-label">Ver historial</div><div class="btn-desc">Buscar por estudiante</div></div></button>
+      <button class="btn-large" onclick="sincronizarAhora()"><div class="btn-icon" style="background:var(--success-bg);color:var(--success)">🔄</div><div><div class="btn-label">Sincronizar</div><div class="btn-desc" id="dashSyncStatus">Todo al día</div></div></button>
       <div class="card mt-16">
         <div class="card-title">Resumen de hoy</div>
-        <div class="flex-between">
-          <div>
-            <div style="font-size:1.8rem;font-weight:700;font-family:var(--mono)" id="dashTodayCount">0</div>
-            <div class="text-sm text-secondary">Registradas hoy</div>
-          </div>
-          <div style="text-align:right">
-            <div style="font-size:1.8rem;font-weight:700;font-family:var(--mono)" id="dashPendingCount">0</div>
-            <div class="text-sm text-secondary">Pendientes sync</div>
-          </div>
-        </div>
+        <div class="flex-between"><div><div style="font-size:1.8rem;font-weight:700;font-family:var(--mono)" id="dashTodayCount">0</div><div class="text-sm text-sec">Registradas hoy</div></div><div style="text-align:right"><div style="font-size:1.8rem;font-weight:700;font-family:var(--mono)" id="dashPendingCount">0</div><div class="text-sm text-sec">Pendientes sync</div></div></div>
       </div>
-
-      <div class="card">
-        <div class="card-title">Última sincronización</div>
-        <div class="text-sm" id="dashLastSync">Nunca</div>
-      </div>
-
-      <button class="btn btn-outline mt-16" onclick="cerrarSesion()" style="color:var(--danger);border-color:var(--danger)">
-        Cerrar sesión
-      </button>
+      <button class="btn btn-outline mt-16" onclick="cerrarSesion()" style="color:var(--danger);border-color:var(--danger)">Cerrar sesión</button>
     </div>
   </div>
 
-  <!-- ═══════════════════════════════════════════
-       PANTALLA 3: SELECCIONAR ESTUDIANTE
-       ═══════════════════════════════════════════ -->
+  <!-- ═══ PANTALLA: SELECCIONAR ESTUDIANTE ═══ -->
   <div id="screenSelectStudent" class="screen">
     <div class="header">
       <button class="btn-back" onclick="irADashboard()">←</button>
-      <h1 id="selectStudentTitle">Seleccionar estudiante</h1>
+      <h1 id="selectTitle">Seleccionar estudiante</h1>
     </div>
-
     <div class="scroll-area">
-      <!-- Filtros cascada -->
       <div class="card">
-        <div class="form-group">
+        <div class="form-group" id="filtroSedeGroup">
           <label class="form-label">Sede</label>
-          <select id="filtroSede" onchange="actualizarFiltrosEstudiantes()">
-            <option value="">— Todas —</option>
-          </select>
+          <select id="filtroSede" onchange="alCambiarSede()"><option value="">— Todas —</option></select>
         </div>
         <div class="flex-row gap-8">
-          <div class="form-group" style="flex:1">
-            <label class="form-label">Grado</label>
-            <select id="filtroGrado" onchange="actualizarFiltrosEstudiantes()">
-              <option value="">Todos</option>
-            </select>
-          </div>
-          <div class="form-group" style="flex:1">
-            <label class="form-label">Grupo</label>
-            <select id="filtroGrupo" onchange="actualizarFiltrosEstudiantes()">
-              <option value="">Todos</option>
-            </select>
-          </div>
+          <div class="form-group" style="flex:1"><label class="form-label">Grado</label><select id="filtroGrado" onchange="alCambiarGrado()"><option value="">Todos</option></select></div>
+          <div class="form-group" style="flex:1"><label class="form-label">Grupo</label><select id="filtroGrupo" onchange="filtrarEstudiantes()"><option value="">Todos</option></select></div>
         </div>
       </div>
-
-      <!-- Búsqueda -->
-      <div class="search-box">
-        <input type="text" id="buscarEstudiante" placeholder="Buscar por nombre o documento..." oninput="filtrarEstudiantes()">
-      </div>
-
-      <!-- Lista de estudiantes -->
+      <div class="search-box"><input type="text" id="buscarEst" placeholder="Buscar por nombre o documento..." oninput="filtrarEstudiantes()"></div>
       <div id="listaEstudiantes"></div>
     </div>
   </div>
 
-  <!-- ═══════════════════════════════════════════
-       PANTALLA 4: FORMULARIO DE OBSERVACIÓN
-       ═══════════════════════════════════════════ -->
+  <!-- ═══ PANTALLA: FORMULARIO OBSERVACIÓN ═══ -->
   <div id="screenObsForm" class="screen">
     <div class="header">
       <button class="btn-back" onclick="volverDeFormulario()">←</button>
-      <div style="flex:1">
-        <h1 id="obsFormStudentName">Estudiante</h1>
-        <div class="header-sub" id="obsFormStudentMeta"></div>
-      </div>
+      <div style="flex:1"><h1 id="obsEstNombre">Estudiante</h1><div class="header-sub" id="obsEstMeta"></div></div>
     </div>
-
     <div class="scroll-area">
-      <!-- Score actual -->
-      <div class="card" id="obsScoreCard">
-        <div class="score-display">
-          <div class="score-number" id="obsScoreNumber">500</div>
-          <div class="score-label" id="obsScoreLabel">SUPERIOR</div>
-        </div>
-      </div>
+      <!-- Score -->
+      <div class="card"><div class="score-display"><div class="score-number" id="obsScore">500</div><div class="score-label" id="obsScoreLabel">SUPERIOR</div></div></div>
 
-      <!-- Tipo de Situación -->
+      <!-- Tipo de Situación con descripciones -->
       <div class="card">
         <div class="card-title">Tipo de situación</div>
+        <div class="info-box blue" style="margin-bottom:12px;font-size:.78rem">
+          <strong>TIPO I:</strong> Conflictos manejados en el aula<br>
+          <strong>TIPO II:</strong> Situaciones que afectan la convivencia (requiere coordinación)<br>
+          <strong>TIPO III:</strong> Delitos (requiere autoridades: Policía, ICBF, Fiscalía)
+        </div>
         <div class="radio-pills">
-          <div class="radio-pill">
-            <input type="radio" name="tipoSit" id="tipo_I" value="TIPO_I" checked onchange="actualizarFormulario()">
-            <label for="tipo_I">Tipo I</label>
-          </div>
-          <div class="radio-pill">
-            <input type="radio" name="tipoSit" id="tipo_II" value="TIPO_II" onchange="actualizarFormulario()">
-            <label for="tipo_II" class="pill-grave">Tipo II</label>
-          </div>
-          <div class="radio-pill">
-            <input type="radio" name="tipoSit" id="tipo_III" value="TIPO_III" onchange="actualizarFormulario()">
-            <label for="tipo_III" class="pill-gravisima">Tipo III</label>
-          </div>
+          <div class="radio-pill"><input type="radio" name="tipoSit" id="t_I" value="TIPO_I" checked onchange="actualizarForm()"><label for="t_I">Tipo I</label></div>
+          <div class="radio-pill"><input type="radio" name="tipoSit" id="t_II" value="TIPO_II" onchange="actualizarForm()"><label for="t_II" class="pill-grave">Tipo II</label></div>
+          <div class="radio-pill"><input type="radio" name="tipoSit" id="t_III" value="TIPO_III" onchange="actualizarForm()"><label for="t_III" class="pill-gravisima">Tipo III</label></div>
+        </div>
+        <button class="btn btn-sm btn-outline mt-8" onclick="verRutaAtencion()" style="font-size:.82rem">📋 Ver protocolo / ruta de atención</button>
+      </div>
+
+      <!-- Selector de Faltas del Manual -->
+      <div class="card">
+        <div class="card-title">Falta del Manual de Convivencia</div>
+        <div class="search-box" style="margin-bottom:8px"><input type="text" id="buscarFalta" placeholder="Buscar falta..." oninput="filtrarFaltas()"></div>
+        <div class="cat-filter" id="catFilter"></div>
+        <div class="faults-container" id="faltasLista"></div>
+        <div class="form-group mt-8">
+          <label class="form-label">Falta seleccionada</label>
+          <input type="text" id="faltaSeleccionada" readonly placeholder="Selecciona una falta de la lista" style="background:#f8f9fa">
+        </div>
+        <div class="flex-between" style="font-size:.8rem;color:var(--text-sec);padding:4px 0">
+          <span>Categoría: <strong id="infoCategoria">—</strong> | Gravedad: <strong id="infoGravedad">—</strong></span>
+          <span>Puntos: <strong id="infoPuntos" style="color:var(--danger)">-0</strong></span>
         </div>
       </div>
 
-      <!-- Categoría -->
+      <!-- Descripción y Descargos -->
       <div class="card">
-        <div class="form-group">
-          <label class="form-label required">Categoría</label>
-          <select id="obsCategoria" onchange="actualizarFormulario()">
-            <option value="">— Seleccionar —</option>
-            <option value="ASISTENCIA">Asistencia</option>
-            <option value="APRENDIZAJE">Aprendizaje</option>
-            <option value="BIENES">Bienes</option>
-            <option value="DESARROLLO">Desarrollo personal</option>
-            <option value="RELACIONES">Relaciones interpersonales</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label required">Gravedad</label>
-          <div class="radio-pills">
-            <div class="radio-pill">
-              <input type="radio" name="gravedad" id="grav_leve" value="LEVE" checked onchange="actualizarFormulario()">
-              <label for="grav_leve">Leve</label>
-            </div>
-            <div class="radio-pill">
-              <input type="radio" name="gravedad" id="grav_grave" value="GRAVE" onchange="actualizarFormulario()">
-              <label for="grav_grave" class="pill-grave">Grave</label>
-            </div>
-            <div class="radio-pill">
-              <input type="radio" name="gravedad" id="grav_gravisima" value="GRAVISIMA" onchange="actualizarFormulario()">
-              <label for="grav_gravisima" class="pill-gravisima">Gravísima</label>
-            </div>
-          </div>
-        </div>
-
-        <!-- Puntos que descuenta -->
-        <div id="puntosInfo" class="flex-between mt-8" style="font-size:0.8rem;color:var(--text-secondary);padding:8px 0;border-top:1px solid var(--border)">
-          <span>Puntos que descuenta:</span>
-          <span id="puntosValor" style="font-weight:700;font-family:var(--mono);color:var(--danger)">-10</span>
-        </div>
+        <div class="form-group"><label class="form-label required">Descripción detallada (lo que realmente sucedió)</label><textarea id="obsDescripcion" placeholder="Describe con detalle lo que sucedió..." rows="3"></textarea></div>
+        <div class="form-group"><label class="form-label">Descargos del estudiante (derecho a la defensa)</label><textarea id="obsDescargos" placeholder="Versión del estudiante sobre lo ocurrido..." rows="2"></textarea></div>
+        <div class="form-group"><label class="form-label">Contexto / Antecedentes</label><textarea id="obsContexto" placeholder="Antecedentes, situaciones previas relevantes..." rows="2"></textarea></div>
       </div>
 
-      <!-- Falta del manual -->
+      <!-- Detalles: Fecha, Actividad, Sitio, Materia -->
       <div class="card">
-        <div class="form-group">
-          <label class="form-label">Falta del manual de convivencia</label>
-          <select id="obsFaltaManual">
-            <option value="">— Seleccionar o escribir descripción —</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label required">Descripción de los hechos</label>
-          <textarea id="obsDescripcion" placeholder="Describa brevemente lo ocurrido..." rows="3"></textarea>
-        </div>
-      </div>
-
-      <!-- Detalles -->
-      <div class="card">
-        <div class="card-title">Detalles</div>
-
+        <div class="card-title">Detalles del suceso</div>
         <div class="flex-row gap-8">
-          <div class="form-group" style="flex:1">
-            <label class="form-label">Fecha del suceso</label>
-            <input type="date" id="obsFechaSuceso">
-          </div>
-          <div class="form-group" style="flex:1">
-            <label class="form-label">Hora</label>
-            <input type="time" id="obsHoraSuceso">
-          </div>
+          <div class="form-group" style="flex:1"><label class="form-label required">Fecha</label><input type="date" id="obsFecha"></div>
+          <div class="form-group" style="flex:1"><label class="form-label required">Hora</label><input type="time" id="obsHora"></div>
         </div>
-
         <div class="form-group">
-          <label class="form-label">Materia / Clase</label>
-          <select id="obsMateria">
-            <option value="">— Seleccionar —</option>
+          <label class="form-label required">Actividad</label>
+          <select id="obsActividad" onchange="alCambiarActividad()">
+            <option value="">Seleccionar...</option>
+            <option value="Actividad académica">Actividad académica</option>
+            <option value="Descanso">Descanso</option>
+            <option value="Actividad extracurricular">Actividad extracurricular</option>
+            <option value="Actividad institucional">Actividad institucional</option>
+            <option value="Actividad en representación de la institución">Actividad en representación</option>
+            <option value="Fuera de la institución portando uniforme">Fuera de la institución</option>
           </select>
         </div>
-
+        <div class="form-group hidden" id="actDetalleGrp"><label class="form-label">Especificar actividad</label><input type="text" id="obsActDetalle" placeholder="Ej: Izadas de bandera..."></div>
         <div class="form-group">
-          <label class="form-label">Lugar / Sitio</label>
-          <select id="obsSitio">
-            <option value="">— Seleccionar —</option>
-            <option value="Salón de clase">Salón de clase</option>
-            <option value="Patio">Patio</option>
-            <option value="Cancha">Cancha</option>
-            <option value="Baños">Baños</option>
-            <option value="Comedor">Comedor</option>
-            <option value="Biblioteca">Biblioteca</option>
-            <option value="Sala de informática">Sala de informática</option>
+          <label class="form-label required">Sitio donde ocurrió</label>
+          <select id="obsSitio" onchange="alCambiarSitio()">
+            <option value="">Seleccionar...</option>
+            <option value="Salón asignado al docente">Salón asignado al docente</option>
+            <option value="Aula de Sistema">Aula de Sistema</option>
             <option value="Laboratorio">Laboratorio</option>
+            <option value="Cancha">Cancha</option>
+            <option value="Restaurante">Restaurante</option>
+            <option value="Aula múltiple">Aula múltiple</option>
+            <option value="Patio">Patio</option>
+            <option value="Baños">Baños</option>
             <option value="Pasillos">Pasillos</option>
             <option value="Entrada">Entrada</option>
-            <option value="Fuera de la institución">Fuera de la institución</option>
             <option value="Otro">Otro</option>
           </select>
         </div>
+        <div class="form-group hidden" id="sitioOtroGrp"><label class="form-label">Especificar sitio</label><input type="text" id="obsSitioOtro" placeholder="Escriba el sitio..."></div>
+        <div class="form-group" id="materiaGrp">
+          <label class="form-label">Asignatura</label>
+          <select id="obsMateria"><option value="">Solo aplica para actividad académica</option></select>
+        </div>
       </div>
 
-      <!-- Medidas y acudiente -->
+      <!-- Medidas y Acudiente -->
       <div class="card">
         <div class="card-title">Seguimiento</div>
-        <div class="form-group">
-          <label class="form-label required">Medidas tomadas</label>
-          <textarea id="obsMedidas" placeholder="¿Qué acciones se tomaron?" rows="2"></textarea>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">¿Se notificó al acudiente?</label>
-          <div class="radio-pills">
-            <div class="radio-pill">
-              <input type="radio" name="acudiente" id="acu_no" value="NO" checked>
-              <label for="acu_no">No</label>
-            </div>
-            <div class="radio-pill">
-              <input type="radio" name="acudiente" id="acu_si" value="SI">
-              <label for="acu_si">Sí</label>
-            </div>
-          </div>
+        <div class="form-group"><label class="form-label required">Medidas tomadas</label><textarea id="obsMedidas" placeholder="Describa las acciones correctivas aplicadas..." rows="2"></textarea></div>
+        <div class="form-group"><label class="form-label">¿Acudiente notificado?</label>
+          <div class="radio-pills"><div class="radio-pill"><input type="radio" name="acudiente" id="acu_no" value="NO" checked><label for="acu_no">No</label></div><div class="radio-pill"><input type="radio" name="acudiente" id="acu_si" value="SI"><label for="acu_si">Sí</label></div></div>
         </div>
       </div>
 
-      <!-- Ruta de atención -->
-      <div id="rutaAtencionCard" class="card hidden">
-        <div class="card-title" id="rutaTitulo">Ruta de atención</div>
-        <div id="rutaContenido" style="font-size:0.85rem;line-height:1.6"></div>
-      </div>
-
-      <!-- Botón guardar -->
-      <button class="btn btn-primary mt-16" id="btnGuardarObs" onclick="guardarObservacion()" style="padding:16px;font-size:1.05rem">
-        💾 Guardar observación
-      </button>
-
+      <button class="btn btn-primary mt-8" onclick="guardarObservacion()" style="padding:16px;font-size:1.05rem">💾 Guardar observación</button>
       <div style="height:40px"></div>
     </div>
   </div>
 
-  <!-- ═══════════════════════════════════════════
-       PANTALLA 5: HISTORIAL DEL ESTUDIANTE
-       ═══════════════════════════════════════════ -->
+  <!-- ═══ PANTALLA: FORMULARIO LOGRO ═══ -->
+  <div id="screenLogro" class="screen">
+    <div class="header">
+      <button class="btn-back" onclick="volverDeFormulario()">←</button>
+      <div style="flex:1"><h1 id="logroEstNombre">Estudiante</h1><div class="header-sub" id="logroEstMeta"></div></div>
+    </div>
+    <div class="scroll-area">
+      <div class="info-box green">🌟 Los logros NO afectan la nota de comportamiento, pero es importante registrar reconocimientos positivos.</div>
+      <div class="card">
+        <div class="form-group"><label class="form-label required">Tipo de logro</label>
+          <select id="logroTipo"><option value="">Seleccionar...</option><option>📚 Académico</option><option>⚽ Deportivo</option><option>🎭 Cultural</option><option>🤝 Social</option><option>👑 Liderazgo</option><option>🫱🏻‍🫲🏼 Colaboración</option><option>🎨 Creatividad</option><option>✨ Otro</option></select>
+        </div>
+        <div class="form-group"><label class="form-label">Espacio / Actividad</label><input type="text" id="logroEspacio" placeholder="Ej: Olimpiadas, Clase de Arte"></div>
+        <div class="form-group"><label class="form-label required">Descripción del logro</label><textarea id="logroDesc" placeholder="Describe el logro, reconocimiento o aspecto positivo..." rows="3"></textarea></div>
+      </div>
+      <button class="btn btn-success mt-8" onclick="guardarLogro()" style="padding:16px;font-size:1.05rem">🌟 Guardar logro</button>
+    </div>
+  </div>
+
+  <!-- ═══ PANTALLA: HISTORIAL ═══ -->
   <div id="screenHistory" class="screen">
     <div class="header">
       <button class="btn-back" onclick="volverDeHistorial()">←</button>
-      <div style="flex:1">
-        <h1 id="histStudentName">Historial</h1>
-        <div class="header-sub" id="histStudentMeta"></div>
-      </div>
+      <div style="flex:1"><h1 id="histNombre">Historial</h1><div class="header-sub" id="histMeta"></div></div>
     </div>
-
     <div class="scroll-area">
-      <div class="card" id="histScoreCard">
-        <div class="score-display">
-          <div class="score-number" id="histScoreNumber">500</div>
-          <div class="score-label" id="histScoreLabel">SUPERIOR</div>
-        </div>
-        <div class="flex-between text-sm text-secondary" style="margin-top:8px">
-          <span>Faltas: <strong id="histFaltas">0</strong></span>
-          <span>Puntos desc.: <strong id="histPuntos">0</strong></span>
-        </div>
+      <div class="card"><div class="score-display"><div class="score-number" id="histScore">500</div><div class="score-label" id="histScoreLabel">SUPERIOR</div></div>
+        <div class="flex-between text-sm text-sec" style="margin-top:8px"><span>Faltas: <strong id="histFaltas">0</strong></span><span>Puntos desc.: <strong id="histPuntos">0</strong></span></div>
       </div>
-
-      <div class="flex-between mb-8">
-        <span class="text-sm text-secondary" id="histTotal">0 observaciones</span>
-        <select id="histPeriodo" onchange="cargarHistorialEstudiante()" style="width:auto;padding:6px 30px 6px 10px;font-size:0.82rem">
-          <option value="">Todos</option>
-          <option value="P1">P1</option>
-          <option value="P2">P2</option>
-          <option value="P3">P3</option>
-        </select>
+      <!-- Filtros -->
+      <div class="card"><div class="card-title">Filtrar</div>
+        <div class="mb-8"><span class="text-sm text-sec">Período:</span><div class="filter-checks" id="filtPeriodo"></div></div>
+        <div class="mb-8"><span class="text-sm text-sec">Tipo:</span><div class="filter-checks" id="filtTipo"></div></div>
+        <div class="mb-8"><span class="text-sm text-sec">Gravedad:</span><div class="filter-checks" id="filtGravedad"></div></div>
+        <div><span class="text-sm text-sec">Categoría:</span><div class="filter-checks" id="filtCategoria"></div></div>
       </div>
-
+      <div class="flex-between mb-8"><span class="text-sm text-sec" id="histTotal">0 observaciones</span></div>
       <div id="listaHistorial"></div>
     </div>
   </div>
 
-  <!-- ═══════════════════════════════════════════
-       PANTALLA 6: MENÚ CONFIGURACIÓN
-       ═══════════════════════════════════════════ -->
+  <!-- ═══ PANTALLA: CONFIG ═══ -->
   <div id="screenConfig" class="screen">
-    <div class="header">
-      <button class="btn-back" onclick="irADashboard()">←</button>
-      <h1>Opciones</h1>
-    </div>
+    <div class="header"><button class="btn-back" onclick="irADashboard()">←</button><h1>Opciones</h1></div>
     <div class="scroll-area">
-      <div class="card">
-        <div class="card-title">Datos del sistema</div>
-        <div class="text-sm" style="line-height:2">
-          <div>Docente: <strong id="cfgDocente">—</strong></div>
-          <div>Cédula: <strong id="cfgCedula">—</strong></div>
-          <div>Sede: <strong id="cfgSede">—</strong></div>
-          <div>Estudiantes cargados: <strong id="cfgEstudiantes">0</strong></div>
-          <div>Periodo actual: <strong id="cfgPeriodo">—</strong></div>
-          <div>Última sincronización: <strong id="cfgSync">—</strong></div>
-        </div>
+      <div class="card"><div class="card-title">Datos del sistema</div>
+        <div class="text-sm" style="line-height:2"><div>Docente: <strong id="cfgDoc">—</strong></div><div>Cédula: <strong id="cfgCed">—</strong></div><div>Sede: <strong id="cfgSede">—</strong></div><div>Rol: <strong id="cfgRol">—</strong></div><div>Estudiantes: <strong id="cfgEst">0</strong></div><div>Observaciones cargadas: <strong id="cfgObs">0</strong></div><div>Periodo actual: <strong id="cfgPer">—</strong></div></div>
       </div>
-
-      <button class="btn btn-primary" onclick="descargarDatosCompletos()">
-        📥 Actualizar datos del sistema
-      </button>
-      <div class="text-sm text-secondary text-center mt-8">Descarga la lista actualizada de estudiantes y configuración</div>
-
-      <button class="btn btn-outline mt-16" onclick="cerrarSesion()" style="color:var(--danger);border-color:var(--danger)">
-        Cerrar sesión
-      </button>
+      <button class="btn btn-primary" onclick="descargarDatos()">📥 Actualizar datos del sistema</button>
+      <div class="text-sm text-sec text-center mt-8">Descarga la lista actualizada de estudiantes y configuración</div>
+      <button class="btn btn-outline mt-16" onclick="cerrarSesion()" style="color:var(--danger);border-color:var(--danger)">Cerrar sesión</button>
     </div>
   </div>
-
 </div>
 
-<!-- ═══════════════════════════════════════════════════════
-     JAVASCRIPT — TODA LA LÓGICA DE LA APP
-     ═══════════════════════════════════════════════════════ -->
 <script>
-// ═══════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════
 // CONFIGURACIÓN
-// ═══════════════════════════════════════════════════════
-
-// ⚠️ ATOMO: Cambia esta URL por la de tu WebApp desplegada
-const API_URL = 'https://script.google.com/macros/s/AKfycbz8-hfbyFDYbgVOnT00MHTMQ2N_k1rhImtN97buXwVLYsv_Y2O3LlQpltxoHXs8cXWV/exec';
-
+// ═══════════════════════════════════════════════════════════════
+const API_URL = 'https://script.google.com/macros/s/AKfycbytL2U6U2MetiuERxpAqn3a-7hwpdNZyfk3LFDyEWGIh5Rz4_ND7NbY9WFDgw9xnano/exec';
 const DB_NAME = 'SIGAT_Observador';
-const DB_VERSION = 1;
-const SESSION_DURATION = 30 * 24 * 60 * 60 * 1000; // 30 días
+const DB_VERSION = 2;
+const SESSION_DAYS = 30;
 
-// ═══════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════
 // ESTADO GLOBAL
-// ═══════════════════════════════════════════════════════
-
+// ═══════════════════════════════════════════════════════════════
 let db = null;
-let estado = {
+let E = {
   online: navigator.onLine,
-  sesion: null,        // { token, usuario, datosAdicionales, credencialOffline }
-  estudianteActual: null,
-  modoActual: null,    // 'nueva' | 'historial'
+  sesion: null,
+  estActual: null,
+  modo: null, // 'obs' | 'logro' | 'historial'
   configFaltas: {},
   configPuntos: {},
   rutasAtencion: {},
   materiasPorNivel: {},
-  periodoActual: 'P1'
+  configGrupos: [],
+  docenteInfo: { sede: '', rol: 'Docente', esRolGlobal: false },
+  periodoActual: 'P1',
+  faltaSeleccionada: null,
+  allFaults: [],
+  filteredFaults: []
 };
 
-// ═══════════════════════════════════════════════════════
-// INDEXEDDB — Almacenamiento Offline
-// ═══════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════
+// INDEXEDDB
+// ═══════════════════════════════════════════════════════════════
+function abrirDB(){return new Promise((ok,err)=>{const r=indexedDB.open(DB_NAME,DB_VERSION);r.onupgradeneeded=e=>{const d=e.target.result;if(!d.objectStoreNames.contains('sesion'))d.createObjectStore('sesion',{keyPath:'key'});if(!d.objectStoreNames.contains('estudiantes')){const s=d.createObjectStore('estudiantes',{keyPath:'id'});s.createIndex('sede','sede');s.createIndex('grado','grado')}if(!d.objectStoreNames.contains('observaciones'))d.createObjectStore('observaciones',{keyPath:'idLocal'});if(!d.objectStoreNames.contains('obs_remotas'))d.createObjectStore('obs_remotas',{keyPath:'id'});if(!d.objectStoreNames.contains('config'))d.createObjectStore('config',{keyPath:'key'});if(!d.objectStoreNames.contains('docentes'))d.createObjectStore('docentes',{keyPath:'id'})};r.onsuccess=()=>{db=r.result;ok(db)};r.onerror=()=>err(r.error)})}
+function dbPut(s,d){return new Promise((ok,err)=>{const t=db.transaction(s,'readwrite');t.objectStore(s).put(d);t.oncomplete=()=>ok();t.onerror=()=>err(t.error)})}
+function dbGet(s,k){return new Promise((ok,err)=>{const t=db.transaction(s,'readonly');const r=t.objectStore(s).get(k);r.onsuccess=()=>ok(r.result||null);r.onerror=()=>err(r.error)})}
+function dbGetAll(s){return new Promise((ok,err)=>{const t=db.transaction(s,'readonly');const r=t.objectStore(s).getAll();r.onsuccess=()=>ok(r.result||[]);r.onerror=()=>err(r.error)})}
+function dbClear(s){return new Promise((ok,err)=>{const t=db.transaction(s,'readwrite');t.objectStore(s).clear();t.oncomplete=()=>ok();t.onerror=()=>err(t.error)})}
 
-function abrirDB() {
-  return new Promise((resolve, reject) => {
-    const req = indexedDB.open(DB_NAME, DB_VERSION);
-    req.onupgradeneeded = (e) => {
-      const db = e.target.result;
-      if (!db.objectStoreNames.contains('sesion'))
-        db.createObjectStore('sesion', { keyPath: 'key' });
-      if (!db.objectStoreNames.contains('estudiantes')) {
-        const store = db.createObjectStore('estudiantes', { keyPath: 'id' });
-        store.createIndex('sede', 'sede');
-        store.createIndex('grado', 'grado');
-        store.createIndex('gradoGrupo', ['grado', 'grupo']);
-      }
-      if (!db.objectStoreNames.contains('observaciones'))
-        db.createObjectStore('observaciones', { keyPath: 'idLocal' });
-      if (!db.objectStoreNames.contains('observaciones_remotas'))
-        db.createObjectStore('observaciones_remotas', { keyPath: 'id' });
-      if (!db.objectStoreNames.contains('config'))
-        db.createObjectStore('config', { keyPath: 'key' });
-      if (!db.objectStoreNames.contains('docentes'))
-        db.createObjectStore('docentes', { keyPath: 'id' });
-    };
-    req.onsuccess = () => { db = req.result; resolve(db); };
-    req.onerror = () => reject(req.error);
-  });
+// ═══════════════════════════════════════════════════════════════
+// API
+// ═══════════════════════════════════════════════════════════════
+async function api(action, datos={}){
+  if(!E.online) throw new Error('Sin conexión');
+  const body={action, token: E.sesion?.token||'', ...datos};
+  const r=await fetch(API_URL,{method:'POST',body:JSON.stringify(body),headers:{'Content-Type':'text/plain'}});
+  if(!r.ok) throw new Error('Error servidor: '+r.status);
+  return await r.json();
 }
 
-function dbPut(store, data) {
-  return new Promise((resolve, reject) => {
-    const tx = db.transaction(store, 'readwrite');
-    tx.objectStore(store).put(data);
-    tx.oncomplete = () => resolve();
-    tx.onerror = () => reject(tx.error);
-  });
-}
-
-function dbGet(store, key) {
-  return new Promise((resolve, reject) => {
-    const tx = db.transaction(store, 'readonly');
-    const req = tx.objectStore(store).get(key);
-    req.onsuccess = () => resolve(req.result || null);
-    req.onerror = () => reject(req.error);
-  });
-}
-
-function dbGetAll(store) {
-  return new Promise((resolve, reject) => {
-    const tx = db.transaction(store, 'readonly');
-    const req = tx.objectStore(store).getAll();
-    req.onsuccess = () => resolve(req.result || []);
-    req.onerror = () => reject(req.error);
-  });
-}
-
-function dbDelete(store, key) {
-  return new Promise((resolve, reject) => {
-    const tx = db.transaction(store, 'readwrite');
-    tx.objectStore(store).delete(key);
-    tx.oncomplete = () => resolve();
-    tx.onerror = () => reject(tx.error);
-  });
-}
-
-function dbClear(store) {
-  return new Promise((resolve, reject) => {
-    const tx = db.transaction(store, 'readwrite');
-    tx.objectStore(store).clear();
-    tx.oncomplete = () => resolve();
-    tx.onerror = () => reject(tx.error);
-  });
-}
-
-// ═══════════════════════════════════════════════════════
-// API — Comunicación con Google Apps Script
-// ═══════════════════════════════════════════════════════
-
-async function apiCall(action, datos = {}) {
-  if (!estado.online) throw new Error('Sin conexión');
-
-  const body = {
-    action: action,
-    token: estado.sesion?.token || '',
-    ...datos
-  };
-
-  const resp = await fetch(API_URL, {
-    method: 'POST',
-    body: JSON.stringify(body),
-    headers: { 'Content-Type': 'text/plain' }
-  });
-
-  if (!resp.ok) throw new Error('Error del servidor: ' + resp.status);
-  return await resp.json();
-}
-
-// ═══════════════════════════════════════════════════════
-// CONEXIÓN — Detectar online/offline
-// ═══════════════════════════════════════════════════════
-
-function actualizarEstadoConexion() {
-  estado.online = navigator.onLine;
-  const badge = document.getElementById('connBadge');
-  if (estado.online) {
-    badge.className = 'conn-badge online';
-    badge.textContent = '● En línea';
-  } else {
-    badge.className = 'conn-badge offline';
-    badge.textContent = '● Sin conexión';
-  }
+// ═══════════════════════════════════════════════════════════════
+// CONEXIÓN
+// ═══════════════════════════════════════════════════════════════
+function actualizarConexion(){
+  E.online=navigator.onLine;
+  const b=document.getElementById('connBadge');
+  b.className='conn-badge '+(E.online?'online':'offline');
+  b.textContent=E.online?'● En línea':'● Sin conexión';
   actualizarSyncBar();
 }
+window.addEventListener('online',()=>{actualizarConexion();autoSync()});
+window.addEventListener('offline',actualizarConexion);
 
-window.addEventListener('online', () => {
-  actualizarEstadoConexion();
-  // Auto-sincronizar cuando vuelve internet
-  const pendientes = contarPendientes();
-  if (pendientes > 0) {
-    setTimeout(() => sincronizarAhora(), 2000);
-  }
-});
-window.addEventListener('offline', actualizarEstadoConexion);
+async function autoSync(){
+  if(!E.online||!E.sesion) return;
+  const p=await contarPendientes();
+  if(p>0) setTimeout(()=>sincronizarAhora(),1500);
+}
 
-// ═══════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════
 // NAVEGACIÓN
-// ═══════════════════════════════════════════════════════
-
-function mostrarPantalla(id) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-}
-
-function irADashboard() {
-  actualizarDashboard();
-  mostrarPantalla('screenDashboard');
-}
-
-function irANuevaObservacion() {
-  estado.modoActual = 'nueva';
-  document.getElementById('selectStudentTitle').textContent = 'Seleccionar estudiante';
-  prepararFiltros();
-  mostrarPantalla('screenSelectStudent');
-}
-
-function irAHistorial() {
-  estado.modoActual = 'historial';
-  document.getElementById('selectStudentTitle').textContent = 'Ver historial de...';
-  prepararFiltros();
-  mostrarPantalla('screenSelectStudent');
-}
-
-function mostrarMenuConfig() {
-  const s = estado.sesion;
-  const da = s?.datosAdicionales || {};
-  document.getElementById('cfgDocente').textContent = s?.usuario?.nombreCompleto || '—';
-  document.getElementById('cfgCedula').textContent = da.documento || s?.usuario?.idPersona || '—';
-  document.getElementById('cfgSede').textContent = da.sedePrincipal || da.sede || '—';
-  document.getElementById('cfgEstudiantes').textContent = contarEstudiantes();
-  document.getElementById('cfgPeriodo').textContent = estado.periodoActual;
-  document.getElementById('cfgSync').textContent = formatearUltimaSync();
+// ═══════════════════════════════════════════════════════════════
+function mostrarPantalla(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active')}
+function irADashboard(){actualizarDashboard();mostrarPantalla('screenDashboard')}
+function irANuevaObs(){E.modo='obs';document.getElementById('selectTitle').textContent='Seleccionar estudiante';prepararFiltros();mostrarPantalla('screenSelectStudent')}
+function irANuevoLogro(){E.modo='logro';document.getElementById('selectTitle').textContent='Registrar logro de...';prepararFiltros();mostrarPantalla('screenSelectStudent')}
+function irAHistorial(){E.modo='historial';document.getElementById('selectTitle').textContent='Ver historial de...';prepararFiltros();mostrarPantalla('screenSelectStudent')}
+function mostrarConfig(){
+  const s=E.sesion, d=E.docenteInfo;
+  document.getElementById('cfgDoc').textContent=s?.usuario?.nombreCompleto||'—';
+  document.getElementById('cfgCed').textContent=d.documento||'—';
+  document.getElementById('cfgSede').textContent=d.sede||'—';
+  document.getElementById('cfgRol').textContent=d.rol||'—';
+  dbGetAll('estudiantes').then(e=>document.getElementById('cfgEst').textContent=e.length);
+  dbGetAll('obs_remotas').then(o=>document.getElementById('cfgObs').textContent=o.length);
+  document.getElementById('cfgPer').textContent=E.periodoActual;
   mostrarPantalla('screenConfig');
 }
+function volverDeFormulario(){mostrarPantalla('screenSelectStudent')}
+function volverDeHistorial(){mostrarPantalla('screenSelectStudent')}
 
-function volverDeFormulario() {
-  mostrarPantalla('screenSelectStudent');
-}
-
-function volverDeHistorial() {
-  mostrarPantalla('screenSelectStudent');
-}
-
-// ═══════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════
 // LOGIN
-// ═══════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════
+async function intentarLogin(){
+  const u=document.getElementById('loginUser').value.trim();
+  const p=document.getElementById('loginPass').value;
+  const err=document.getElementById('loginError');
+  if(!u||!p){err.textContent='Ingresa tu cédula/correo y contraseña';err.classList.add('visible');return}
+  err.classList.remove('visible');
 
-async function intentarLogin() {
-  const usuario = document.getElementById('loginUser').value.trim();
-  const password = document.getElementById('loginPass').value;
-  const errorDiv = document.getElementById('loginError');
-
-  if (!usuario || !password) {
-    errorDiv.textContent = 'Ingresa tu cédula/correo y contraseña';
-    errorDiv.classList.add('visible');
-    return;
-  }
-
-  errorDiv.classList.remove('visible');
-
-  // Intentar login online primero
-  if (estado.online) {
-    try {
+  if(E.online){
+    try{
       mostrarCargando('Verificando credenciales...');
-      const resp = await apiCall('login', {
-        cedula: usuario,
-        email: usuario,
-        password: password,
-        dispositivo: 'PWA_Observador'
-      });
-
-      if (resp.exito) {
-        // Guardar sesión en IndexedDB
-        const sesionData = {
-          key: 'sesion_actual',
-          token: resp.token,
-          usuario: resp.usuario,
-          datosAdicionales: resp.datosAdicionales,
-          credencialOffline: resp.credencialOffline,
-          identificador: usuario,
-          fechaLogin: new Date().toISOString()
-        };
-
-        await dbPut('sesion', sesionData);
-        estado.sesion = sesionData;
-
-        // Descargar datos iniciales
+      const r=await api('login',{cedula:u,email:u,password:p,dispositivo:'PWA_Observador'});
+      if(r.exito){
+        const sesion={key:'sesion_actual',token:r.token,usuario:r.usuario,datosAdicionales:r.datosAdicionales,credencialOffline:r.credencialOffline,identificador:u,fechaLogin:new Date().toISOString()};
+        await dbPut('sesion',sesion);
+        E.sesion=sesion;
         mostrarCargando('Descargando datos...');
-        await descargarDatosCompletos();
-
-        ocultarCargando();
-        toast('¡Bienvenido/a!', 'success');
-        irADashboard();
-        return;
-      } else {
-        ocultarCargando();
-        errorDiv.textContent = resp.mensaje || 'Credenciales incorrectas';
-        errorDiv.classList.add('visible');
-        return;
-      }
-    } catch (err) {
-      ocultarCargando();
-      console.warn('Login online falló, intentando offline...', err);
-    }
+        await descargarDatos();
+        ocultarCargando();toast('¡Bienvenido/a!','success');irADashboard();return;
+      }else{ocultarCargando();err.textContent=r.mensaje||'Credenciales incorrectas';err.classList.add('visible');return}
+    }catch(e){ocultarCargando();console.warn('Login online falló',e)}
   }
-
-  // Intentar login offline
-  const sesionGuardada = await dbGet('sesion', 'sesion_actual');
-  if (sesionGuardada && sesionGuardada.identificador === usuario) {
-    // Verificar que no haya expirado
-    const fechaLogin = new Date(sesionGuardada.fechaLogin);
-    if (new Date() - fechaLogin < SESSION_DURATION) {
-      estado.sesion = sesionGuardada;
-      await cargarConfigDesdeDB();
-      toast('Modo sin conexión', 'success');
-      irADashboard();
-      return;
-    }
+  // Offline login
+  const sg=await dbGet('sesion','sesion_actual');
+  if(sg&&sg.identificador===u&&(new Date()-new Date(sg.fechaLogin))<SESSION_DAYS*864e5){
+    E.sesion=sg;await cargarConfigDB();toast('Modo sin conexión','success');irADashboard();return;
   }
-
-  errorDiv.textContent = estado.online
-    ? 'No se pudo conectar al servidor'
-    : 'Sin conexión. Solo puedes ingresar si ya te habías logueado antes en este dispositivo.';
-  errorDiv.classList.add('visible');
+  err.textContent=E.online?'No se pudo conectar':'Sin conexión. Inicia sesión primero con internet.';
+  err.classList.add('visible');
 }
+async function cerrarSesion(){await dbClear('sesion');E.sesion=null;mostrarPantalla('screenLogin');document.getElementById('loginUser').value='';document.getElementById('loginPass').value=''}
 
-async function cerrarSesion() {
-  await dbClear('sesion');
-  estado.sesion = null;
-  mostrarPantalla('screenLogin');
-  document.getElementById('loginUser').value = '';
-  document.getElementById('loginPass').value = '';
-}
-
-// ═══════════════════════════════════════════════════════
-// DESCARGA DE DATOS PARA OFFLINE
-// ═══════════════════════════════════════════════════════
-
-async function descargarDatosCompletos() {
-  if (!estado.online) {
-    toast('Sin conexión. No se pueden actualizar datos.', 'error');
-    return;
-  }
-
-  try {
+// ═══════════════════════════════════════════════════════════════
+// DESCARGA DE DATOS
+// ═══════════════════════════════════════════════════════════════
+async function descargarDatos(){
+  if(!E.online){toast('Sin conexión','error');return}
+  try{
     mostrarCargando('Descargando estudiantes y configuración...');
-    const resp = await apiCall('obtenerDatosInicialesApp', {});
+    const r=await api('obtenerDatosInicialesApp',{token:E.sesion?.token});
+    if(!r.exito) throw new Error(r.mensaje||'Error');
 
-    if (!resp.exito) {
-      throw new Error(resp.mensaje || 'Error descargando datos');
-    }
-
-    // Guardar estudiantes
-    mostrarCargando(`Guardando ${resp.estudiantes.length} estudiantes...`);
+    // Estudiantes
     await dbClear('estudiantes');
-    for (const est of resp.estudiantes) {
-      await dbPut('estudiantes', est);
-    }
+    for(const e of r.estudiantes) await dbPut('estudiantes',e);
 
-    // Guardar docentes
+    // Docentes
     await dbClear('docentes');
-    for (const doc of resp.docentes) {
-      await dbPut('docentes', doc);
-    }
+    for(const d of r.docentes) await dbPut('docentes',d);
 
-    // Guardar configuración
-    await dbPut('config', { key: 'configFaltas', value: resp.configFaltas });
-    await dbPut('config', { key: 'configPuntos', value: resp.configPuntos });
-    await dbPut('config', { key: 'rutasAtencion', value: resp.rutasAtencion });
-    await dbPut('config', { key: 'materiasPorNivel', value: resp.materiasPorNivel });
-    await dbPut('config', { key: 'periodoActual', value: resp.periodoActual });
-    await dbPut('config', { key: 'sedes', value: resp.sedes || [] });
-    await dbPut('config', { key: 'ultimaDescarga', value: new Date().toISOString() });
+    // Observaciones existentes
+    await dbClear('obs_remotas');
+    for(const o of (r.observacionesExistentes||[])) await dbPut('obs_remotas',o);
+
+    // Config
+    await dbPut('config',{key:'configFaltas',value:r.configFaltas});
+    await dbPut('config',{key:'configPuntos',value:r.configPuntos});
+    await dbPut('config',{key:'rutasAtencion',value:r.rutasAtencion});
+    await dbPut('config',{key:'materiasPorNivel',value:r.materiasPorNivel});
+    await dbPut('config',{key:'periodoActual',value:r.periodoActual});
+    await dbPut('config',{key:'configGrupos',value:r.configGrupos||[]});
+    await dbPut('config',{key:'docenteInfo',value:r.docenteInfo||{}});
+    await dbPut('config',{key:'sedes',value:r.sedes||[]});
 
     // Cargar en memoria
-    estado.configFaltas = resp.configFaltas || {};
-    estado.configPuntos = resp.configPuntos || {};
-    estado.rutasAtencion = resp.rutasAtencion || {};
-    estado.materiasPorNivel = resp.materiasPorNivel || {};
-    estado.periodoActual = resp.periodoActual || 'P1';
+    E.configFaltas=r.configFaltas||{};E.configPuntos=r.configPuntos||{};
+    E.rutasAtencion=r.rutasAtencion||{};E.materiasPorNivel=r.materiasPorNivel||{};
+    E.periodoActual=r.periodoActual||'P1';E.configGrupos=r.configGrupos||[];
+    E.docenteInfo=r.docenteInfo||{};
+    prepararFaltasGlobal();
 
-    ocultarCargando();
-    toast(`${resp.estudiantes.length} estudiantes descargados`, 'success');
-  } catch (err) {
-    ocultarCargando();
-    toast('Error: ' + err.message, 'error');
-  }
+    ocultarCargando();toast(`${r.totalEstudiantes} estudiantes, ${r.totalObservaciones} obs cargadas`,'success');
+  }catch(e){ocultarCargando();toast('Error: '+e.message,'error')}
 }
 
-async function cargarConfigDesdeDB() {
-  try {
-    const cf = await dbGet('config', 'configFaltas');
-    const cp = await dbGet('config', 'configPuntos');
-    const ra = await dbGet('config', 'rutasAtencion');
-    const mn = await dbGet('config', 'materiasPorNivel');
-    const pa = await dbGet('config', 'periodoActual');
-
-    estado.configFaltas = cf?.value || {};
-    estado.configPuntos = cp?.value || {};
-    estado.rutasAtencion = ra?.value || {};
-    estado.materiasPorNivel = mn?.value || {};
-    estado.periodoActual = pa?.value || 'P1';
-  } catch (e) {
-    console.error('Error cargando config:', e);
-  }
+async function cargarConfigDB(){
+  try{
+    const get=async k=>{const r=await dbGet('config',k);return r?.value};
+    E.configFaltas=await get('configFaltas')||{};
+    E.configPuntos=await get('configPuntos')||{};
+    E.rutasAtencion=await get('rutasAtencion')||{};
+    E.materiasPorNivel=await get('materiasPorNivel')||{};
+    E.periodoActual=await get('periodoActual')||'P1';
+    E.configGrupos=await get('configGrupos')||[];
+    E.docenteInfo=await get('docenteInfo')||{};
+    prepararFaltasGlobal();
+  }catch(e){console.error('Error config:',e)}
 }
 
-// ═══════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════
 // DASHBOARD
-// ═══════════════════════════════════════════════════════
-
-async function actualizarDashboard() {
-  const s = estado.sesion;
-  if (!s) return;
-
-  const nombre = s.usuario?.nombreCompleto || s.datosAdicionales?.nombres || 'Docente';
-  const primerNombre = nombre.split(' ')[0];
-  document.getElementById('dashGreeting').textContent = 'Hola, ' + primerNombre;
-  document.getElementById('dashSubtitle').textContent = 'Observador Digital · ' + estado.periodoActual;
-
-  // Contar observaciones de hoy
-  const hoy = new Date().toISOString().split('T')[0];
-  const todas = await dbGetAll('observaciones');
-  const deHoy = todas.filter(o => o.timestampCreacion?.startsWith(hoy));
-  const pendientes = todas.filter(o => o.estado === 'PENDIENTE');
-
-  document.getElementById('dashTodayCount').textContent = deHoy.length;
-  document.getElementById('dashPendingCount').textContent = pendientes.length;
-  document.getElementById('dashSyncStatus').textContent =
-    pendientes.length > 0
-      ? `${pendientes.length} pendiente${pendientes.length > 1 ? 's' : ''}`
-      : 'Todo al día';
-  document.getElementById('dashLastSync').textContent = formatearUltimaSync();
-
+// ═══════════════════════════════════════════════════════════════
+async function actualizarDashboard(){
+  if(!E.sesion)return;
+  const nombre=(E.sesion.usuario?.nombreCompleto||'Docente').split(' ')[0];
+  document.getElementById('dashGreeting').textContent='Hola, '+nombre;
+  document.getElementById('dashSubtitle').textContent=(E.docenteInfo.sede||'')+ ' · '+E.periodoActual;
+  const hoy=new Date().toISOString().split('T')[0];
+  const locales=await dbGetAll('observaciones');
+  const deHoy=locales.filter(o=>o.timestampCreacion?.startsWith(hoy));
+  const pend=locales.filter(o=>o.estado==='PENDIENTE');
+  document.getElementById('dashTodayCount').textContent=deHoy.length;
+  document.getElementById('dashPendingCount').textContent=pend.length;
+  document.getElementById('dashSyncStatus').textContent=pend.length>0?pend.length+' pendiente'+(pend.length>1?'s':''):'Todo al día';
   actualizarSyncBar();
 }
 
-async function actualizarSyncBar() {
-  const todas = await dbGetAll('observaciones');
-  const pendientes = todas.filter(o => o.estado === 'PENDIENTE');
-  const bar = document.getElementById('syncBar');
-  const text = document.getElementById('syncBarText');
+async function actualizarSyncBar(){
+  const all=await dbGetAll('observaciones');
+  const p=all.filter(o=>o.estado==='PENDIENTE');
+  const bar=document.getElementById('syncBar');
+  const txt=document.getElementById('syncBarText');
+  if(p.length>0){bar.classList.add('visible');txt.textContent=E.online?p.length+' pendiente'+(p.length>1?'s':'')+' — Toca para sincronizar':p.length+' pendiente'+(p.length>1?'s':'')+' — Se subirán con internet'}
+  else bar.classList.remove('visible');
+}
 
-  if (pendientes.length > 0) {
-    bar.classList.add('visible');
-    text.textContent = estado.online
-      ? `${pendientes.length} pendiente${pendientes.length > 1 ? 's' : ''} — Toca para sincronizar`
-      : `${pendientes.length} pendiente${pendientes.length > 1 ? 's' : ''} — Se subirán cuando haya internet`;
-  } else {
-    bar.classList.remove('visible');
+async function contarPendientes(){return(await dbGetAll('observaciones')).filter(o=>o.estado==='PENDIENTE').length}
+
+// ═══════════════════════════════════════════════════════════════
+// FILTROS CASCADA — SEDE → GRADO → GRUPO
+// ═══════════════════════════════════════════════════════════════
+async function prepararFiltros(){
+  const grupos=E.configGrupos;
+  const selSede=document.getElementById('filtroSede');
+  const selGrado=document.getElementById('filtroGrado');
+  const selGrupo=document.getElementById('filtroGrupo');
+  const sedeGrp=document.getElementById('filtroSedeGroup');
+
+  // Si es docente normal, ocultar selector de sedes y auto-seleccionar
+  if(!E.docenteInfo.esRolGlobal && E.docenteInfo.sede){
+    sedeGrp.classList.add('hidden');
+    selSede.innerHTML=`<option value="${E.docenteInfo.sede}">${E.docenteInfo.sede}</option>`;
+    selSede.value=E.docenteInfo.sede;
+  }else{
+    sedeGrp.classList.remove('hidden');
+    const sedes=[...new Set(grupos.map(g=>g.sede))].sort();
+    selSede.innerHTML='<option value="">— Todas —</option>';
+    sedes.forEach(s=>selSede.innerHTML+=`<option value="${s}">${s}</option>`);
   }
+
+  selGrado.innerHTML='<option value="">Todos</option>';
+  selGrupo.innerHTML='<option value="">Todos</option>';
+  document.getElementById('buscarEst').value='';
+  alCambiarSede();
 }
 
-function formatearUltimaSync() {
-  // placeholder — se actualiza después de sync real
-  return 'Toca Sincronizar para actualizar';
-}
-
-async function contarPendientes() {
-  const todas = await dbGetAll('observaciones');
-  return todas.filter(o => o.estado === 'PENDIENTE').length;
-}
-
-async function contarEstudiantes() {
-  const est = await dbGetAll('estudiantes');
-  return est.length;
-}
-
-// ═══════════════════════════════════════════════════════
-// SELECCIÓN DE ESTUDIANTE — Filtros cascada
-// ═══════════════════════════════════════════════════════
-
-async function prepararFiltros() {
-  const estudiantes = await dbGetAll('estudiantes');
-
-  // Sedes únicas
-  const sedes = [...new Set(estudiantes.map(e => e.sede).filter(Boolean))].sort();
-  const selectSede = document.getElementById('filtroSede');
-  selectSede.innerHTML = '<option value="">— Todas —</option>';
-  sedes.forEach(s => {
-    selectSede.innerHTML += `<option value="${s}">${s}</option>`;
-  });
-
-  // Grados únicos
-  const grados = [...new Set(estudiantes.map(e => e.grado).filter(Boolean))];
-  grados.sort((a, b) => {
-    const numA = parseInt(a) || 99;
-    const numB = parseInt(b) || 99;
-    return numA - numB;
-  });
-  const selectGrado = document.getElementById('filtroGrado');
-  selectGrado.innerHTML = '<option value="">Todos</option>';
-  grados.forEach(g => {
-    selectGrado.innerHTML += `<option value="${g}">${g}</option>`;
-  });
-
-  document.getElementById('filtroGrupo').innerHTML = '<option value="">Todos</option>';
-  document.getElementById('buscarEstudiante').value = '';
-
+function alCambiarSede(){
+  const sede=document.getElementById('filtroSede').value;
+  const grupos=E.configGrupos.filter(g=>!sede||g.sede===sede);
+  const grados=[...new Set(grupos.map(g=>g.grado))];
+  grados.sort((a,b)=>(parseInt(a)||99)-(parseInt(b)||99));
+  const sel=document.getElementById('filtroGrado');
+  sel.innerHTML='<option value="">Todos</option>';
+  grados.forEach(g=>sel.innerHTML+=`<option value="${g}">${g}</option>`);
+  document.getElementById('filtroGrupo').innerHTML='<option value="">Todos</option>';
   filtrarEstudiantes();
 }
 
-async function actualizarFiltrosEstudiantes() {
-  const grado = document.getElementById('filtroGrado').value;
-  const estudiantes = await dbGetAll('estudiantes');
-
-  // Actualizar grupos según grado seleccionado
-  if (grado) {
-    const grupos = [...new Set(
-      estudiantes.filter(e => e.grado === grado).map(e => e.grupo).filter(Boolean)
-    )].sort();
-    const selectGrupo = document.getElementById('filtroGrupo');
-    selectGrupo.innerHTML = '<option value="">Todos</option>';
-    grupos.forEach(g => {
-      selectGrupo.innerHTML += `<option value="${g}">${g}</option>`;
-    });
-  }
-
+function alCambiarGrado(){
+  const sede=document.getElementById('filtroSede').value;
+  const grado=document.getElementById('filtroGrado').value;
+  const grupos=E.configGrupos.filter(g=>(!sede||g.sede===sede)&&(!grado||g.grado===grado));
+  const grps=[...new Set(grupos.map(g=>g.grupo))].sort();
+  const sel=document.getElementById('filtroGrupo');
+  sel.innerHTML='<option value="">Todos</option>';
+  grps.forEach(g=>sel.innerHTML+=`<option value="${g}">${g}</option>`);
   filtrarEstudiantes();
 }
 
-async function filtrarEstudiantes() {
-  const sede = document.getElementById('filtroSede').value;
-  const grado = document.getElementById('filtroGrado').value;
-  const grupo = document.getElementById('filtroGrupo').value;
-  const busqueda = document.getElementById('buscarEstudiante').value.toLowerCase().trim();
-
-  let estudiantes = await dbGetAll('estudiantes');
-
-  if (sede) estudiantes = estudiantes.filter(e => e.sede === sede);
-  if (grado) estudiantes = estudiantes.filter(e => e.grado === grado);
-  if (grupo) estudiantes = estudiantes.filter(e => e.grupo === grupo);
-  if (busqueda) {
-    estudiantes = estudiantes.filter(e =>
-      (e.apellidos + ' ' + e.nombres).toLowerCase().includes(busqueda) ||
-      String(e.documento).includes(busqueda)
-    );
-  }
-
-  // Ordenar por apellido
-  estudiantes.sort((a, b) => (a.apellidos || '').localeCompare(b.apellidos || ''));
-
-  renderizarListaEstudiantes(estudiantes);
+async function filtrarEstudiantes(){
+  const sede=document.getElementById('filtroSede').value;
+  const grado=document.getElementById('filtroGrado').value;
+  const grupo=document.getElementById('filtroGrupo').value;
+  const busq=document.getElementById('buscarEst').value.toLowerCase().trim();
+  let est=await dbGetAll('estudiantes');
+  if(sede)est=est.filter(e=>e.sede===sede);
+  if(grado)est=est.filter(e=>e.grado===grado);
+  if(grupo)est=est.filter(e=>e.grupo===grupo);
+  if(busq)est=est.filter(e=>(e.apellidos+' '+e.nombres).toLowerCase().includes(busq)||String(e.documento).includes(busq));
+  est.sort((a,b)=>(a.apellidos||'').localeCompare(b.apellidos||''));
+  renderEstudiantes(est);
 }
 
-function renderizarListaEstudiantes(lista) {
-  const container = document.getElementById('listaEstudiantes');
-
-  if (lista.length === 0) {
-    container.innerHTML = `
-      <div class="empty-state">
-        <div class="empty-icon">🔍</div>
-        <div class="empty-text">No se encontraron estudiantes</div>
-      </div>`;
-    return;
-  }
-
-  container.innerHTML = lista.map(e => {
-    const iniciales = ((e.nombres?.[0] || '') + (e.apellidos?.[0] || '')).toUpperCase();
-    return `
-    <div class="student-item" onclick="seleccionarEstudiante('${e.id}')">
-      <div class="student-avatar">${iniciales}</div>
-      <div>
-        <div class="student-name">${e.apellidos} ${e.nombres}</div>
-        <div class="student-meta">${e.grado} ${e.grupo} · ${e.sede || ''} · ${e.tipoDoc || ''} ${e.documento || ''}</div>
-      </div>
-    </div>`;
+function renderEstudiantes(lista){
+  const c=document.getElementById('listaEstudiantes');
+  if(!lista.length){c.innerHTML='<div class="empty-state"><div class="empty-icon">🔍</div><div>No se encontraron estudiantes</div></div>';return}
+  c.innerHTML=lista.map(e=>{
+    const ini=((e.nombres?.[0]||'')+(e.apellidos?.[0]||'')).toUpperCase();
+    return`<div class="student-item" onclick="seleccionarEst('${e.id}')"><div class="student-avatar">${ini}</div><div><div class="student-name">${e.apellidos} ${e.nombres}</div><div class="student-meta">${e.grado} ${e.grupo} · ${e.sede||''}</div></div></div>`;
   }).join('');
 }
 
-async function seleccionarEstudiante(id) {
-  const est = await dbGet('estudiantes', id);
-  if (!est) { toast('Estudiante no encontrado', 'error'); return; }
+async function seleccionarEst(id){
+  const e=await dbGet('estudiantes',id);
+  if(!e){toast('No encontrado','error');return}
+  E.estActual=e;
+  if(E.modo==='obs') abrirFormObs(e);
+  else if(E.modo==='logro') abrirFormLogro(e);
+  else abrirHistorial(e);
+}
 
-  estado.estudianteActual = est;
-
-  if (estado.modoActual === 'nueva') {
-    abrirFormularioObservacion(est);
-  } else {
-    abrirHistorial(est);
+// ═══════════════════════════════════════════════════════════════
+// FALTAS DEL MANUAL — PREPARAR Y FILTRAR
+// ═══════════════════════════════════════════════════════════════
+function prepararFaltasGlobal(){
+  E.allFaults=[];
+  for(const cat in E.configFaltas){
+    for(const grav in E.configFaltas[cat]){
+      (E.configFaltas[cat][grav]||[]).forEach(texto=>{
+        E.allFaults.push({categoria:cat,gravedad:grav,texto});
+      });
+    }
   }
 }
 
-// ═══════════════════════════════════════════════════════
-// FORMULARIO DE OBSERVACIÓN
-// ═══════════════════════════════════════════════════════
+function renderCatFilter(){
+  const c=document.getElementById('catFilter');
+  const cats=['Todas','ASISTENCIA','APRENDIZAJE','BIENES','DESARROLLO','RELACIONES'];
+  c.innerHTML=cats.map(cat=>`<button class="cat-btn${cat==='Todas'?' active':''}" onclick="filtrarFaltasPorCat(this,'${cat}')">${cat==='Todas'?'Todas':cat.charAt(0)+cat.slice(1).toLowerCase()}</button>`).join('');
+}
 
-function abrirFormularioObservacion(est) {
-  document.getElementById('obsFormStudentName').textContent = est.apellidos + ' ' + est.nombres;
-  document.getElementById('obsFormStudentMeta').textContent = est.grado + ' ' + est.grupo + ' · ' + (est.sede || '');
+function filtrarFaltasPorCat(btn,cat){
+  document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('buscarFalta').value='';
+  if(cat==='Todas') E.filteredFaults=[...E.allFaults];
+  else E.filteredFaults=E.allFaults.filter(f=>f.categoria===cat);
+  renderFaltas();
+}
 
-  // Score actual
-  actualizarScoreDisplay(est.id, 'obsScoreNumber', 'obsScoreLabel');
+function filtrarFaltas(){
+  const q=document.getElementById('buscarFalta').value.toLowerCase();
+  if(!q){E.filteredFaults=[...E.allFaults];renderFaltas();return}
+  E.filteredFaults=E.allFaults.filter(f=>f.texto.toLowerCase().includes(q));
+  renderFaltas();
+}
 
-  // Defaults
-  document.getElementById('tipo_I').checked = true;
-  document.getElementById('obsCategoria').value = '';
-  document.getElementById('grav_leve').checked = true;
-  document.getElementById('obsFaltaManual').innerHTML = '<option value="">— Seleccionar —</option>';
-  document.getElementById('obsDescripcion').value = '';
-  document.getElementById('obsMedidas').value = '';
-  document.getElementById('acu_no').checked = true;
-  document.getElementById('obsSitio').value = '';
+function renderFaltas(){
+  const c=document.getElementById('faltasLista');
+  if(!E.filteredFaults.length){c.innerHTML='<div class="text-center text-sm text-sec" style="padding:20px">No se encontraron faltas</div>';return}
+  c.innerHTML=E.filteredFaults.map((f,i)=>{
+    const gc=f.gravedad.toLowerCase();
+    const sel=E.faltaSeleccionada&&E.faltaSeleccionada.texto===f.texto?' selected':'';
+    return`<div class="fault-item${sel}" onclick="seleccionarFalta(${i})"><span class="fault-badge ${gc}">${f.gravedad}</span>${f.texto}</div>`;
+  }).join('');
+}
 
-  // Fecha y hora actual
-  const now = new Date();
-  document.getElementById('obsFechaSuceso').value = now.toISOString().split('T')[0];
-  document.getElementById('obsHoraSuceso').value = now.toTimeString().slice(0, 5);
+function seleccionarFalta(i){
+  E.faltaSeleccionada=E.filteredFaults[i];
+  document.getElementById('faltaSeleccionada').value=E.faltaSeleccionada.texto;
+  document.getElementById('infoCategoria').textContent=E.faltaSeleccionada.categoria;
+  document.getElementById('infoGravedad').textContent=E.faltaSeleccionada.gravedad;
+  const pts=(E.configPuntos[E.faltaSeleccionada.categoria]||{})[E.faltaSeleccionada.gravedad]||10;
+  document.getElementById('infoPuntos').textContent='-'+pts;
+  renderFaltas(); // para marcar .selected
+}
 
-  // Materias según grado del estudiante
-  cargarMaterias(est.grado);
+// ═══════════════════════════════════════════════════════════════
+// FORMULARIO OBSERVACIÓN
+// ═══════════════════════════════════════════════════════════════
+function abrirFormObs(est){
+  document.getElementById('obsEstNombre').textContent=est.apellidos+' '+est.nombres;
+  document.getElementById('obsEstMeta').textContent=est.grado+' '+est.grupo+' · '+(est.sede||'');
+  calcularScore(est.id,'obsScore','obsScoreLabel');
+  // Reset
+  document.getElementById('t_I').checked=true;
+  E.faltaSeleccionada=null;
+  document.getElementById('faltaSeleccionada').value='';
+  document.getElementById('infoCategoria').textContent='—';
+  document.getElementById('infoGravedad').textContent='—';
+  document.getElementById('infoPuntos').textContent='-0';
+  document.getElementById('obsDescripcion').value='';
+  document.getElementById('obsDescargos').value='';
+  document.getElementById('obsContexto').value='';
+  document.getElementById('obsMedidas').value='';
+  document.getElementById('obsActividad').value='';
+  document.getElementById('obsSitio').value='';
+  document.getElementById('obsMateria').innerHTML='<option value="">Solo aplica para actividad académica</option>';
+  document.getElementById('actDetalleGrp').classList.add('hidden');
+  document.getElementById('sitioOtroGrp').classList.add('hidden');
+  document.getElementById('acu_no').checked=true;
+  const now=new Date();
+  document.getElementById('obsFecha').value=now.toISOString().split('T')[0];
+  document.getElementById('obsHora').value=now.toTimeString().slice(0,5);
 
-  actualizarFormulario();
+  E.filteredFaults=[...E.allFaults];
+  renderCatFilter();renderFaltas();
   mostrarPantalla('screenObsForm');
 }
 
-function cargarMaterias(grado) {
-  const select = document.getElementById('obsMateria');
-  select.innerHTML = '<option value="">— Seleccionar —</option>';
-
-  // Determinar nivel
-  const num = parseInt(grado) || 0;
-  let nivel = 'PRIMARIA';
-  if (num >= 6 && num <= 9) nivel = 'SECUNDARIA';
-  else if (num >= 10) nivel = 'MEDIA';
-
-  const materias = estado.materiasPorNivel[nivel] || [];
-  materias.forEach(m => {
-    select.innerHTML += `<option value="${m.nombre}">${m.nombre}</option>`;
-  });
-
-  // Si no hay materias cargadas, poner genéricas
-  if (materias.length === 0) {
-    ['Matemáticas', 'Español', 'Ciencias Naturales', 'Ciencias Sociales',
-     'Inglés', 'Educación Física', 'Artística', 'Tecnología', 'Ética', 'Religión'
-    ].forEach(m => {
-      select.innerHTML += `<option value="${m}">${m}</option>`;
-    });
-  }
-}
-
-function actualizarFormulario() {
-  const tipo = document.querySelector('input[name="tipoSit"]:checked')?.value || 'TIPO_I';
-  const categoria = document.getElementById('obsCategoria').value;
-  const gravedad = document.querySelector('input[name="gravedad"]:checked')?.value || 'LEVE';
-
-  // Actualizar puntos
-  const puntos = (estado.configPuntos[categoria] || {})[gravedad] || 10;
-  document.getElementById('puntosValor').textContent = '-' + puntos;
-
-  // Actualizar faltas del manual
-  actualizarFaltasManual(categoria, gravedad);
-
-  // Mostrar ruta de atención
-  const rutaCard = document.getElementById('rutaAtencionCard');
-  const ruta = estado.rutasAtencion[tipo];
-  if (ruta && tipo !== 'TIPO_I') {
-    document.getElementById('rutaTitulo').textContent = ruta.nombre || tipo;
-    let html = `<p style="margin-bottom:8px"><strong>Responsable:</strong> ${ruta.responsable || '—'}</p>`;
-    html += `<p style="margin-bottom:8px"><strong>Tiempo:</strong> ${ruta.tiempo || '—'}</p>`;
-    if (ruta.protocolo) {
-      html += '<p style="margin-top:8px"><strong>Protocolo:</strong></p>';
-      html += '<ol style="padding-left:18px;margin-top:4px">';
-      ruta.protocolo.forEach(p => { html += `<li style="margin-bottom:4px">${p}</li>`; });
-      html += '</ol>';
+function actualizarForm(){}
+function alCambiarActividad(){
+  const a=document.getElementById('obsActividad').value;
+  const dg=document.getElementById('actDetalleGrp');
+  const mg=document.getElementById('materiaGrp');
+  if(['Actividad extracurricular','Actividad institucional','Actividad en representación de la institución'].includes(a)){dg.classList.remove('hidden')}else{dg.classList.add('hidden');document.getElementById('obsActDetalle').value=''}
+  // Materia solo para actividad académica
+  const sel=document.getElementById('obsMateria');
+  if(a==='Actividad académica'){
+    sel.innerHTML='<option value="">Seleccionar...</option>';
+    const num=parseInt(E.estActual?.grado)||0;
+    let nivel=num<=5?'PRIMARIA':num<=9?'SECUNDARIA':'MEDIA';
+    (E.materiasPorNivel[nivel]||[]).forEach(m=>sel.innerHTML+=`<option value="${m.nombre}">${m.nombre}</option>`);
+    if(!E.materiasPorNivel[nivel]?.length){
+      ['Matemáticas','Español','Ciencias Naturales','Ciencias Sociales','Inglés','Educación Física','Artística','Tecnología','Ética','Religión'].forEach(m=>sel.innerHTML+=`<option value="${m}">${m}</option>`);
     }
-    if (ruta.nota) html += `<p style="margin-top:8px;color:var(--danger);font-weight:600">${ruta.nota}</p>`;
-    document.getElementById('rutaContenido').innerHTML = html;
-    rutaCard.classList.remove('hidden');
-  } else {
-    rutaCard.classList.add('hidden');
-  }
+  }else{sel.innerHTML='<option value="">Solo aplica para actividad académica</option>'}
+}
+function alCambiarSitio(){
+  const s=document.getElementById('obsSitio').value;
+  if(s==='Otro')document.getElementById('sitioOtroGrp').classList.remove('hidden');
+  else{document.getElementById('sitioOtroGrp').classList.add('hidden');document.getElementById('obsSitioOtro').value=''}
 }
 
-function actualizarFaltasManual(categoria, gravedad) {
-  const select = document.getElementById('obsFaltaManual');
-  select.innerHTML = '<option value="">— Seleccionar (opcional) —</option>';
-
-  if (!categoria || !gravedad) return;
-
-  const faltas = (estado.configFaltas[categoria] || {})[gravedad] || [];
-  faltas.forEach(f => {
-    select.innerHTML += `<option value="${f}">${f}</option>`;
-  });
+// ═══════════════════════════════════════════════════════════════
+// RUTAS DE ATENCIÓN
+// ═══════════════════════════════════════════════════════════════
+function verRutaAtencion(){
+  const tipo=document.querySelector('input[name="tipoSit"]:checked')?.value||'TIPO_I';
+  const ruta=E.rutasAtencion[tipo];
+  if(!ruta){toast('Rutas no cargadas','error');return}
+  let html=`<h3 style="margin-bottom:16px">${ruta.nombre||tipo}</h3>`;
+  html+=`<div class="info-box blue" style="margin-bottom:12px"><strong>${ruta.articulo||''}</strong></div>`;
+  if(ruta.protocolo){ruta.protocolo.forEach(p=>html+=`<div class="protocol-step">${p}</div>`)}
+  html+=`<div style="margin-top:16px;font-size:.85rem"><strong>👤 Responsable:</strong> ${ruta.responsable||'—'}<br><strong>⏱️ Tiempo:</strong> ${ruta.tiempo||'—'}</div>`;
+  if(ruta.nota)html+=`<div class="info-box red mt-8">${ruta.nota}</div>`;
+  html+=`<div class="modal-buttons"><button class="btn btn-primary" onclick="cerrarModal()">Entendido</button></div>`;
+  document.getElementById('modalSheet').innerHTML=html;
+  document.getElementById('modalBackdrop').classList.add('visible');
 }
+function cerrarModal(){document.getElementById('modalBackdrop').classList.remove('visible')}
 
-async function actualizarScoreDisplay(idEstudiante, numId, labelId) {
-  // Calcular localmente
-  const todasObs = await dbGetAll('observaciones');
-  const remotas = await dbGetAll('observaciones_remotas');
-  const obsEstudiante = [...todasObs, ...remotas].filter(o =>
-    String(o.idEstudiante) === String(idEstudiante)
-  );
-
-  let totalPuntos = 0;
-  obsEstudiante.forEach(o => {
-    const cat = o.categoria || '';
-    const grav = o.gravedad || '';
-    const pts = (estado.configPuntos[cat] || {})[grav] || 10;
-    totalPuntos += pts;
-  });
-
-  const nota = Math.max(0, 500 - totalPuntos);
-  let desempeno = 'BAJO';
-  let clase = 'bajo';
-  if (nota >= 450) { desempeno = 'SUPERIOR'; clase = 'superior'; }
-  else if (nota >= 400) { desempeno = 'ALTO'; clase = 'alto'; }
-  else if (nota >= 300) { desempeno = 'BASICO'; clase = 'basico'; }
-
-  const numEl = document.getElementById(numId);
-  numEl.textContent = nota;
-  numEl.className = 'score-number ' + clase;
-  document.getElementById(labelId).textContent = desempeno;
-
-  return { nota, desempeno, faltas: obsEstudiante.length, puntos: totalPuntos };
-}
-
-// ═══════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════
 // GUARDAR OBSERVACIÓN
-// ═══════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════
+async function guardarObservacion(){
+  const est=E.estActual;if(!est){toast('Sin estudiante','error');return}
+  if(!E.faltaSeleccionada){toast('Selecciona una falta del manual','error');return}
+  const desc=document.getElementById('obsDescripcion').value.trim();
+  if(!desc||desc.length<10){toast('Descripción mínimo 10 caracteres','error');return}
+  const act=document.getElementById('obsActividad').value;
+  if(!act){toast('Selecciona la actividad','error');return}
+  const sitio=document.getElementById('obsSitio').value;
+  if(!sitio){toast('Selecciona el sitio','error');return}
+  const medidas=document.getElementById('obsMedidas').value.trim();
+  if(!medidas){toast('Escribe las medidas tomadas','error');return}
 
-async function guardarObservacion() {
-  const est = estado.estudianteActual;
-  if (!est) { toast('No hay estudiante seleccionado', 'error'); return; }
+  let actFinal=act;
+  const actDet=document.getElementById('obsActDetalle').value.trim();
+  if(actDet&&['Actividad extracurricular','Actividad institucional','Actividad en representación de la institución'].includes(act))actFinal=act+': '+actDet;
+  let sitioFinal=sitio;
+  if(sitio==='Otro'){const o=document.getElementById('obsSitioOtro').value.trim();if(!o){toast('Especifica el sitio','error');return}sitioFinal=o}
 
-  const categoria = document.getElementById('obsCategoria').value;
-  const descripcion = document.getElementById('obsDescripcion').value.trim();
-  const medidas = document.getElementById('obsMedidas').value.trim();
-
-  // Validaciones
-  if (!categoria) { toast('Selecciona una categoría', 'error'); return; }
-  if (!descripcion) { toast('Escribe la descripción de los hechos', 'error'); return; }
-  if (!medidas) { toast('Escribe las medidas tomadas', 'error'); return; }
-
-  const docente = estado.sesion?.datosAdicionales || {};
-  const idLocal = 'LOCAL_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6);
-
-  const observacion = {
-    idLocal: idLocal,
-    idServidor: null,
-    idEstudiante: est.id,
-    periodo: estado.periodoActual,
-    tipoSituacion: document.querySelector('input[name="tipoSit"]:checked')?.value || 'TIPO_I',
-    categoria: categoria,
-    gravedad: document.querySelector('input[name="gravedad"]:checked')?.value || 'LEVE',
-    faltaManual: document.getElementById('obsFaltaManual').value || '',
-    descripcion: descripcion,
-    descargos: '',
-    actividad: '',
-    sitio: document.getElementById('obsSitio').value || '',
-    materia: document.getElementById('obsMateria').value || '',
-    idDocente: docente.id || docente.documento || estado.sesion?.usuario?.idPersona || '',
-    nombreDocente: (docente.nombres || '') + ' ' + (docente.apellidos || ''),
-    contexto: '',
-    medidas: medidas,
-    medidasTomadas: medidas,
-    acudienteNotificado: document.querySelector('input[name="acudiente"]:checked')?.value || 'NO',
-    fechaSuceso: formatearFechaParaAPI(document.getElementById('obsFechaSuceso').value),
-    horaSuceso: document.getElementById('obsHoraSuceso').value + ':00',
-    estado: 'PENDIENTE',
-    timestampCreacion: new Date().toISOString(),
-    intentosSync: 0
+  const da=E.sesion?.datosAdicionales||{};
+  const idLocal='LOCAL_'+Date.now()+'_'+Math.random().toString(36).substr(2,6);
+  const obs={
+    idLocal,idServidor:null,
+    idEstudiante:est.id,periodo:E.periodoActual,
+    tipoSituacion:document.querySelector('input[name="tipoSit"]:checked')?.value||'TIPO_I',
+    categoria:E.faltaSeleccionada.categoria,
+    gravedad:E.faltaSeleccionada.gravedad,
+    faltaManual:E.faltaSeleccionada.texto,
+    descripcion:desc,
+    descargos:document.getElementById('obsDescargos').value.trim(),
+    actividad:actFinal,
+    sitio:sitioFinal,
+    materia:document.getElementById('obsMateria').value||'',
+    idDocente:da.id||da.documento||E.sesion?.usuario?.idPersona||E.docenteInfo.id||'',
+    nombreDocente:(da.nombres||'')+' '+(da.apellidos||''),
+    contexto:document.getElementById('obsContexto').value.trim(),
+    medidas,medidasTomadas:medidas,
+    acudienteNotificado:document.querySelector('input[name="acudiente"]:checked')?.value||'NO',
+    fechaSuceso:document.getElementById('obsFecha').value,
+    horaSuceso:document.getElementById('obsHora').value+':00',
+    estado:'PENDIENTE',timestampCreacion:new Date().toISOString(),intentosSync:0
   };
 
-  // Guardar en IndexedDB SIEMPRE (offline-first)
-  await dbPut('observaciones', observacion);
-
-  toast('✓ Observación guardada', 'success');
-
-  // Si estamos online, intentar subir inmediatamente
-  if (estado.online) {
-    subirObservacionIndividual(observacion);
-  }
-
-  actualizarSyncBar();
-  irADashboard();
+  await dbPut('observaciones',obs);
+  toast('✓ Observación guardada','success');
+  if(E.online) subirObs(obs);
+  actualizarSyncBar();irADashboard();
 }
 
-function formatearFechaParaAPI(dateStr) {
-  if (!dateStr) return '';
-  const [y, m, d] = dateStr.split('-');
-  return d + '/' + m + '/' + y;
+async function subirObs(obs){
+  try{
+    const r=await api('registrarObservacion',{...obs,docente:obs.idDocente});
+    if(r.exito){obs.idServidor=r.idObservacion;obs.estado='SINCRONIZADA';await dbPut('observaciones',obs);actualizarSyncBar()}
+  }catch(e){console.warn('Subida falló:',e.message)}
 }
 
-async function subirObservacionIndividual(obs) {
-  try {
-    const resp = await apiCall('registrarObservacion', {
-      ...obs,
-      docente: obs.idDocente
-    });
-    if (resp.exito) {
-      obs.idServidor = resp.idObservacion;
-      obs.estado = 'SINCRONIZADA';
-      await dbPut('observaciones', obs);
-      actualizarSyncBar();
-    }
-  } catch (e) {
-    console.warn('Subida individual falló (se intentará en sync):', e.message);
-  }
+// ═══════════════════════════════════════════════════════════════
+// GUARDAR LOGRO
+// ═══════════════════════════════════════════════════════════════
+function abrirFormLogro(est){
+  document.getElementById('logroEstNombre').textContent=est.apellidos+' '+est.nombres;
+  document.getElementById('logroEstMeta').textContent=est.grado+' '+est.grupo+' · '+(est.sede||'');
+  document.getElementById('logroTipo').value='';
+  document.getElementById('logroEspacio').value='';
+  document.getElementById('logroDesc').value='';
+  mostrarPantalla('screenLogro');
 }
 
-// ═══════════════════════════════════════════════════════
+async function guardarLogro(){
+  const est=E.estActual;if(!est)return;
+  const tipo=document.getElementById('logroTipo').value;
+  const desc=document.getElementById('logroDesc').value.trim();
+  if(!tipo||!desc){toast('Completa tipo y descripción','error');return}
+  const da=E.sesion?.datosAdicionales||{};
+  const idLocal='LOG_'+Date.now()+'_'+Math.random().toString(36).substr(2,6);
+  const logro={
+    idLocal,idServidor:null,idEstudiante:est.id,periodo:E.periodoActual,
+    tipoSituacion:'LOGRO',categoria:tipo,gravedad:'',faltaManual:'',
+    descripcion:desc,descargos:'',actividad:document.getElementById('logroEspacio').value||'',
+    sitio:'',materia:'',idDocente:da.id||da.documento||E.docenteInfo.id||'',
+    nombreDocente:(da.nombres||'')+' '+(da.apellidos||''),
+    contexto:'',medidas:'',medidasTomadas:'',acudienteNotificado:'',
+    fechaSuceso:new Date().toISOString().split('T')[0],
+    horaSuceso:new Date().toTimeString().slice(0,8),
+    estado:'PENDIENTE',timestampCreacion:new Date().toISOString(),intentosSync:0
+  };
+  await dbPut('observaciones',logro);
+  toast('🌟 Logro registrado','success');
+  if(E.online){try{const r=await api('guardarLogroPWA',{...logro,tipoLogro:tipo,espacio:logro.actividad,docente:logro.idDocente});if(r.exito){logro.idServidor=r.idLogro;logro.estado='SINCRONIZADA';await dbPut('observaciones',logro)}}catch(e){}}
+  actualizarSyncBar();irADashboard();
+}
+
+// ═══════════════════════════════════════════════════════════════
 // SINCRONIZACIÓN
-// ═══════════════════════════════════════════════════════
-
-async function sincronizarAhora() {
-  if (!estado.online) {
-    toast('Sin conexión. Se sincronizará cuando haya internet.', 'error');
-    return;
-  }
-
-  const todas = await dbGetAll('observaciones');
-  const pendientes = todas.filter(o => o.estado === 'PENDIENTE');
-
-  if (pendientes.length === 0) {
-    toast('Todo sincronizado ✓');
-    return;
-  }
-
-  try {
-    mostrarCargando(`Sincronizando ${pendientes.length} observaciones...`);
-
-    const docente = estado.sesion?.datosAdicionales || {};
-    const ultimaSync = (await dbGet('config', 'ultimaSync'))?.value || null;
-
-    const resp = await apiCall('sincronizarObservacionesApp', {
-      observacionesPendientes: pendientes.map(o => ({
-        ...o,
-        docente: o.idDocente
-      })),
-      ultimaSync: ultimaSync,
-      idDocente: docente.id || docente.documento || ''
-    });
-
-    if (resp.exito) {
-      // Marcar las subidas como sincronizadas
-      for (const sub of (resp.subidas || [])) {
-        if (sub.exito) {
-          const obs = pendientes.find(p => p.idLocal === sub.idLocal);
-          if (obs) {
-            obs.idServidor = sub.idServidor;
-            obs.estado = 'SINCRONIZADA';
-            await dbPut('observaciones', obs);
-          }
-        }
-      }
-
-      // Guardar observaciones de otros docentes
-      for (const nueva of (resp.nuevasObservaciones || [])) {
-        await dbPut('observaciones_remotas', nueva);
-      }
-
-      // Guardar timestamp
-      await dbPut('config', { key: 'ultimaSync', value: resp.timestampServidor });
-
-      const subidas = (resp.subidas || []).filter(s => s.exito).length;
-      const bajadas = (resp.nuevasObservaciones || []).length;
-
-      ocultarCargando();
-      toast(`✓ ${subidas} subidas, ${bajadas} descargadas`, 'success');
-    } else {
-      throw new Error(resp.mensaje || 'Error de sincronización');
+// ═══════════════════════════════════════════════════════════════
+async function sincronizarAhora(){
+  if(!E.online){toast('Sin conexión','error');return}
+  const all=await dbGetAll('observaciones');
+  const pend=all.filter(o=>o.estado==='PENDIENTE');
+  if(!pend.length){toast('Todo sincronizado ✓');return}
+  try{
+    mostrarCargando('Sincronizando '+pend.length+'...');
+    let subidas=0;
+    for(const obs of pend){
+      try{
+        const isLogro=obs.tipoSituacion==='LOGRO';
+        const action=isLogro?'guardarLogroPWA':'registrarObservacion';
+        const r=await api(action,{...obs,docente:obs.idDocente,tipoLogro:obs.categoria,espacio:obs.actividad});
+        if(r.exito){obs.idServidor=r.idObservacion||r.idLogro;obs.estado='SINCRONIZADA';await dbPut('observaciones',obs);subidas++}
+      }catch(e){obs.intentosSync=(obs.intentosSync||0)+1;await dbPut('observaciones',obs)}
     }
-  } catch (err) {
-    ocultarCargando();
-    toast('Error: ' + err.message, 'error');
-  }
-
-  actualizarSyncBar();
-  actualizarDashboard();
+    ocultarCargando();toast(`✓ ${subidas} de ${pend.length} sincronizadas`,'success');
+  }catch(e){ocultarCargando();toast('Error: '+e.message,'error')}
+  actualizarSyncBar();actualizarDashboard();
 }
 
-// ═══════════════════════════════════════════════════════
-// HISTORIAL DE ESTUDIANTE
-// ═══════════════════════════════════════════════════════
-
-async function abrirHistorial(est) {
-  document.getElementById('histStudentName').textContent = est.apellidos + ' ' + est.nombres;
-  document.getElementById('histStudentMeta').textContent = est.grado + ' ' + est.grupo + ' · ' + (est.sede || '');
-  document.getElementById('histPeriodo').value = '';
-
-  estado.estudianteActual = est;
+// ═══════════════════════════════════════════════════════════════
+// HISTORIAL
+// ═══════════════════════════════════════════════════════════════
+async function abrirHistorial(est){
+  document.getElementById('histNombre').textContent=est.apellidos+' '+est.nombres;
+  document.getElementById('histMeta').textContent=est.grado+' '+est.grupo+' · '+(est.sede||'');
+  E.estActual=est;
+  inicializarFiltrosHist();
   mostrarPantalla('screenHistory');
-  await cargarHistorialEstudiante();
+  await cargarHistorial();
 }
 
-async function cargarHistorialEstudiante() {
-  const est = estado.estudianteActual;
-  if (!est) return;
+function inicializarFiltrosHist(){
+  const mk=(containerId,items,checked)=>{
+    const c=document.getElementById(containerId);
+    c.innerHTML=items.map(it=>`<label class="filter-check${checked?' checked':''}"><input type="checkbox" value="${it.v}" ${checked?'checked':''} onchange="this.parentElement.classList.toggle('checked');cargarHistorial()"><span>${it.l}</span></label>`).join('');
+  };
+  mk('filtPeriodo',[{v:'P1',l:'P1'},{v:'P2',l:'P2'},{v:'P3',l:'P3'}],false);
+  mk('filtTipo',[{v:'TIPO_I',l:'Tipo I'},{v:'TIPO_II',l:'Tipo II'},{v:'TIPO_III',l:'Tipo III'},{v:'LOGRO',l:'Logro'}],true);
+  mk('filtGravedad',[{v:'LEVE',l:'Leve'},{v:'GRAVE',l:'Grave'},{v:'GRAVISIMA',l:'Gravísima'}],true);
+  mk('filtCategoria',[{v:'ASISTENCIA',l:'Asist.'},{v:'APRENDIZAJE',l:'Aprend.'},{v:'BIENES',l:'Bienes'},{v:'DESARROLLO',l:'Desarr.'},{v:'RELACIONES',l:'Relac.'}],true);
+}
 
-  const periodo = document.getElementById('histPeriodo').value;
+function getChecked(id){return[...document.querySelectorAll(`#${id} input:checked`)].map(i=>i.value)}
 
-  // Score
-  const score = await actualizarScoreDisplay(est.id, 'histScoreNumber', 'histScoreLabel');
-  document.getElementById('histFaltas').textContent = score.faltas;
-  document.getElementById('histPuntos').textContent = score.puntos;
+async function cargarHistorial(){
+  const est=E.estActual;if(!est)return;
+  const score=await calcularScore(est.id,'histScore','histScoreLabel');
+  document.getElementById('histFaltas').textContent=score.faltas;
+  document.getElementById('histPuntos').textContent=score.puntos;
 
-  // Obtener observaciones locales + remotas
-  const locales = await dbGetAll('observaciones');
-  const remotas = await dbGetAll('observaciones_remotas');
+  const locales=await dbGetAll('observaciones');
+  const remotas=await dbGetAll('obs_remotas');
+  let obs=[...locales,...remotas].filter(o=>String(o.idEstudiante)===String(est.id));
 
-  let obs = [...locales, ...remotas]
-    .filter(o => String(o.idEstudiante) === String(est.id));
-
-  if (periodo) {
-    obs = obs.filter(o => o.periodo === periodo || !o.periodo);
-  }
-
-  // Ordenar: más recientes primero
-  obs.sort((a, b) => {
-    const fa = new Date(a.timestampCreacion || a.fechaRegistro || 0);
-    const fb = new Date(b.timestampCreacion || b.fechaRegistro || 0);
-    return fb - fa;
+  // Aplicar filtros
+  const fp=getChecked('filtPeriodo');
+  const ft=getChecked('filtTipo');
+  const fg=getChecked('filtGravedad');
+  const fc=getChecked('filtCategoria');
+  if(fp.length)obs=obs.filter(o=>fp.includes(o.periodo));
+  if(ft.length)obs=obs.filter(o=>ft.includes(o.tipoSituacion||o.tipo));
+  obs=obs.filter(o=>{
+    const t=o.tipoSituacion||o.tipo;
+    if(t==='LOGRO')return true;
+    return(fg.length?fg.includes(o.gravedad):true)&&(fc.length?fc.includes(o.categoria):true);
   });
 
-  document.getElementById('histTotal').textContent = obs.length + ' observacion' + (obs.length !== 1 ? 'es' : '');
-  renderizarHistorial(obs);
+  obs.sort((a,b)=>new Date(b.timestampCreacion||b.fechaRegistro||0)-new Date(a.timestampCreacion||a.fechaRegistro||0));
+  document.getElementById('histTotal').textContent=obs.length+' observacion'+(obs.length!==1?'es':'');
+  renderHistorial(obs);
 }
 
-function renderizarHistorial(observaciones) {
-  const container = document.getElementById('listaHistorial');
-
-  if (observaciones.length === 0) {
-    container.innerHTML = `
-      <div class="empty-state">
-        <div class="empty-icon">📋</div>
-        <div class="empty-text">Sin observaciones registradas</div>
-      </div>`;
-    return;
-  }
-
-  container.innerHTML = observaciones.map(o => {
-    const tipoClase = (o.tipoSituacion || o.tipo || '').toLowerCase().replace('_', '-');
-    const esPendiente = o.estado === 'PENDIENTE';
-    const fecha = o.fechaSuceso || o.fechaRegistro || '';
-    const hora = o.horaSuceso || o.horaRegistro || '';
-
-    return `
-    <div class="obs-item ${tipoClase} ${esPendiente ? 'pendiente' : ''}">
-      <div class="flex-between">
-        <div class="obs-date">${fecha} ${hora ? '· ' + hora.slice(0, 5) : ''}</div>
-        ${esPendiente ? '<span class="obs-pending-badge">⏳ Pendiente</span>' : ''}
-      </div>
-      <div style="margin-top:4px">
-        <span class="obs-type ${tipoClase}">${(o.tipoSituacion || o.tipo || '').replace('_', ' ')}</span>
-        <span class="obs-type obs-cat">${o.categoria || ''}</span>
-        <span class="obs-type obs-cat">${o.gravedad || ''}</span>
-      </div>
-      ${o.faltaManual ? `<div style="font-size:0.82rem;color:var(--text-secondary);margin-top:4px;font-style:italic">${o.faltaManual}</div>` : ''}
-      <div class="obs-desc">${o.descripcion || ''}</div>
-      ${o.medidas || o.medidasTomadas ? `<div style="font-size:0.82rem;margin-top:4px"><strong>Medidas:</strong> ${o.medidas || o.medidasTomadas}</div>` : ''}
-      <div class="obs-teacher">👤 ${o.nombreDocente || o.idDocente || 'Docente'}</div>
+function renderHistorial(obs){
+  const c=document.getElementById('listaHistorial');
+  if(!obs.length){c.innerHTML='<div class="empty-state"><div class="empty-icon">📋</div><div>Sin observaciones</div></div>';return}
+  c.innerHTML=obs.map(o=>{
+    const t=(o.tipoSituacion||o.tipo||'').toLowerCase().replace('_','-');
+    const pend=o.estado==='PENDIENTE';
+    const isLogro=t==='logro';
+    return`<div class="obs-item ${t} ${pend?'pendiente':''}">
+      <div class="flex-between"><div class="obs-date">${o.fechaSuceso||o.fechaRegistro||''} ${(o.horaSuceso||o.horaRegistro||'').slice(0,5)}</div>${pend?'<span class="obs-pending">⏳ Pendiente</span>':''}</div>
+      <div style="margin-top:4px"><span class="obs-type ${t}">${isLogro?'🌟 LOGRO':(o.tipoSituacion||o.tipo||'').replace('_',' ')}</span>${!isLogro?`<span class="obs-type obs-cat">${o.categoria||''}</span><span class="obs-type obs-cat">${o.gravedad||''}</span>`:''}</div>
+      ${o.faltaManual?`<div style="font-size:.8rem;color:var(--text-sec);margin-top:4px;font-style:italic">${o.faltaManual}</div>`:''}
+      <div class="obs-desc">${o.descripcion||''}</div>
+      ${o.descargos?`<div style="font-size:.82rem;margin-top:6px;padding:8px;background:var(--warning-bg);border-radius:6px;border-left:3px solid var(--warning)"><strong>Descargos:</strong> ${o.descargos}</div>`:''}
+      ${o.medidas||o.medidasTomadas?`<div style="font-size:.82rem;margin-top:4px"><strong>Medidas:</strong> ${o.medidas||o.medidasTomadas}</div>`:''}
+      <div class="obs-teacher">👤 ${resolverNombreDocente(o.idDocente)||o.nombreDocente||'Docente'}</div>
     </div>`;
   }).join('');
 }
 
-// ═══════════════════════════════════════════════════════
-// UTILIDADES DE UI
-// ═══════════════════════════════════════════════════════
-
-function toast(msg, type = '') {
-  const el = document.getElementById('toast');
-  el.textContent = msg;
-  el.className = 'toast ' + type + ' visible';
-  setTimeout(() => el.classList.remove('visible'), 3000);
+function resolverNombreDocente(idDoc){
+  // Intentar desde los docentes en memoria (se cargan de IndexedDB en init)
+  return ''; // Se resolverá desde los datos cargados
 }
 
-function mostrarCargando(texto) {
-  document.getElementById('loadingText').textContent = texto || 'Cargando...';
-  document.getElementById('loadingOverlay').classList.add('visible');
-}
-function ocultarCargando() {
-  document.getElementById('loadingOverlay').classList.remove('visible');
+// ═══════════════════════════════════════════════════════════════
+// SCORE
+// ═══════════════════════════════════════════════════════════════
+async function calcularScore(idEst,numId,labelId){
+  const locales=await dbGetAll('observaciones');
+  const remotas=await dbGetAll('obs_remotas');
+  const obs=[...locales,...remotas].filter(o=>String(o.idEstudiante)===String(idEst)&&(o.tipoSituacion||o.tipo)!=='LOGRO');
+  let totalPts=0,faltas=0;
+  obs.forEach(o=>{
+    const pts=(E.configPuntos[o.categoria]||{})[o.gravedad]||10;
+    totalPts+=pts;faltas++;
+  });
+  const nota=Math.max(0,500-totalPts);
+  let desemp='BAJO',cls='bajo';
+  if(nota>=450){desemp='SUPERIOR';cls='superior'}else if(nota>=400){desemp='ALTO';cls='alto'}else if(nota>=300){desemp='BASICO';cls='basico'}
+  if(numId){const el=document.getElementById(numId);el.textContent=nota;el.className='score-number '+cls}
+  if(labelId)document.getElementById(labelId).textContent=desemp;
+  return{nota,desempeno:desemp,faltas,puntos:totalPts};
 }
 
-function mostrarModal(titulo, cuerpo, onConfirm) {
-  document.getElementById('modalTitle').textContent = titulo;
-  document.getElementById('modalBody').textContent = cuerpo;
-  document.getElementById('modalConfirmBtn').onclick = () => { cerrarModal(); onConfirm(); };
-  document.getElementById('modalBackdrop').classList.add('visible');
-}
-function cerrarModal() {
-  document.getElementById('modalBackdrop').classList.remove('visible');
-}
+// ═══════════════════════════════════════════════════════════════
+// UI UTILS
+// ═══════════════════════════════════════════════════════════════
+function toast(m,t=''){const e=document.getElementById('toast');e.textContent=m;e.className='toast '+t+' visible';setTimeout(()=>e.classList.remove('visible'),3000)}
+function mostrarCargando(t){document.getElementById('loadingText').textContent=t||'Cargando...';document.getElementById('loadingOverlay').classList.add('visible')}
+function ocultarCargando(){document.getElementById('loadingOverlay').classList.remove('visible')}
 
-// ═══════════════════════════════════════════════════════
-// INICIALIZACIÓN
-// ═══════════════════════════════════════════════════════
-
-async function init() {
-  try {
-    await abrirDB();
-    actualizarEstadoConexion();
-
-    // Verificar sesión guardada
-    const sesion = await dbGet('sesion', 'sesion_actual');
-    if (sesion && sesion.token) {
-      const fechaLogin = new Date(sesion.fechaLogin);
-      if (new Date() - fechaLogin < SESSION_DURATION) {
-        estado.sesion = sesion;
-        await cargarConfigDesdeDB();
-        irADashboard();
-        return;
-      }
+// ═══════════════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════════════
+async function init(){
+  try{
+    await abrirDB();actualizarConexion();
+    const sesion=await dbGet('sesion','sesion_actual');
+    if(sesion?.token&&(new Date()-new Date(sesion.fechaLogin))<SESSION_DAYS*864e5){
+      E.sesion=sesion;await cargarConfigDB();irADashboard();
+      if(E.online) autoSync();
+      return;
     }
-
-    // No hay sesión, mostrar login
     mostrarPantalla('screenLogin');
-  } catch (err) {
-    console.error('Error de inicialización:', err);
-    mostrarPantalla('screenLogin');
-  }
+  }catch(e){console.error('Init error:',e);mostrarPantalla('screenLogin')}
 }
-
-// Registrar Service Worker
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('sw.js').catch(e => console.log('SW registro falló:', e));
-}
-
-// Arrancar app
+if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(e=>console.log('SW:',e));
 init();
 </script>
-
 </body>
 </html>
