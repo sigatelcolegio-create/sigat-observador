@@ -157,7 +157,7 @@ textarea{resize:vertical;min-height:80px;line-height:1.5}
 .sync-bar-fill.error{background:var(--rose)}
 
 /* ═══ TOAST ═══ */
-.toast{position:fixed;bottom:calc(var(--safe-bottom)+20px);left:50%;transform:translateX(-50%) translateY(100px);background:var(--primary);color:#fff;padding:11px 22px;border-radius:30px;font-size:.85rem;font-weight:500;box-shadow:var(--shadow-lg);z-index:200;transition:transform .3s cubic-bezier(.4,0,.2,1);white-space:nowrap;max-width:90%;text-align:center}
+.toast{position:fixed;top:calc(var(--safe-top)+10px);left:50%;transform:translateX(-50%) translateY(-100px);background:var(--primary);color:#fff;padding:11px 22px;border-radius:30px;font-size:.85rem;font-weight:500;box-shadow:var(--shadow-lg);z-index:200;transition:transform .3s cubic-bezier(.4,0,.2,1);white-space:nowrap;max-width:90%;text-align:center;pointer-events:auto;cursor:pointer}
 .toast.vis{transform:translateX(-50%) translateY(0)}
 .toast.ok{background:var(--emerald)}.toast.err{background:var(--rose)}
 
@@ -490,7 +490,7 @@ textarea{resize:vertical;min-height:80px;line-height:1.5}
    SIGAT OBSERVADOR DIGITAL — PWA V3
    ═══════════════════════════════════════════════════════════════ */
 
-const API_URL = 'https://script.google.com/macros/s/AKfycbwsUE18UcIdTruWjI3Bumx2Tn2y90E7Iu2qUGyaWgj8WxuEOz-az2JC2RwYoROHxOnL/exec';
+const API_URL = 'https://script.google.com/macros/s/AKfycbxMcG9Ek71n7goaKPYxA7hf4dY38IjjID73Jd69uZYP3dwfQ0wuHWrCcNloPxoPeRFJ/exec';
 const DB_NAME = 'SIGAT_OBS_V3';
 const DB_VERSION = 2;
 
@@ -595,7 +595,7 @@ async function cerrarSesion(){await dbClear('sesion');S.sesion=null;mostrar('scr
 async function descargarDatos(){
   mostrarCarga('Descargando datos...');
   try{
-    const r=await api('obtenerDatosInicialesApp',{token:S.sesion?.token,documento:S.sesion?.usuario?.nombreCompleto});
+    const r=await api('obtenerDatosInicialesApp',{token:S.sesion?.token,documento:S.sesion?.usuario?.idPersona||S.sesion?.usuario?.nombreCompleto});
     if(!r.exito){ocultarCarga();toast(r.mensaje||'Error descargando datos','err');return}
     // Save estudiantes
     await dbClear('estudiantes');for(const e of r.estudiantes) await dbPut('estudiantes',e);
@@ -985,12 +985,16 @@ function verRuta(){
 }
 
 /* ═══ SAVE OBSERVATION ═══ */
+
 async function guardarObs(){
+  if(S._guardando)return; // ← Prevenir doble-tap
   const est=S.estudianteActual;if(!est)return;
   const desc=document.getElementById('fDesc').value.trim();
   const medidas=document.getElementById('fMedidas').value.trim();
   if(!desc||desc.length<10){toast('Descripción muy corta (mín 10 caracteres)','err');return}
   if(!medidas){toast('Indique las medidas tomadas','err');return}
+  
+  S._guardando=true; // ← Bloquear
   
   const tipo=document.querySelector('input[name="tipo"]:checked').value;
   const falta=S.faltaSelIdx>=0?S.faltasFiltradas[S.faltaSelIdx]:null;
@@ -1028,8 +1032,9 @@ async function guardarObs(){
   await dbPut('observaciones',obs);
   toast('Observación guardada ✓','ok');
   
-  // Try immediate sync
-  if(navigator.onLine) subirObs(obs);
+  // Try immediate sync — AHORA con await para que termine antes de navegar
+  if(navigator.onLine){try{await subirObs(obs)}catch(e){}}
+  S._guardando=false; // ← Desbloquear
   irDashboard();
 }
 
@@ -1272,7 +1277,10 @@ function verDetalle(o){
   // Footer
   html+=`<div class="det-block meta mt-8"><b>👤 Registrada por:</b> ${docName}<br><b>📞 Acudiente notificado:</b> ${o.acudienteNotificado||'—'}</div>`;
   
+// ✅ DESPUÉS:
   if(o.estado==='PENDIENTE')html+=`<div class="info amber mt-8">⏳ Esta observación está pendiente de sincronización.</div>`;
+  
+  html+=`<button class="btn btn-outline mt-12" onclick="cerrarModal()" style="margin-bottom:8px">← Volver al historial</button>`;
   
   abrirModal(html);
 }
@@ -1282,7 +1290,7 @@ function abrirModal(html){document.getElementById('modalContent').innerHTML=html
 function cerrarModal(){document.getElementById('modalBg').classList.remove('vis')}
 
 /* ═══ TOAST / LOADING ═══ */
-function toast(m,t){const e=document.getElementById('toast');e.textContent=m;e.className='toast '+(t||'')+' vis';setTimeout(()=>e.classList.remove('vis'),3000)}
+function toast(m,t){const e=document.getElementById('toast');e.textContent=m;e.className='toast '+(t||'')+' vis';e.onclick=()=>e.classList.remove('vis');clearTimeout(window._toastTimer);window._toastTimer=setTimeout(()=>e.classList.remove('vis'),2000)}
 function mostrarCarga(t){document.getElementById('loadingTxt').textContent=t||'Cargando...';document.getElementById('loadingOv').classList.add('vis')}
 function ocultarCarga(){document.getElementById('loadingOv').classList.remove('vis')}
 
