@@ -480,7 +480,37 @@ textarea{resize:vertical;min-height:80px;line-height:1.5}
       </div>
       <button class="btn btn-accent mb-8" onclick="descargarDatos()">🔄 Actualizar datos del sistema</button>
       <button class="btn btn-outline mb-8" onclick="sincronizarAhora()">📤 Sincronizar pendientes</button>
+      <button class="btn btn-outline mb-8" onclick="irCambiarPassword()">🔑 Cambiar contraseña</button>
+      <button id="btnRolDual" class="btn btn-outline mb-8" onclick="cambiarRolDual()" style="display:none">🔄 Cambiar modo (Docente ↔ Acudiente)</button>
       <button class="btn btn-rose" onclick="cerrarSesion()">🚪 Cerrar sesión</button>
+
+    </div>
+  </div>
+
+  <!-- ═══ PANTALLA CAMBIAR CONTRASEÑA ═══ -->
+  <div id="scrPassword" class="screen">
+    <div class="header">
+      <button class="btn-icon-h" onclick="mostrarConfig()">←</button>
+      <h1>Cambiar contraseña</h1>
+    </div>
+    <div class="scroll-area">
+      <div class="card">
+        <div class="form-group">
+          <label class="form-label">Contraseña actual</label>
+          <input type="password" id="pwdActual" placeholder="Ingrese su contraseña actual" autocomplete="current-password">
+        </div>
+        <div class="form-group" style="margin-top:12px">
+          <label class="form-label">Nueva contraseña</label>
+          <input type="password" id="pwdNueva" placeholder="Mínimo 4 caracteres" autocomplete="new-password">
+        </div>
+        <div class="form-group" style="margin-top:12px">
+          <label class="form-label">Confirmar nueva contraseña</label>
+          <input type="password" id="pwdConfirmar" placeholder="Repita la nueva contraseña" autocomplete="new-password">
+        </div>
+        <div id="pwdErr" class="login-err" style="margin-top:12px"></div>
+        <div id="pwdOk" style="color:#16a34a;background:#dcfce7;padding:10px;border-radius:8px;font-weight:600;margin-top:12px;display:none"></div>
+        <button class="btn btn-accent" style="margin-top:16px" onclick="ejecutarCambioPassword()">🔑 Cambiar contraseña</button>
+      </div>
     </div>
   </div>
 </div>
@@ -490,7 +520,7 @@ textarea{resize:vertical;min-height:80px;line-height:1.5}
    SIGAT OBSERVADOR DIGITAL — PWA V3
    ═══════════════════════════════════════════════════════════════ */
 
-const API_URL = 'https://script.google.com/macros/s/AKfycbxMcG9Ek71n7goaKPYxA7hf4dY38IjjID73Jd69uZYP3dwfQ0wuHWrCcNloPxoPeRFJ/exec';
+const API_URL = 'https://script.google.com/macros/s/AKfycbyQDtzmBixIFV1roU3YjfTl-0RvZSq9qYnKPWjkRW4lLLk2fac3UZGgQkCLz_8kNTsR/exec';
 const DB_NAME = 'SIGAT_OBS_V3';
 const DB_VERSION = 2;
 
@@ -500,14 +530,20 @@ let db = null;
 const S = {
   sesion: null,
   docenteInfo: { sede:'', rol:'Docente', area:'', esRolGlobal:false, id:'', nombreCompleto:'' },
-  modo: 'obs', // obs|logro|historial
+  modo: 'obs',
   estudianteActual: null,
   faltasGlobal: [], faltasFiltradas: [], faltaSelIdx: -1,
   catActiva: 'TODAS', gravActiva: 'TODAS',
   configGrupos: [], sedes: [], periodoActual: 'P1',
   configPuntos: {}, rutasAtencion: {}, materiasPorNivel: {},
-  // Coordinator quick-fault
-  tipoFaltaRapida: '', seleccionadosMulti: new Set()
+  tipoFaltaRapida: '', seleccionadosMulti: new Set(),
+  // 🔒 NUEVO: Control de permisos y roles
+  permisos: { puedeCrearObservacion: true, puedeVerTodos: true, soloLectura: false },
+  tipoUsuario: 'Docente',
+  esDocenteYAcudiente: false,
+  hijosDelDocente: [],
+  rolActivo: 'Docente',
+  estudiantePropio: null
 };
 
 /* ═══ INDEXED DB ═══ */
@@ -542,20 +578,49 @@ async function api(action, datos={}){
 
 /* ═══ NAVIGATION ═══ */
 function mostrar(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active')}
-function irDashboard(){actualizarDash();mostrar('scrDash')}
+function irDashboard(){
+  actualizarDash();
+  // 🔒 ESTUDIANTE: Ir directo a su historial
+  if(S.permisos.soloLectura && S.tipoUsuario==='ESTUDIANTE' && S.estudiantePropio){
+    S.estudianteActual=S.estudiantePropio;
+    S.modo='historial';
+    initHistFilters();cargarHist();calcScore(S.estudiantePropio.id);
+    document.getElementById('histHeader').textContent=S.estudiantePropio.apellidos+' '+S.estudiantePropio.nombres;
+    document.getElementById('histSub').textContent=S.estudiantePropio.grado+'° '+S.estudiantePropio.grupo+' · '+S.estudiantePropio.sede;
+    mostrar('scrHist');
+    return;
+  }
+  // 🔒 ACUDIENTE: Ir directo a selección de hijos
+  if(S.permisos.soloLectura && S.tipoUsuario==='ACUDIENTE'){
+    S.modo='historial';
+    prepararFiltros('sel');
+    document.getElementById('selTitle').textContent='Seleccionar hijo/a';
+    mostrar('scrSelect');
+    return;
+  }
+  mostrar('scrDash');
+}
 function irNuevaObs(){S.modo='obs';document.getElementById('selTitle').textContent='Seleccionar estudiante';prepararFiltros('sel');mostrar('scrSelect')}
 function irNuevoLogro(){S.modo='logro';document.getElementById('selTitle').textContent='Registrar logro de...';prepararFiltros('sel');mostrar('scrSelect')}
 function irHistorial(){S.modo='historial';document.getElementById('selTitle').textContent='Ver historial de...';prepararFiltros('sel');mostrar('scrSelect')}
 function volverDeForm(){mostrar('scrSelect')}
-function volverDeHist(){mostrar('scrSelect')}
+function volverDeHist(){
+  if(S.permisos.soloLectura && S.tipoUsuario==='ESTUDIANTE'){mostrarConfig();return}
+  if(S.permisos.soloLectura && S.tipoUsuario==='ACUDIENTE'){prepararFiltros('sel');document.getElementById('selTitle').textContent='Seleccionar hijo/a';mostrar('scrSelect');return}
+  mostrar('scrSelect');
+}
 function mostrarConfig(){
   const s=S.sesion, d=S.docenteInfo;
   document.getElementById('cfgDoc').textContent=d.nombreCompleto||s?.usuario?.nombreCompleto||'—';
-  document.getElementById('cfgRol').textContent=d.rol||d.area||'Docente';
+  let rolText=d.rol||d.area||S.tipoUsuario||'Docente';
+  if(S.esDocenteYAcudiente){rolText=(S.rolActivo||'Docente')+' (también '+(S.rolActivo==='Docente'?'Acudiente':'Docente')+')';}
+  document.getElementById('cfgRol').textContent=rolText;
   document.getElementById('cfgSede').textContent=d.sede||'—';
   document.getElementById('cfgPer').textContent=S.periodoActual;
   dbGetAll('estudiantes').then(e=>document.getElementById('cfgEst').textContent=e.length);
   document.getElementById('cfgConnSt').textContent=navigator.onLine?'En línea':'Sin conexión';
+  const btnRolDual=document.getElementById('btnRolDual');
+  if(btnRolDual) btnRolDual.style.display=S.esDocenteYAcudiente?'':'none';
   mostrar('scrConfig');
 }
 
@@ -589,8 +654,54 @@ async function intentarLogin(){
   }
   document.getElementById('btnLogin').disabled=false;
 }
-async function cerrarSesion(){await dbClear('sesion');S.sesion=null;mostrar('scrLogin');document.getElementById('loginUser').value='';document.getElementById('loginPass').value=''}
+async function cerrarSesion(){await dbClear('sesion');S.sesion=null;S.permisos={puedeCrearObservacion:true,puedeVerTodos:true,soloLectura:false};S.tipoUsuario='Docente';S.esDocenteYAcudiente=false;S.hijosDelDocente=[];S.rolActivo='Docente';S.estudiantePropio=null;mostrar('scrLogin');document.getElementById('loginUser').value='';document.getElementById('loginPass').value=''}
+async function ejecutarCambioPassword(){
+  const actual=document.getElementById('pwdActual').value.trim();
+  const nueva=document.getElementById('pwdNueva').value.trim();
+  const confirmar=document.getElementById('pwdConfirmar').value.trim();
+  const errEl=document.getElementById('pwdErr');
+  const okEl=document.getElementById('pwdOk');
+  errEl.classList.remove('vis');okEl.style.display='none';
+  if(!actual){errEl.textContent='Ingrese su contraseña actual';errEl.classList.add('vis');return}
+  if(!nueva){errEl.textContent='Ingrese la nueva contraseña';errEl.classList.add('vis');return}
+  if(nueva.length<4){errEl.textContent='La nueva contraseña debe tener al menos 4 caracteres';errEl.classList.add('vis');return}
+  if(nueva!==confirmar){errEl.textContent='Las contraseñas nuevas no coinciden';errEl.classList.add('vis');return}
+  if(actual===nueva){errEl.textContent='La nueva contraseña debe ser diferente a la actual';errEl.classList.add('vis');return}
+  mostrarCarga('Cambiando contraseña...');
+  try{
+    const r=await api('cambiarPasswordPWA',{passwordActual:actual,passwordNueva:nueva});
+    ocultarCarga();
+    if(r.exito){
+      okEl.textContent='✅ Contraseña actualizada correctamente';okEl.style.display='block';
+      document.getElementById('pwdActual').value='';document.getElementById('pwdNueva').value='';document.getElementById('pwdConfirmar').value='';
+      const usuario=S.sesion?.usuario?.idPersona||document.getElementById('loginUser').value;
+      S.sesion.credencialOffline=btoa(usuario+':'+nueva);
+      await dbPut('sesion',{key:'sesion',...S.sesion});
+    }else{errEl.textContent=r.mensaje||'Error al cambiar contraseña';errEl.classList.add('vis')}
+  }catch(e){ocultarCarga();errEl.textContent='Error de conexión: '+e.message;errEl.classList.add('vis')}
+}
 
+// 🔄 CAMBIO DE ROL DUAL (Docente ↔ Acudiente)
+async function cambiarRolDual(){
+  if(!S.esDocenteYAcudiente) return;
+  const nuevoRol=(S.rolActivo||'Docente')==='Docente'?'Acudiente':'Docente';
+  S.rolActivo=nuevoRol;
+  await dbPut('config',{key:'rolActivo',value:nuevoRol});
+  if(nuevoRol==='Acudiente'){
+    S.permisos={puedeCrearObservacion:false,puedeVerTodos:false,soloLectura:true};
+    S.tipoUsuario='ACUDIENTE';
+    const todosEst=await dbGetAll('estudiantes');
+    const hijos=todosEst.filter(e=>S.hijosDelDocente.includes(e.id));
+    await dbClear('estudiantes');for(const h of hijos) await dbPut('estudiantes',h);
+    toast('Modo Acudiente activado 👨‍👧‍👦','ok');
+  }else{
+    S.permisos={puedeCrearObservacion:true,puedeVerTodos:true,soloLectura:false};
+    S.tipoUsuario='Docente';
+    await descargarDatos();
+    toast('Modo Docente activado 👨‍🏫','ok');
+  }
+  irDashboard();
+}
 /* ═══ DATA DOWNLOAD ═══ */
 async function descargarDatos(){
   mostrarCarga('Descargando datos...');
@@ -620,8 +731,19 @@ async function descargarDatos(){
     S.rutasAtencion=r.rutasAtencion||{};
     S.materiasPorNivel=r.materiasPorNivel||{};
     S.periodoActual=r.periodoActual||'P1';
+    // 🔒 NUEVO: Guardar permisos de seguridad
+    S.permisos=r.permisos||{puedeCrearObservacion:true,puedeVerTodos:true,soloLectura:false};
+    S.tipoUsuario=r.tipoUsuario||r.docenteInfo?.rol||'Docente';
+    S.esDocenteYAcudiente=r.esDocenteYAcudiente||false;
+    S.hijosDelDocente=r.hijosDelDocente||[];
+    S.estudiantePropio=r.estudiantePropio||null;
+    await dbPut('config',{key:'permisos',value:S.permisos});
+    await dbPut('config',{key:'tipoUsuario',value:S.tipoUsuario});
+    await dbPut('config',{key:'esDocenteYAcudiente',value:S.esDocenteYAcudiente});
+    await dbPut('config',{key:'hijosDelDocente',value:S.hijosDelDocente});
+    if(S.estudiantePropio) await dbPut('config',{key:'estudiantePropio',value:S.estudiantePropio});
     prepararFaltasGlobal(r.configFaltas||{});
-    ocultarCarga();toast('Datos actualizados ✓','ok');
+    ocultarCarga();toast('Datos actualizados ✔','ok');
   }catch(e){ocultarCarga();toast('Error: '+e.message,'err')}
 }
 
@@ -634,6 +756,13 @@ async function cargarConfigDB(){
   S.materiasPorNivel=await get('materiasPorNivel')||{};
   S.periodoActual=await get('periodoActual')||'P1';
   S.docenteInfo=await get('docenteInfo')||{};
+  // 🔒 NUEVO: Restaurar permisos
+  S.permisos=await get('permisos')||{puedeCrearObservacion:true,puedeVerTodos:true,soloLectura:false};
+  S.tipoUsuario=await get('tipoUsuario')||'Docente';
+  S.esDocenteYAcudiente=await get('esDocenteYAcudiente')||false;
+  S.hijosDelDocente=await get('hijosDelDocente')||[];
+  S.estudiantePropio=await get('estudiantePropio')||null;
+  S.rolActivo=await get('rolActivo')||'Docente';
   const faltas=await get('configFaltas')||{};
   prepararFaltasGlobal(faltas);
 }
@@ -653,7 +782,12 @@ async function actualizarDash(){
   document.getElementById('btnSync').style.display=pend>0?'flex':'none';
   // Show coordinator panel
   const esCoord=S.docenteInfo.esRolGlobal || ['Coordinador','Rector','COORDINADOR','RECTOR'].some(r=>(S.docenteInfo.rol||'').toUpperCase().includes(r.toUpperCase()));
-  document.getElementById('quickPanel').classList.toggle('hidden',!esCoord);
+  document.getElementById('quickPanel').classList.toggle('hidden',!esCoord||S.permisos.soloLectura);
+  // 🔒 Ocultar/mostrar botones según permisos
+  const btnObs=document.querySelector('[onclick="irNuevaObs()"]');
+  const btnLogro=document.querySelector('[onclick="irNuevoLogro()"]');
+  if(btnObs) btnObs.closest('.card')? btnObs.closest('.card').style.display=S.permisos.soloLectura?'none':'': btnObs.style.display=S.permisos.soloLectura?'none':'';
+  if(btnLogro) btnLogro.closest('.card')? btnLogro.closest('.card').style.display=S.permisos.soloLectura?'none':'': btnLogro.style.display=S.permisos.soloLectura?'none':'';
 }
 
 /* ═══ FILTERS (cascading) ═══ */
@@ -954,15 +1088,22 @@ function cargarMaterias(grado){
   sel.innerHTML='<option value="">— No aplica —</option>';
   const mats=S.materiasPorNivel[grado]||S.materiasPorNivel['TODOS']||[];
   mats.forEach(m=>sel.innerHTML+=`<option value="${m.nombre}">${m.nombre}</option>`);
-  document.getElementById('wrapMateria').classList.toggle('hidden',!mats.length);
+  actualizarVisibilidadMateria();
 }
 function alCambiarActividad(){
   const v=document.getElementById('fActividad').value;
   document.getElementById('wrapActDet').classList.toggle('hidden',!['Actividad extracurricular','Actividad institucional','Representación institucional'].includes(v));
-  document.getElementById('wrapMateria').classList.toggle('hidden',v!=='Actividad académica');
+  actualizarVisibilidadMateria();
 }
 function alCambiarSitio(){
   document.getElementById('wrapSitioOtro').classList.toggle('hidden',document.getElementById('fSitio').value!=='Otro');
+  actualizarVisibilidadMateria();
+}
+function actualizarVisibilidadMateria(){
+  const act=document.getElementById('fActividad').value;
+  const sitio=document.getElementById('fSitio').value;
+  const mostrar=act==='Actividad académica'||sitio==='Aula de clase'||sitio==='Salón asignado al docente';
+  document.getElementById('wrapMateria').classList.toggle('hidden',!mostrar);
 }
 
 /* ═══ ROUTES / PROTOCOL ═══ */
@@ -987,7 +1128,8 @@ function verRuta(){
 /* ═══ SAVE OBSERVATION ═══ */
 
 async function guardarObs(){
-  if(S._guardando)return; // ← Prevenir doble-tap
+  if(S.permisos.soloLectura||!S.permisos.puedeCrearObservacion){toast('No tiene permisos para registrar observaciones','err');return}
+  if(S._guardando)return;
   const est=S.estudianteActual;if(!est)return;
   const desc=document.getElementById('fDesc').value.trim();
   const medidas=document.getElementById('fMedidas').value.trim();
@@ -1140,7 +1282,7 @@ async function abrirHistorial(est){
 }
 function initHistFilters(){
   const mk=(id,vals,labels)=>{
-    document.getElementById(id).innerHTML=(labels||vals).map((l,i)=>`<label class="fcheck on" onclick="toggleFcheck(this)"><input type="checkbox" value="${vals[i]}" checked>${l}</label>`).join('');
+    document.getElementById(id).innerHTML=(labels||vals).map((l,i)=>`<span class="fcheck on" onclick="toggleFcheck(this)"><input type="checkbox" value="${vals[i]}" checked>${l}</span>`).join('');
   };
   mk('filtPeriodo',['P1','P2','P3']);
   mk('filtTipo',['TIPO_I','TIPO_II','TIPO_III','LOGRO'],['Tipo I','Tipo II','Tipo III','Logro']);
@@ -1149,6 +1291,7 @@ function initHistFilters(){
 }
 function toggleFcheck(el){el.classList.toggle('on');el.querySelector('input').checked=el.classList.contains('on');cargarHist()}
 function getChecked(id){return[...document.querySelectorAll(`#${id} input:checked`)].map(i=>i.value)}
+
 
 async function cargarHist(){
   const id=S.estudianteActual?.id;if(!id)return;
