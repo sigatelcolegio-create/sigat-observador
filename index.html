@@ -10,11 +10,11 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
 <link rel="apple-touch-icon" href="icons/icon-192.png">
-<title>SIGAT · Observador Digital</title>
+<title>SIGAT &#183; Observador Digital</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-/* ═══ DESIGN SYSTEM ═══ */
+/* DESIGN SYSTEM */
 :root {
   --bg:#f1f5f9;--surface:#fff;--surface-alt:#f8fafc;
   --primary:#0f172a;--primary-mid:#1e293b;--primary-light:#334155;
@@ -41,21 +41,21 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);height:100%;
 .screen{display:none;flex-direction:column;height:100%}
 .screen.active{display:flex}
 
-/* ═══ HEADER ═══ */
+/* HEADER */
 .header{background:var(--primary);color:#fff;padding:calc(var(--safe-top)+10px) 16px 10px;display:flex;align-items:center;gap:10px;flex-shrink:0;z-index:10;min-height:var(--header-h)}
 .header h1{font-size:.95rem;font-weight:600;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:-.01em}
 .header-sub{font-size:.68rem;opacity:.6;font-weight:400;display:block;margin-top:1px}
 .btn-icon-h{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1);color:#fff;width:36px;height:36px;border-radius:10px;font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .15s}
 .btn-icon-h:active{background:rgba(255,255,255,.18)}
 
-/* ═══ SCROLL AREA ═══ */
+/* SCROLL AREA */
 .scroll-area{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:16px;padding-bottom:calc(var(--safe-bottom)+80px)}
 
-/* ═══ CARDS ═══ */
+/* CARDS */
 .card{background:var(--surface);border-radius:var(--radius);padding:16px;margin-bottom:12px;box-shadow:var(--shadow);border:1px solid var(--border)}
 .card-header{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--text-light);margin-bottom:10px}
 
-/* ═══ BUTTONS ═══ */
+/* BUTTONS */
 .btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:13px 20px;border:none;border-radius:var(--radius-sm);font-family:var(--font);font-size:.92rem;font-weight:600;cursor:pointer;transition:all .15s;-webkit-tap-highlight-color:transparent;letter-spacing:-.01em}
 .btn:active{transform:scale(.98)}.btn:disabled{opacity:.45;pointer-events:none}
 .btn-accent{background:var(--accent);color:#fff}.btn-accent:active{background:var(--accent-hover)}
@@ -70,7 +70,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);height:100%;
 .action-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0}
 .action-label{font-weight:600;line-height:1.2}.action-desc{font-size:.78rem;color:var(--text-mid);font-weight:400;margin-top:2px}
 
-/* ═══ FORMS ═══ */
+/* FORMS */
 .form-group{margin-bottom:14px}
 .form-label{display:block;font-size:.78rem;font-weight:600;color:var(--text-mid);margin-bottom:5px}
 .form-label.req::after{content:' *';color:var(--rose)}
@@ -80,9 +80,9 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
 select:disabled{background-color:var(--surface-alt);color:var(--text-light);cursor:not-allowed}
 textarea{resize:vertical;min-height:80px;line-height:1.5}
 .search-wrap{position:relative}.search-wrap input{padding-left:38px}
-.search-wrap::before{content:'🔍';position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:.85rem}
+.search-wrap::before{content:'&#128269;';position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:.85rem}
 
-/* ═══ PILLS / CHIPS ═══ */
+/* PILLS / CHIPS */
 .pill-row{display:flex;gap:6px;flex-wrap:wrap}
 .pill{padding:7px 14px;border:1.5px solid var(--border);border-radius:20px;background:var(--surface);font-size:.78rem;font-weight:600;cursor:pointer;font-family:var(--font);transition:all .12s;color:var(--text-mid)}
 .pill.on{background:var(--primary);color:#fff;border-color:var(--primary)}
@@ -99,12 +99,12 @@ textarea{resize:vertical;min-height:80px;line-height:1.5}
 .radio-pill input:checked+label.pill-rose{background:var(--rose);border-color:var(--rose)}
 .radio-pill input:checked+label.pill-emerald{background:var(--emerald);border-color:var(--emerald)}
 
-/* ═══ TABS ═══ */
+/* TABS */
 .tabs{display:flex;border-bottom:2px solid var(--border);flex-shrink:0;padding:0 16px;background:var(--surface)}
 .tab-btn{flex:1;padding:11px 6px;border:none;background:none;font-family:var(--font);font-size:.8rem;font-weight:600;color:var(--text-light);cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;transition:all .12s}
 .tab-btn.active{color:var(--accent);border-bottom-color:var(--accent)}
 
-/* ═══ STUDENT LIST ═══ */
+/* STUDENT LIST */
 .stu-item{display:flex;align-items:center;gap:12px;padding:13px 14px;background:var(--surface);border-radius:var(--radius-sm);margin-bottom:6px;cursor:pointer;border:1.5px solid var(--border);transition:all .12s}
 .stu-item:active{border-color:var(--accent);background:var(--accent-light)}
 .stu-avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--primary-light));color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.82rem;flex-shrink:0}
@@ -112,14 +112,14 @@ textarea{resize:vertical;min-height:80px;line-height:1.5}
 .stu-check{width:22px;height:22px;border-radius:6px;border:2px solid var(--border);margin-left:auto;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .12s}
 .stu-item.checked .stu-check{background:var(--accent);border-color:var(--accent);color:#fff}
 
-/* ═══ FAULTS LIST ═══ */
+/* FAULTS LIST */
 .fault-item{padding:10px 12px;border:1.5px solid var(--border);border-radius:var(--radius-sm);margin-bottom:5px;cursor:pointer;font-size:.83rem;line-height:1.4;transition:all .12s}
 .fault-item:active,.fault-item.sel{border-color:var(--accent);background:var(--accent-light)}
 .fbadge{display:inline-block;font-size:.6rem;font-weight:700;padding:2px 7px;border-radius:4px;margin-right:5px;text-transform:uppercase;vertical-align:middle;letter-spacing:.3px}
 .fbadge.leve{background:#dbeafe;color:#1d4ed8}.fbadge.grave{background:var(--amber-bg);color:var(--amber-dark)}.fbadge.gravisima{background:var(--rose-bg);color:var(--rose-dark)}
 .faults-box{max-height:200px;overflow-y:auto;border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:6px}
 
-/* ═══ OBSERVATION HISTORY ═══ */
+/* OBSERVATION HISTORY */
 .obs-card{padding:14px;background:var(--surface);border-radius:var(--radius-sm);margin-bottom:8px;border:1px solid var(--border);border-left:4px solid var(--border);cursor:pointer;transition:all .12s}
 .obs-card:active{box-shadow:var(--shadow)}
 .obs-card.t1{border-left-color:var(--accent)}.obs-card.t2{border-left-color:var(--amber)}.obs-card.t3{border-left-color:var(--rose)}.obs-card.logro{border-left-color:var(--emerald)}
@@ -133,13 +133,13 @@ textarea{resize:vertical;min-height:80px;line-height:1.5}
 .obs-foot{font-size:.7rem;color:var(--text-light);margin-top:8px;display:flex;justify-content:space-between;align-items:center}
 .obs-pend-badge{font-size:.6rem;background:var(--amber-bg);color:var(--amber-dark);padding:2px 8px;border-radius:4px;font-weight:700}
 
-/* ═══ SCORE ═══ */
+/* SCORE */
 .score-ring{text-align:center;padding:12px}
 .score-num{font-size:2.6rem;font-weight:800;font-family:var(--mono);line-height:1}
 .score-num.sup{color:var(--emerald)}.score-num.alt{color:var(--accent)}.score-num.bas{color:var(--amber)}.score-num.baj{color:var(--rose)}
 .score-lbl{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;margin-top:4px;color:var(--text-mid)}
 
-/* ═══ INFO BOX ═══ */
+/* INFO BOX */
 .info{padding:12px 14px;border-radius:var(--radius-sm);font-size:.82rem;line-height:1.5;margin-bottom:12px;border-left:4px solid}
 .info.blue{background:var(--accent-light);color:#1e40af;border-color:var(--accent)}
 .info.amber{background:var(--amber-bg);color:var(--amber-dark);border-color:var(--amber)}
@@ -147,7 +147,7 @@ textarea{resize:vertical;min-height:80px;line-height:1.5}
 .info.emerald{background:var(--emerald-bg);color:var(--emerald-dark);border-color:var(--emerald)}
 .info.locked{background:var(--surface-alt);color:var(--text-mid);border-color:var(--border);display:flex;align-items:center;gap:8px}
 
-/* ═══ SYNC PROGRESS BAR ═══ */
+/* SYNC PROGRESS BAR */
 .sync-strip{position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-top:1px solid var(--border);padding:10px 16px calc(var(--safe-bottom)+10px);z-index:50;transform:translateY(100%);transition:transform .3s cubic-bezier(.4,0,.2,1);box-shadow:0 -2px 12px rgba(0,0,0,.06)}
 .sync-strip.show{transform:translateY(0)}
 .sync-info{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;font-size:.78rem;font-weight:600;color:var(--text-mid)}
@@ -156,19 +156,19 @@ textarea{resize:vertical;min-height:80px;line-height:1.5}
 .sync-bar-fill.done{background:var(--emerald)}
 .sync-bar-fill.error{background:var(--rose)}
 
-/* ═══ TOAST ═══ */
+/* TOAST */
 .toast{position:fixed;top:calc(var(--safe-top)+10px);left:50%;transform:translateX(-50%) translateY(-100px);background:var(--primary);color:#fff;padding:11px 22px;border-radius:30px;font-size:.85rem;font-weight:500;box-shadow:var(--shadow-lg);z-index:200;transition:transform .3s cubic-bezier(.4,0,.2,1);white-space:nowrap;max-width:90%;text-align:center;pointer-events:auto;cursor:pointer}
 .toast.vis{transform:translateX(-50%) translateY(0)}
 .toast.ok{background:var(--emerald)}.toast.err{background:var(--rose)}
 
-/* ═══ LOADING ═══ */
+/* LOADING */
 .loading-ov{position:fixed;inset:0;background:rgba(255,255,255,.94);display:none;flex-direction:column;align-items:center;justify-content:center;z-index:150;gap:16px;backdrop-filter:blur(4px)}
 .loading-ov.vis{display:flex}
 @keyframes spin{to{transform:rotate(360deg)}}
 .spinner{width:36px;height:36px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite}
 .loading-text{font-size:.88rem;color:var(--text-mid);font-weight:500}
 
-/* ═══ MODAL (Bottom Sheet) ═══ */
+/* MODAL (B */
 .modal-bg{position:fixed;inset:0;background:rgba(15,23,42,.45);display:none;align-items:flex-end;justify-content:center;z-index:160;backdrop-filter:blur(2px)}
 .modal-bg.vis{display:flex}
 .modal-sheet{background:var(--surface);border-radius:var(--radius) var(--radius) 0 0;padding:6px 20px 24px;width:100%;max-height:88vh;overflow-y:auto}
@@ -176,7 +176,7 @@ textarea{resize:vertical;min-height:80px;line-height:1.5}
 .modal-sheet h3{font-size:1.05rem;font-weight:700;margin-bottom:14px}
 .modal-close{position:absolute;top:16px;right:16px;background:var(--surface-alt);border:none;width:32px;height:32px;border-radius:50%;font-size:1.2rem;cursor:pointer;display:flex;align-items:center;justify-content:center}
 
-/* ═══ DETAIL BLOCKS (inside detail modal) ═══ */
+/* DETAIL BLOCKS ( */
 .det-block{padding:12px 14px;border-radius:var(--radius-sm);margin-bottom:10px;font-size:.85rem;line-height:1.5}
 .det-block.id{background:var(--amber-bg);border-left:4px solid var(--amber)}
 .det-block.tipo{background:var(--accent-light);border-left:4px solid var(--accent)}
@@ -189,7 +189,7 @@ textarea{resize:vertical;min-height:80px;line-height:1.5}
 .det-grid-item{background:var(--surface-alt);padding:10px;border-radius:var(--radius-xs)}
 .det-grid-item strong{font-size:.72rem;text-transform:uppercase;color:var(--text-light);display:block;margin-bottom:2px}
 
-/* ═══ COORDINATOR QUICK PANEL ═══ */
+/* COORDINATOR QUICK PANEL */
 .quick-panel{background:linear-gradient(135deg,#fef3c7,#fffbeb);border:1.5px solid #fde68a;border-radius:var(--radius);padding:16px;margin-bottom:12px}
 .quick-title{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--amber-dark);margin-bottom:10px}
 .quick-btns{display:flex;gap:10px}
@@ -197,7 +197,7 @@ textarea{resize:vertical;min-height:80px;line-height:1.5}
 .quick-btn:active{background:var(--amber);color:#fff}
 .quick-btn .qicon{font-size:1.5rem;display:block;margin-bottom:4px}
 
-/* ═══ LOGIN ═══ */
+/* LOGIN */
 .login-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100%;padding:32px 24px;background:linear-gradient(180deg,var(--primary) 0%,var(--primary-mid) 40%,var(--bg) 40%)}
 .login-card{background:var(--surface);border-radius:var(--radius);padding:32px 24px;width:100%;max-width:380px;box-shadow:var(--shadow-lg);margin-top:-40px}
 .login-logo{font-size:2.5rem;text-align:center;margin-bottom:4px}
@@ -207,12 +207,12 @@ textarea{resize:vertical;min-height:80px;line-height:1.5}
 .login-err.vis{display:block}
 .login-footer{margin-top:20px;font-size:.72rem;color:var(--text-light);text-align:center}
 
-/* ═══ EMPTY STATE ═══ */
+/* EMPTY STATE */
 .empty{text-align:center;padding:40px 20px;color:var(--text-light)}
 .empty-icon{font-size:2.4rem;margin-bottom:10px}
 .empty-text{font-size:.9rem}
 
-/* ═══ UTILS ═══ */
+/* UTILS */
 .mt-8{margin-top:8px}.mt-12{margin-top:12px}.mb-8{margin-bottom:8px}.mb-12{margin-bottom:12px}
 .gap-8{gap:8px}.text-center{text-align:center}.text-sm{font-size:.8rem}
 .text-sec{color:var(--text-mid)}.flex-row{display:flex;align-items:center}
@@ -223,7 +223,7 @@ textarea{resize:vertical;min-height:80px;line-height:1.5}
 .section-divider{height:1px;background:var(--border);margin:16px 0}
 .filter-row{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px}
 
-/* ═══ CHECKBOX FILTERS ═══ */
+/* CHECKBOX FILTERS */
 .fcheck{display:inline-flex;align-items:center;gap:4px;font-size:.72rem;font-weight:600;cursor:pointer;padding:5px 10px;border-radius:20px;border:1.5px solid var(--border);background:var(--surface);transition:all .12s;color:var(--text-mid)}
 .fcheck input{display:none}
 .fcheck.on{background:var(--primary);color:#fff;border-color:var(--primary)}
@@ -237,65 +237,66 @@ textarea{resize:vertical;min-height:80px;line-height:1.5}
   <div id="modalBg" class="modal-bg" onclick="if(event.target===this)cerrarModal()"><div class="modal-sheet" id="modalSheet"><div class="modal-handle"></div><div id="modalContent"></div></div></div>
   <div id="syncStrip" class="sync-strip"><div class="sync-info"><span id="syncLabel">Sincronizando...</span><span id="syncCount"></span></div><div class="sync-bar-track"><div id="syncFill" class="sync-bar-fill"></div></div></div>
 
-  <!-- ═══ LOGIN ═══ -->
+  <!-- &#9552;&#9552;&#9552; LOGIN &#9552;&#9552;&#9552; -->
   <div id="scrLogin" class="screen active">
     <div class="login-wrap">
       <div class="login-card">
-        <div class="login-logo">📋</div>
+        <div class="login-logo">&#128203;</div>
         <div class="login-title">Observador Digital</div>
-        <div class="login-sub">IED El Triunfo · SIGAT V2.0</div>
+        <div class="login-sub">IED El Triunfo &#183; SIGAT V2.0</div>
         <div id="loginErr" class="login-err"></div>
-        <div class="form-group"><label class="form-label">Número de cédula</label><input type="text" id="loginUser" placeholder="Ej: 1234567890" inputmode="numeric" autocomplete="username"></div>
-        <div class="form-group"><label class="form-label">Contraseña</label><input type="password" id="loginPass" placeholder="••••••••" autocomplete="current-password"></div>
+        <div class="form-group"><label class="form-label">N&#250;mero de c&#233;dula</label><input type="text" id="loginUser" placeholder="Ej: 1234567890" inputmode="numeric" autocomplete="username"></div>
+        <div class="form-group"><label class="form-label">Contrase&#241;a</label><input type="password" id="loginPass" placeholder="&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;" autocomplete="current-password"></div>
         <button class="btn btn-accent mt-8" id="btnLogin" onclick="intentarLogin()">Ingresar</button>
-        <div class="login-footer">Sistema de Gestión Académica y Tecnológica</div>
+        <div class="login-footer">Sistema de Gesti&#243;n Acad&#233;mica y Tecnol&#243;gica</div>
       </div>
     </div>
   </div>
 
-  <!-- ═══ DASHBOARD ═══ -->
+  <!-- &#9552;&#9552;&#9552; DASHBOARD &#9552;&#9552;&#9552; -->
   <div id="scrDash" class="screen">
     <div class="header">
       <div style="flex:1"><h1 id="dashGreet">Hola</h1><span class="header-sub" id="dashSub"></span></div>
-      <button class="btn-icon-h" onclick="mostrarConfig()" title="Ajustes">⚙️</button>
+      <button class="btn-icon-h" onclick="mostrarConfig()" title="Ajustes">&#9881;&#65039;</button>
     </div>
     <div class="scroll-area">
       <!-- Coordinator Quick Panel (hidden for regular teachers) -->
       <div id="quickPanel" class="quick-panel hidden">
-        <div class="quick-title">⚡ Registro rápido — Coordinación</div>
+        <div class="quick-title">&#9889; Registro r&#225;pido &#8212; Coordinaci&#243;n</div>
         <div class="quick-btns">
-          <button class="quick-btn" onclick="iniciarFaltaRapida('RETARDO')"><span class="qicon">⏰</span>Retardos</button>
-          <button class="quick-btn" onclick="iniciarFaltaRapida('UNIFORME')"><span class="qicon">👔</span>Uniformes</button>
+          <button class="quick-btn" onclick="iniciarFaltaRapida('RETARDO')"><span class="qicon">&#9200;</span>Retardos</button>
+          <button class="quick-btn" onclick="iniciarFaltaRapida('UNIFORME')"><span class="qicon">&#128084;</span>Uniformes</button>
         </div>
       </div>
 
       <div class="card">
-        <div class="card-header">Resumen del día</div>
+        <div class="card-header">Resumen del d&#237;a</div>
         <div class="flex-between">
           <div><div style="font-size:1.8rem;font-weight:800;font-family:var(--mono)" id="dashToday">0</div><div class="text-sm text-sec">Registradas hoy</div></div>
           <div style="text-align:right"><div style="font-size:1.8rem;font-weight:800;font-family:var(--mono)" id="dashPend">0</div><div class="text-sm text-sec">Pendientes sync</div></div>
         </div>
       </div>
 
-      <button class="action-card" onclick="irNuevaObs()"><div class="action-icon" style="background:var(--accent-light);color:var(--accent)">📝</div><div><div class="action-label">Nueva Observación</div><div class="action-desc">Registrar situación de convivencia</div></div></button>
-      <button class="action-card" onclick="irNuevoLogro()"><div class="action-icon" style="background:var(--emerald-bg);color:var(--emerald)">⭐</div><div><div class="action-label">Registrar Logro</div><div class="action-desc">Reconocer logros y avances positivos</div></div></button>
-      <button class="action-card" onclick="irHistorial()"><div class="action-icon" style="background:var(--violet-bg);color:var(--violet)">📊</div><div><div class="action-label">Historial</div><div class="action-desc">Consultar observaciones de un estudiante</div></div></button>
+      <button class="action-card" onclick="irNuevaObs()"><div class="action-icon" style="background:var(--accent-light);color:var(--accent)">&#128221;</div><div><div class="action-label">Nueva Observaci&#243;n</div><div class="action-desc">Registrar situaci&#243;n de convivencia</div></div></button>
+      <button class="action-card" onclick="irNuevoLogro()"><div class="action-icon" style="background:var(--emerald-bg);color:var(--emerald)">&#11088;</div><div><div class="action-label">Registrar Logro</div><div class="action-desc">Reconocer logros y avances positivos</div></div></button>
+      <button class="action-card" onclick="irHistorial()"><div class="action-icon" style="background:var(--violet-bg);color:var(--violet)">&#128202;</div><div><div class="action-label">Historial</div><div class="action-desc">Consultar observaciones de un estudiante</div></div></button>
       
-      <button class="btn btn-outline mt-12" id="btnSync" onclick="sincronizarAhora()" style="display:none">🔄 Sincronizar pendientes</button>
+      <button class="btn btn-outline mt-12" id="btnSync" onclick="sincronizarAhora()" style="display:none">&#128260; Sincronizar pendientes</button>
     </div>
   </div>
 
-  <!-- ═══ SELECT STUDENT ═══ -->
+  <!-- &#9552;&#9552;&#9552; SELECT STUDENT &#9552;&#9552;&#9552; -->
   <div id="scrSelect" class="screen">
     <div class="header">
-      <button class="btn-icon-h" onclick="irDashboard()">←</button>
-      <h1 id="selTitle">Seleccionar estudiante</h1>
+      <button class="btn-icon-h" onclick="irDashboard()">&#8592;</button>
+      <h1 id="selTitle" style="flex:1">Seleccionar estudiante</h1>
+      <button class="btn-icon-h" onclick="mostrarConfig()" title="Menu">&#9881;</button>
     </div>
     <div style="padding:12px 16px 0;flex-shrink:0;background:var(--surface-alt)">
       <div id="sedeWrap" class="form-group mb-8">
         <select id="selSede" onchange="alCambiarSede()"><option value="">Sede...</option></select>
       </div>
-      <div id="sedeLocked" class="info locked hidden">🔒 <span id="sedeLockedName"></span></div>
+      <div id="sedeLocked" class="info locked hidden">&#128274; <span id="sedeLockedName"></span></div>
       <div class="flex-row gap-8 mb-8">
         <select id="selGrado" onchange="alCambiarGrado()" style="flex:1"><option value="">Grado</option></select>
         <select id="selGrupo" onchange="filtrarEstudiantes()" style="flex:1"><option value="">Grupo</option></select>
@@ -305,12 +306,12 @@ textarea{resize:vertical;min-height:80px;line-height:1.5}
     <div class="scroll-area" id="listaEst"></div>
   </div>
 
-  <!-- ═══ SELECT MULTIPLE (for coordinator quick faults) ═══ -->
+  <!-- &#9552;&#9552;&#9552; SELECT MULTIPLE (for coordinator quick faults) &#9552;&#9552;&#9552; -->
   <div id="scrSelectMulti" class="screen">
     <div class="header">
-      <button class="btn-icon-h" onclick="irDashboard()">←</button>
+      <button class="btn-icon-h" onclick="irDashboard()">&#8592;</button>
       <h1 id="multiTitle">Seleccionar estudiantes</h1>
-      <button class="btn-icon-h" id="btnConfirmMulti" onclick="confirmarFaltaRapida()">✓</button>
+      <button class="btn-icon-h" id="btnConfirmMulti" onclick="confirmarFaltaRapida()">&#10003;</button>
     </div>
     <div style="padding:12px 16px 0;flex-shrink:0;background:var(--surface-alt)">
       <div id="multiSedeWrap" class="form-group mb-8">
@@ -326,18 +327,18 @@ textarea{resize:vertical;min-height:80px;line-height:1.5}
     <div class="scroll-area" id="listaMulti"></div>
   </div>
 
-  <!-- ═══ OBSERVATION FORM ═══ -->
+  <!-- &#9552;&#9552;&#9552; OBSERVATION FORM &#9552;&#9552;&#9552; -->
   <div id="scrForm" class="screen">
     <div class="header">
-      <button class="btn-icon-h" onclick="volverDeForm()">←</button>
-      <div style="flex:1"><h1 id="formEstName">Observación</h1><span class="header-sub" id="formEstMeta"></span></div>
+      <button class="btn-icon-h" onclick="volverDeForm()">&#8592;</button>
+      <div style="flex:1"><h1 id="formEstName">Observaci&#243;n</h1><span class="header-sub" id="formEstMeta"></span></div>
     </div>
     <div class="scroll-area">
       <div class="card">
-        <div class="card-header">Tipo de situación</div>
+        <div class="card-header">Tipo de situaci&#243;n</div>
         <div class="info blue" style="font-size:.78rem;margin-bottom:12px">
           <b>Tipo I:</b> Conflictos manejados inadecuadamente en el aula<br>
-          <b>Tipo II:</b> Situaciones de agresión escolar / acoso<br>
+          <b>Tipo II:</b> Situaciones de agresi&#243;n escolar / acoso<br>
           <b>Tipo III:</b> Presuntos delitos contra la libertad o integridad
         </div>
         <div class="radio-pills">
@@ -345,7 +346,7 @@ textarea{resize:vertical;min-height:80px;line-height:1.5}
           <div class="radio-pill"><input type="radio" name="tipo" id="t2" value="TIPO_II"><label for="t2" class="pill-amber">Tipo II</label></div>
           <div class="radio-pill"><input type="radio" name="tipo" id="t3" value="TIPO_III"><label for="t3" class="pill-rose">Tipo III</label></div>
         </div>
-        <button class="btn btn-outline btn-sm mt-8" onclick="verRuta()" style="font-size:.78rem">📋 Ver protocolo / ruta de atención</button>
+        <button class="btn btn-outline btn-sm mt-8" onclick="verRuta()" style="font-size:.78rem">&#128203; Ver protocolo / ruta de atenci&#243;n</button>
       </div>
 
       <div class="card">
@@ -361,9 +362,9 @@ textarea{resize:vertical;min-height:80px;line-height:1.5}
       </div>
 
       <div class="card">
-        <div class="card-header">Descripción</div>
-        <div class="form-group"><label class="form-label req">Descripción detallada</label><textarea id="fDesc" placeholder="Describa la situación ocurrida con detalle..." rows="3"></textarea></div>
-        <div class="form-group"><label class="form-label">Descargos del estudiante</label><textarea id="fDescargos" placeholder="Versión del estudiante sobre los hechos..." rows="2"></textarea></div>
+        <div class="card-header">Descripci&#243;n</div>
+        <div class="form-group"><label class="form-label req">Descripci&#243;n detallada</label><textarea id="fDesc" placeholder="Describa la situaci&#243;n ocurrida con detalle..." rows="3"></textarea></div>
+        <div class="form-group"><label class="form-label">Descargos del estudiante</label><textarea id="fDescargos" placeholder="Versi&#243;n del estudiante sobre los hechos..." rows="2"></textarea></div>
         <div class="form-group"><label class="form-label">Contexto / Antecedentes</label><textarea id="fContexto" placeholder="Situaciones previas relevantes..." rows="2"></textarea></div>
       </div>
 
@@ -375,80 +376,81 @@ textarea{resize:vertical;min-height:80px;line-height:1.5}
         </div>
         <div class="form-group"><label class="form-label">Actividad</label>
           <select id="fActividad" onchange="alCambiarActividad()">
-            <option value="Actividad académica">Actividad académica</option>
+            <option value="Actividad acad&#233;mica">Actividad acad&#233;mica</option>
             <option value="Descanso / Recreo">Descanso / Recreo</option>
             <option value="Actividad extracurricular">Actividad extracurricular</option>
             <option value="Actividad institucional">Actividad institucional</option>
-            <option value="Representación institucional">Representación institucional</option>
+            <option value="Representaci&#243;n institucional">Representaci&#243;n institucional</option>
             <option value="Ingreso/Salida">Ingreso / Salida</option>
           </select>
         </div>
-        <div class="form-group hidden" id="wrapActDet"><label class="form-label">Especificar actividad</label><input type="text" id="fActDetalle" placeholder="¿Cuál actividad?"></div>
+        <div class="form-group hidden" id="wrapActDet"><label class="form-label">Especificar actividad</label><input type="text" id="fActDetalle" placeholder="&#191;Cu&#225;l actividad?"></div>
         <div class="form-group"><label class="form-label">Sitio</label>
           <select id="fSitio" onchange="alCambiarSitio()">
             <option value="Aula de clase">Aula de clase</option>
             <option value="Patio / Cancha">Patio / Cancha</option>
-            <option value="Baños">Baños</option>
+            <option value="Ba&#241;os">Ba&#241;os</option>
             <option value="Pasillos">Pasillos</option>
             <option value="Sala de profesores">Sala de profesores</option>
             <option value="Biblioteca">Biblioteca</option>
-            <option value="Salón asignado al docente">Salón asignado al docente</option>
+            <option value="Sal&#243;n asignado al docente">Sal&#243;n asignado al docente</option>
             <option value="Laboratorio">Laboratorio</option>
             <option value="Comedor / Tienda escolar">Comedor / Tienda escolar</option>
-            <option value="Entrada de la institución">Entrada de la institución</option>
-            <option value="Fuera de la institución portando uniforme">Fuera de la institución portando uniforme</option>
+            <option value="Entrada de la instituci&#243;n">Entrada de la instituci&#243;n</option>
+            <option value="Fuera de la instituci&#243;n portando uniforme">Fuera de la instituci&#243;n portando uniforme</option>
             <option value="Otro">Otro</option>
           </select>
         </div>
-        <div class="form-group hidden" id="wrapSitioOtro"><label class="form-label">Especificar sitio</label><input type="text" id="fSitioOtro" placeholder="¿Cuál sitio?"></div>
-        <div class="form-group" id="wrapMateria"><label class="form-label">Materia / Asignatura</label><select id="fMateria"><option value="">— No aplica —</option></select></div>
+        <div class="form-group hidden" id="wrapSitioOtro"><label class="form-label">Especificar sitio</label><input type="text" id="fSitioOtro" placeholder="&#191;Cu&#225;l sitio?"></div>
+        <div class="form-group" id="wrapMateria"><label class="form-label">Materia / Asignatura</label><select id="fMateria"><option value="">&#8212; No aplica &#8212;</option></select></div>
       </div>
 
       <div class="card">
         <div class="card-header">Acciones</div>
-        <div class="form-group"><label class="form-label req">Medidas tomadas</label><textarea id="fMedidas" placeholder="Acciones pedagógicas y/o correctivas aplicadas..." rows="2"></textarea></div>
-        <div class="form-group"><label class="form-label">¿Acudiente notificado?</label>
-          <div class="radio-pills"><div class="radio-pill"><input type="radio" name="acud" id="acudSi" value="SI"><label for="acudSi" class="pill-emerald">Sí</label></div><div class="radio-pill"><input type="radio" name="acud" id="acudNo" value="NO" checked><label for="acudNo">No</label></div></div>
+        <div class="form-group"><label class="form-label req">Medidas tomadas</label><textarea id="fMedidas" placeholder="Acciones pedag&#243;gicas y/o correctivas aplicadas..." rows="2"></textarea></div>
+        <div class="form-group"><label class="form-label">&#191;Acudiente notificado?</label>
+          <div class="radio-pills"><div class="radio-pill"><input type="radio" name="acud" id="acudSi" value="SI"><label for="acudSi" class="pill-emerald">S&#237;</label></div><div class="radio-pill"><input type="radio" name="acud" id="acudNo" value="NO" checked><label for="acudNo">No</label></div></div>
         </div>
       </div>
 
-      <button class="btn btn-accent" onclick="guardarObs()" style="margin-top:4px">💾 Guardar Observación</button>
+      <button class="btn btn-accent" onclick="guardarObs()" style="margin-top:4px">&#128190; Guardar Observaci&#243;n</button>
     </div>
   </div>
 
-  <!-- ═══ LOGRO FORM ═══ -->
+  <!-- &#9552;&#9552;&#9552; LOGRO FORM &#9552;&#9552;&#9552; -->
   <div id="scrLogro" class="screen">
     <div class="header">
-      <button class="btn-icon-h" onclick="volverDeForm()">←</button>
+      <button class="btn-icon-h" onclick="volverDeForm()">&#8592;</button>
       <div style="flex:1"><h1 id="logroEstName">Registrar Logro</h1><span class="header-sub" id="logroEstMeta"></span></div>
     </div>
     <div class="scroll-area">
-      <div class="info emerald">⭐ Los logros reconocen avances positivos del estudiante y quedan registrados en su historial.</div>
+      <div class="info emerald">&#11088; Los logros reconocen avances positivos del estudiante y quedan registrados en su historial.</div>
       <div class="card">
         <div class="form-group"><label class="form-label req">Tipo de logro</label>
           <select id="lTipo">
-            <option value="Académico">📚 Académico</option>
-            <option value="Deportivo">⚽ Deportivo</option>
-            <option value="Cultural">🎨 Cultural</option>
-            <option value="Social">🤝 Social</option>
-            <option value="Liderazgo">🌟 Liderazgo</option>
-            <option value="Colaboración">🤲 Colaboración</option>
-            <option value="Creatividad">💡 Creatividad</option>
-            <option value="Otro">📋 Otro</option>
+            <option value="Acad&#233;mico">&#128218; Acad&#233;mico</option>
+            <option value="Deportivo">&#9917; Deportivo</option>
+            <option value="Cultural">&#127912; Cultural</option>
+            <option value="Social">&#129309; Social</option>
+            <option value="Liderazgo">&#127775; Liderazgo</option>
+            <option value="Colaboraci&#243;n">&#129330; Colaboraci&#243;n</option>
+            <option value="Creatividad">&#128161; Creatividad</option>
+            <option value="Otro">&#128203; Otro</option>
           </select>
         </div>
-        <div class="form-group"><label class="form-label">Espacio / Actividad</label><input type="text" id="lEspacio" placeholder="¿En qué contexto ocurrió?"></div>
-        <div class="form-group"><label class="form-label req">Descripción del logro</label><textarea id="lDesc" placeholder="Describa el logro o avance positivo del estudiante..." rows="4"></textarea></div>
+        <div class="form-group"><label class="form-label">Espacio / Actividad</label><input type="text" id="lEspacio" placeholder="&#191;En qu&#233; contexto ocurri&#243;?"></div>
+        <div class="form-group"><label class="form-label req">Descripci&#243;n del logro</label><textarea id="lDesc" placeholder="Describa el logro o avance positivo del estudiante..." rows="4"></textarea></div>
       </div>
-      <button class="btn btn-emerald" onclick="guardarLogro()">⭐ Guardar Logro</button>
+      <button class="btn btn-emerald" onclick="guardarLogro()">&#11088; Guardar Logro</button>
     </div>
   </div>
 
-  <!-- ═══ HISTORY ═══ -->
+  <!-- &#9552;&#9552;&#9552; HISTORY &#9552;&#9552;&#9552; -->
   <div id="scrHist" class="screen">
     <div class="header">
-      <button class="btn-icon-h" onclick="volverDeHist()">←</button>
+      <button class="btn-icon-h" onclick="volverDeHist()">&#8592;</button>
       <div style="flex:1"><h1 id="histEstName">Historial</h1><span class="header-sub" id="histEstMeta"></span></div>
+      <button class="btn-icon-h" onclick="mostrarConfig()" title="Menu">&#9881;</button>
     </div>
     <div style="padding:12px 16px 0;flex-shrink:0;background:var(--surface-alt)">
       <div id="histScore" class="score-ring"></div>
@@ -462,63 +464,61 @@ textarea{resize:vertical;min-height:80px;line-height:1.5}
     <div class="scroll-area" id="listaHist"></div>
   </div>
 
-  <!-- ═══ CONFIG ═══ -->
+  <!-- &#9552;&#9552;&#9552; CONFIG &#9552;&#9552;&#9552; -->
   <div id="scrConfig" class="screen">
     <div class="header">
-      <button class="btn-icon-h" onclick="irDashboard()">←</button>
-      <h1>Configuración</h1>
+      <button class="btn-icon-h" onclick="irDashboard()">&#8592;</button>
+      <h1>Configuraci&#243;n</h1>
     </div>
     <div class="scroll-area">
       <div class="card">
-        <div class="card-header">Sesión</div>
-        <div class="text-sm"><b>Docente:</b> <span id="cfgDoc">—</span></div>
-        <div class="text-sm mt-8"><b>Rol:</b> <span id="cfgRol">—</span></div>
-        <div class="text-sm mt-8"><b>Sede:</b> <span id="cfgSede">—</span></div>
-        <div class="text-sm mt-8"><b>Periodo:</b> <span id="cfgPer">—</span></div>
-        <div class="text-sm mt-8"><b>Estudiantes:</b> <span id="cfgEst">—</span></div>
-        <div class="text-sm mt-8" id="cfgConn"><b>Conexión:</b> <span id="cfgConnSt">—</span></div>
+        <div class="card-header">Sesi&#243;n</div>
+        <div class="text-sm"><b>Docente:</b> <span id="cfgDoc">&#8212;</span></div>
+        <div class="text-sm mt-8"><b>Rol:</b> <span id="cfgRol">&#8212;</span></div>
+        <div class="text-sm mt-8"><b>Sede:</b> <span id="cfgSede">&#8212;</span></div>
+        <div class="text-sm mt-8"><b>Periodo:</b> <span id="cfgPer">&#8212;</span></div>
+        <div class="text-sm mt-8"><b>Estudiantes:</b> <span id="cfgEst">&#8212;</span></div>
+        <div class="text-sm mt-8" id="cfgConn"><b>Conexi&#243;n:</b> <span id="cfgConnSt">&#8212;</span></div>
       </div>
-      <button class="btn btn-accent mb-8" onclick="descargarDatos()">🔄 Actualizar datos del sistema</button>
-      <button class="btn btn-outline mb-8" onclick="sincronizarAhora()">📤 Sincronizar pendientes</button>
-      <button class="btn btn-outline mb-8" onclick="irCambiarPassword()">🔑 Cambiar contraseña</button>
-      <button id="btnRolDual" class="btn btn-outline mb-8" onclick="cambiarRolDual()" style="display:none">🔄 Cambiar modo (Docente ↔ Acudiente)</button>
-      <button class="btn btn-rose" onclick="cerrarSesion()">🚪 Cerrar sesión</button>
+      <button class="btn btn-accent mb-8" onclick="descargarDatos()">&#128260; Actualizar datos del sistema</button>
+      <button class="btn btn-outline mb-8" onclick="sincronizarAhora()">&#128228; Sincronizar pendientes</button>
+      <button class="btn btn-outline mb-8" onclick="irCambiarPassword()">&#128273; Cambiar contrase&#241;a</button>
+      <button id="btnRolDual" class="btn btn-outline mb-8" onclick="cambiarRolDual()" style="display:none">&#128260; Cambiar modo (Docente &#8596; Acudiente)</button>
+      <button class="btn btn-rose" onclick="cerrarSesion()">&#128682; Cerrar sesi&#243;n</button>
 
     </div>
   </div>
 
-  <!-- ═══ PANTALLA CAMBIAR CONTRASEÑA ═══ -->
+  <!-- &#9552;&#9552;&#9552; PANTALLA CAMBIAR CONTRASE&#209;A &#9552;&#9552;&#9552; -->
   <div id="scrPassword" class="screen">
     <div class="header">
-      <button class="btn-icon-h" onclick="mostrarConfig()">←</button>
-      <h1>Cambiar contraseña</h1>
+      <button class="btn-icon-h" onclick="mostrarConfig()">&#8592;</button>
+      <h1>Cambiar contrase&#241;a</h1>
     </div>
     <div class="scroll-area">
       <div class="card">
         <div class="form-group">
-          <label class="form-label">Contraseña actual</label>
-          <input type="password" id="pwdActual" placeholder="Ingrese su contraseña actual" autocomplete="current-password">
+          <label class="form-label">Contrase&#241;a actual</label>
+          <input type="password" id="pwdActual" placeholder="Ingrese su contrase&#241;a actual" autocomplete="current-password">
         </div>
         <div class="form-group" style="margin-top:12px">
-          <label class="form-label">Nueva contraseña</label>
-          <input type="password" id="pwdNueva" placeholder="Mínimo 4 caracteres" autocomplete="new-password">
+          <label class="form-label">Nueva contrase&#241;a</label>
+          <input type="password" id="pwdNueva" placeholder="M&#237;nimo 4 caracteres" autocomplete="new-password">
         </div>
         <div class="form-group" style="margin-top:12px">
-          <label class="form-label">Confirmar nueva contraseña</label>
-          <input type="password" id="pwdConfirmar" placeholder="Repita la nueva contraseña" autocomplete="new-password">
+          <label class="form-label">Confirmar nueva contrase&#241;a</label>
+          <input type="password" id="pwdConfirmar" placeholder="Repita la nueva contrase&#241;a" autocomplete="new-password">
         </div>
         <div id="pwdErr" class="login-err" style="margin-top:12px"></div>
         <div id="pwdOk" style="color:#16a34a;background:#dcfce7;padding:10px;border-radius:8px;font-weight:600;margin-top:12px;display:none"></div>
-        <button class="btn btn-accent" style="margin-top:16px" onclick="ejecutarCambioPassword()">🔑 Cambiar contraseña</button>
+        <button class="btn btn-accent" style="margin-top:16px" onclick="ejecutarCambioPassword()">&#128273; Cambiar contrase&#241;a</button>
       </div>
     </div>
   </div>
 </div>
 
 <script>
-/* ═══════════════════════════════════════════════════════════════
-   SIGAT OBSERVADOR DIGITAL — PWA V3
-   ═══════════════════════════════════════════════════════════════ */
+/* SIGAT OBSERVADOR DIGITAL */
 
 const API_URL = 'https://script.google.com/macros/s/AKfycbyayz9lDldpIH-ieqJ0MtDqFfDHcqQWEnODUdy9b-knFQDDenCgaSnFDJ4f8Te4wx8j/exec';
 const DB_NAME = 'SIGAT_OBS_V3';
@@ -526,7 +526,7 @@ const DB_VERSION = 2;
 
 let db = null;
 
-// ═══ STATE ═══
+// &#9552;&#9552;&#9552; STATE &#9552;&#9552;&#9552;
 const S = {
   sesion: null,
   docenteInfo: { sede:'', rol:'Docente', area:'', esRolGlobal:false, id:'', nombreCompleto:'' },
@@ -537,7 +537,7 @@ const S = {
   configGrupos: [], sedes: [], periodoActual: 'P1',
   configPuntos: {}, rutasAtencion: {}, materiasPorNivel: {},
   tipoFaltaRapida: '', seleccionadosMulti: new Set(),
-  // 🔒 NUEVO: Control de permisos y roles
+  // &#128274; NUEVO: Control de permisos y roles
   permisos: { puedeCrearObservacion: true, puedeVerTodos: true, soloLectura: false },
   tipoUsuario: 'Docente',
   esDocenteYAcudiente: false,
@@ -546,7 +546,7 @@ const S = {
   estudiantePropio: null
 };
 
-/* ═══ INDEXED DB ═══ */
+/* INDEXED DB */
 function abrirDB(){
   return new Promise((ok,fail)=>{
     const r=indexedDB.open(DB_NAME,DB_VERSION);
@@ -567,7 +567,7 @@ function dbGetAll(s){return new Promise((ok,fail)=>{const t=db.transaction(s,'re
 function dbClear(s){return new Promise((ok,fail)=>{const t=db.transaction(s,'readwrite');t.objectStore(s).clear();t.oncomplete=()=>ok();t.onerror=()=>fail(t.error)})}
 function dbDel(s,k){return new Promise((ok,fail)=>{const t=db.transaction(s,'readwrite');t.objectStore(s).delete(k);t.oncomplete=()=>ok();t.onerror=()=>fail(t.error)})}
 
-/* ═══ API ═══ */
+/* API */
 async function api(action, datos={}){
   const body={action,...datos};
   if(S.sesion?.token) body.token=S.sesion.token;
@@ -576,21 +576,21 @@ async function api(action, datos={}){
   return r.json();
 }
 
-/* ═══ NAVIGATION ═══ */
+/* NAVIGATION */
 function mostrar(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active')}
 function irDashboard(){
   actualizarDash();
-  // 🔒 ESTUDIANTE: Ir directo a su historial
+  // &#128274; ESTUDIANTE: Ir directo a su historial
   if(S.permisos.soloLectura && S.tipoUsuario==='ESTUDIANTE' && S.estudiantePropio){
     S.estudianteActual=S.estudiantePropio;
     S.modo='historial';
     initHistFilters();cargarHist();calcScore(S.estudiantePropio.id);
-    document.getElementById('histHeader').textContent=S.estudiantePropio.apellidos+' '+S.estudiantePropio.nombres;
-    document.getElementById('histSub').textContent=S.estudiantePropio.grado+'° '+S.estudiantePropio.grupo+' · '+S.estudiantePropio.sede;
+    document.getElementById('histEstName').textContent=S.estudiantePropio.apellidos+' '+S.estudiantePropio.nombres;
+    document.getElementById('histEstMeta').textContent=S.estudiantePropio.grado+'&#176; '+S.estudiantePropio.grupo+' &#183; '+S.estudiantePropio.sede;
     mostrar('scrHist');
     return;
   }
-  // 🔒 ACUDIENTE: Ir directo a selección de hijos
+  // &#128274; ACUDIENTE: Ir directo a selecci&#243;n de hijos
   if(S.permisos.soloLectura && S.tipoUsuario==='ACUDIENTE'){
     S.modo='historial';
     prepararFiltros('sel');
@@ -611,25 +611,25 @@ function volverDeHist(){
 }
 function mostrarConfig(){
   const s=S.sesion, d=S.docenteInfo;
-  document.getElementById('cfgDoc').textContent=d.nombreCompleto||s?.usuario?.nombreCompleto||'—';
+  document.getElementById('cfgDoc').textContent=d.nombreCompleto||s?.usuario?.nombreCompleto||'&#8212;';
   let rolText=d.rol||d.area||S.tipoUsuario||'Docente';
-  if(S.esDocenteYAcudiente){rolText=(S.rolActivo||'Docente')+' (también '+(S.rolActivo==='Docente'?'Acudiente':'Docente')+')';}
+  if(S.esDocenteYAcudiente){rolText=(S.rolActivo||'Docente')+' (tambi&#233;n '+(S.rolActivo==='Docente'?'Acudiente':'Docente')+')';}
   document.getElementById('cfgRol').textContent=rolText;
-  document.getElementById('cfgSede').textContent=d.sede||'—';
+  document.getElementById('cfgSede').textContent=d.sede||'&#8212;';
   document.getElementById('cfgPer').textContent=S.periodoActual;
   dbGetAll('estudiantes').then(e=>document.getElementById('cfgEst').textContent=e.length);
-  document.getElementById('cfgConnSt').textContent=navigator.onLine?'En línea':'Sin conexión';
+  document.getElementById('cfgConnSt').textContent=navigator.onLine?'En l&#237;nea':'Sin conexi&#243;n';
   const btnRolDual=document.getElementById('btnRolDual');
   if(btnRolDual) btnRolDual.style.display=S.esDocenteYAcudiente?'':'none';
   mostrar('scrConfig');
 }
 
-/* ═══ LOGIN ═══ */
+/* LOGIN */
 async function intentarLogin(){
   const u=document.getElementById('loginUser').value.trim();
   const p=document.getElementById('loginPass').value.trim();
   const errEl=document.getElementById('loginErr');
-  if(!u||!p){errEl.textContent='Ingrese cédula y contraseña';errEl.classList.add('vis');return}
+  if(!u||!p){errEl.textContent='Ingrese c&#233;dula y contrase&#241;a';errEl.classList.add('vis');return}
   errEl.classList.remove('vis');
   document.getElementById('btnLogin').disabled=true;
   mostrarCarga('Verificando credenciales...');
@@ -649,11 +649,12 @@ async function intentarLogin(){
     const saved=await dbGet('sesion','sesion');
     if(saved&&saved.credencialOffline===btoa(u+':'+p)){
       S.sesion=saved;await cargarConfigDB();ocultarCarga();irDashboard();
-      toast('Modo sin conexión','');
-    } else {ocultarCarga();errEl.textContent='Sin conexión y sin sesión guardada';errEl.classList.add('vis')}
+      toast('Modo sin conexi&#243;n','');
+    } else {ocultarCarga();errEl.textContent='Sin conexi&#243;n y sin sesi&#243;n guardada';errEl.classList.add('vis')}
   }
   document.getElementById('btnLogin').disabled=false;
 }
+function irCambiarPassword(){mostrar('scrPassword')}
 async function cerrarSesion(){await dbClear('sesion');S.sesion=null;S.permisos={puedeCrearObservacion:true,puedeVerTodos:true,soloLectura:false};S.tipoUsuario='Docente';S.esDocenteYAcudiente=false;S.hijosDelDocente=[];S.rolActivo='Docente';S.estudiantePropio=null;mostrar('scrLogin');document.getElementById('loginUser').value='';document.getElementById('loginPass').value=''}
 async function ejecutarCambioPassword(){
   const actual=document.getElementById('pwdActual').value.trim();
@@ -662,26 +663,26 @@ async function ejecutarCambioPassword(){
   const errEl=document.getElementById('pwdErr');
   const okEl=document.getElementById('pwdOk');
   errEl.classList.remove('vis');okEl.style.display='none';
-  if(!actual){errEl.textContent='Ingrese su contraseña actual';errEl.classList.add('vis');return}
-  if(!nueva){errEl.textContent='Ingrese la nueva contraseña';errEl.classList.add('vis');return}
-  if(nueva.length<4){errEl.textContent='La nueva contraseña debe tener al menos 4 caracteres';errEl.classList.add('vis');return}
-  if(nueva!==confirmar){errEl.textContent='Las contraseñas nuevas no coinciden';errEl.classList.add('vis');return}
-  if(actual===nueva){errEl.textContent='La nueva contraseña debe ser diferente a la actual';errEl.classList.add('vis');return}
-  mostrarCarga('Cambiando contraseña...');
+  if(!actual){errEl.textContent='Ingrese su contrase&#241;a actual';errEl.classList.add('vis');return}
+  if(!nueva){errEl.textContent='Ingrese la nueva contrase&#241;a';errEl.classList.add('vis');return}
+  if(nueva.length<4){errEl.textContent='La nueva contrase&#241;a debe tener al menos 4 caracteres';errEl.classList.add('vis');return}
+  if(nueva!==confirmar){errEl.textContent='Las contrase&#241;as nuevas no coinciden';errEl.classList.add('vis');return}
+  if(actual===nueva){errEl.textContent='La nueva contrase&#241;a debe ser diferente a la actual';errEl.classList.add('vis');return}
+  mostrarCarga('Cambiando contrase&#241;a...');
   try{
     const r=await api('cambiarPasswordPWA',{passwordActual:actual,passwordNueva:nueva});
     ocultarCarga();
     if(r.exito){
-      okEl.textContent='✅ Contraseña actualizada correctamente';okEl.style.display='block';
+      okEl.textContent='&#9989; Contrase&#241;a actualizada correctamente';okEl.style.display='block';
       document.getElementById('pwdActual').value='';document.getElementById('pwdNueva').value='';document.getElementById('pwdConfirmar').value='';
       const usuario=S.sesion?.usuario?.idPersona||document.getElementById('loginUser').value;
       S.sesion.credencialOffline=btoa(usuario+':'+nueva);
       await dbPut('sesion',{key:'sesion',...S.sesion});
-    }else{errEl.textContent=r.mensaje||'Error al cambiar contraseña';errEl.classList.add('vis')}
-  }catch(e){ocultarCarga();errEl.textContent='Error de conexión: '+e.message;errEl.classList.add('vis')}
+    }else{errEl.textContent=r.mensaje||'Error al cambiar contrase&#241;a';errEl.classList.add('vis')}
+  }catch(e){ocultarCarga();errEl.textContent='Error de conexi&#243;n: '+e.message;errEl.classList.add('vis')}
 }
 
-// 🔄 CAMBIO DE ROL DUAL (Docente ↔ Acudiente)
+// &#128260; CAMBIO DE ROL DUAL (Docente &#8596; Acudiente)
 async function cambiarRolDual(){
   if(!S.esDocenteYAcudiente) return;
   const nuevoRol=(S.rolActivo||'Docente')==='Docente'?'Acudiente':'Docente';
@@ -693,16 +694,16 @@ async function cambiarRolDual(){
     const todosEst=await dbGetAll('estudiantes');
     const hijos=todosEst.filter(e=>S.hijosDelDocente.includes(e.id));
     await dbClear('estudiantes');for(const h of hijos) await dbPut('estudiantes',h);
-    toast('Modo Acudiente activado 👨‍👧‍👦','ok');
+    toast('Modo Acudiente activado &#128104;&#8205;&#128103;&#8205;&#128102;','ok');
   }else{
     S.permisos={puedeCrearObservacion:true,puedeVerTodos:true,soloLectura:false};
     S.tipoUsuario='Docente';
     await descargarDatos();
-    toast('Modo Docente activado 👨‍🏫','ok');
+    toast('Modo Docente activado &#128104;&#8205;&#127979;','ok');
   }
   irDashboard();
 }
-/* ═══ DATA DOWNLOAD ═══ */
+/* DATA DOWNLOAD */
 async function descargarDatos(){
   mostrarCarga('Descargando datos...');
   try{
@@ -731,7 +732,7 @@ async function descargarDatos(){
     S.rutasAtencion=r.rutasAtencion||{};
     S.materiasPorNivel=r.materiasPorNivel||{};
     S.periodoActual=r.periodoActual||'P1';
-    // 🔒 NUEVO: Guardar permisos de seguridad
+    // &#128274; NUEVO: Guardar permisos de seguridad
     S.permisos=r.permisos||{puedeCrearObservacion:true,puedeVerTodos:true,soloLectura:false};
     S.tipoUsuario=r.tipoUsuario||r.docenteInfo?.rol||'Docente';
     S.esDocenteYAcudiente=r.esDocenteYAcudiente||false;
@@ -743,7 +744,7 @@ async function descargarDatos(){
     await dbPut('config',{key:'hijosDelDocente',value:S.hijosDelDocente});
     if(S.estudiantePropio) await dbPut('config',{key:'estudiantePropio',value:S.estudiantePropio});
     prepararFaltasGlobal(r.configFaltas||{});
-    ocultarCarga();toast('Datos actualizados ✔','ok');
+    ocultarCarga();toast('Datos actualizados &#10004;','ok');
   }catch(e){ocultarCarga();toast('Error: '+e.message,'err')}
 }
 
@@ -756,7 +757,7 @@ async function cargarConfigDB(){
   S.materiasPorNivel=await get('materiasPorNivel')||{};
   S.periodoActual=await get('periodoActual')||'P1';
   S.docenteInfo=await get('docenteInfo')||{};
-  // 🔒 NUEVO: Restaurar permisos
+  // &#128274; NUEVO: Restaurar permisos
   S.permisos=await get('permisos')||{puedeCrearObservacion:true,puedeVerTodos:true,soloLectura:false};
   S.tipoUsuario=await get('tipoUsuario')||'Docente';
   S.esDocenteYAcudiente=await get('esDocenteYAcudiente')||false;
@@ -767,11 +768,11 @@ async function cargarConfigDB(){
   prepararFaltasGlobal(faltas);
 }
 
-/* ═══ DASHBOARD ═══ */
+/* DASHBOARD */
 async function actualizarDash(){
   const nombre=(S.docenteInfo.nombreCompleto||S.sesion?.usuario?.nombreCompleto||'Docente').split(' ')[0];
   document.getElementById('dashGreet').textContent='Hola, '+nombre;
-  document.getElementById('dashSub').textContent=(S.docenteInfo.sede||'')+(S.docenteInfo.sede?' · ':'')+S.periodoActual;
+  document.getElementById('dashSub').textContent=(S.docenteInfo.sede||'')+(S.docenteInfo.sede?' &#183; ':'')+S.periodoActual;
   // Counts
   const obs=await dbGetAll('observaciones');
   const hoy=new Date().toLocaleDateString('es-CO');
@@ -783,14 +784,14 @@ async function actualizarDash(){
   // Show coordinator panel
   const esCoord=S.docenteInfo.esRolGlobal || ['Coordinador','Rector','COORDINADOR','RECTOR'].some(r=>(S.docenteInfo.rol||'').toUpperCase().includes(r.toUpperCase()));
   document.getElementById('quickPanel').classList.toggle('hidden',!esCoord||S.permisos.soloLectura);
-  // 🔒 Ocultar/mostrar botones según permisos
+  // &#128274; Ocultar/mostrar botones seg&#250;n permisos
   const btnObs=document.querySelector('[onclick="irNuevaObs()"]');
   const btnLogro=document.querySelector('[onclick="irNuevoLogro()"]');
   if(btnObs) btnObs.closest('.card')? btnObs.closest('.card').style.display=S.permisos.soloLectura?'none':'': btnObs.style.display=S.permisos.soloLectura?'none':'';
   if(btnLogro) btnLogro.closest('.card')? btnLogro.closest('.card').style.display=S.permisos.soloLectura?'none':'': btnLogro.style.display=S.permisos.soloLectura?'none':'';
 }
 
-/* ═══ FILTERS (cascading) ═══ */
+/* FILTERS ( */
 function prepararFiltros(prefix){
   const isMulti = prefix === 'multi';
   const selSede = document.getElementById(isMulti?'multiSelSede':'selSede');
@@ -863,14 +864,14 @@ async function filtrarEstudiantes(){
 }
 function renderEstudiantes(lista){
   const c=document.getElementById('listaEst');
-  if(!lista.length){c.innerHTML='<div class="empty"><div class="empty-icon">🔍</div><div class="empty-text">No se encontraron estudiantes</div></div>';return}
+  if(!lista.length){c.innerHTML='<div class="empty"><div class="empty-icon">&#128269;</div><div class="empty-text">No se encontraron estudiantes</div></div>';return}
   c.innerHTML=lista.map(e=>{
     const ini=((e.nombres?.[0]||'')+(e.apellidos?.[0]||'')).toUpperCase();
-    return`<div class="stu-item" onclick="selEst('${e.id}')"><div class="stu-avatar">${ini}</div><div><div class="stu-name">${e.apellidos} ${e.nombres}</div><div class="stu-meta">${e.grado} ${e.grupo} · ${e.sede||''}</div></div></div>`;
+    return`<div class="stu-item" onclick="selEst('${e.id}')"><div class="stu-avatar">${ini}</div><div><div class="stu-name">${e.apellidos} ${e.nombres}</div><div class="stu-meta">${e.grado} ${e.grupo} &#183; ${e.sede||''}</div></div></div>`;
   }).join('');
 }
 
-/* ═══ MULTI-SELECT (for coordinator quick faults) ═══ */
+/* MULTI-SELECT ( */
 function alCambiarSedeMulti(){
   const sede=document.getElementById('multiSelSede').value;
   const grds=[...new Set(S.configGrupos.filter(g=>!sede||g.sede===sede).map(g=>g.grado))].sort((a,b)=>{const na=parseInt(a),nb=parseInt(b);if(!isNaN(na)&&!isNaN(nb))return na-nb;return a.localeCompare(b)});
@@ -899,17 +900,17 @@ async function filtrarEstudiantesMulti(){
 }
 function renderEstMulti(lista){
   const c=document.getElementById('listaMulti');
-  if(!lista.length){c.innerHTML='<div class="empty"><div class="empty-icon">🔍</div><div class="empty-text">No se encontraron estudiantes</div></div>';return}
+  if(!lista.length){c.innerHTML='<div class="empty"><div class="empty-icon">&#128269;</div><div class="empty-text">No se encontraron estudiantes</div></div>';return}
   c.innerHTML=lista.map(e=>{
     const ini=((e.nombres?.[0]||'')+(e.apellidos?.[0]||'')).toUpperCase();
     const checked=S.seleccionadosMulti.has(e.id);
-    return`<div class="stu-item ${checked?'checked':''}" onclick="toggleMulti('${e.id}',this)"><div class="stu-avatar">${ini}</div><div><div class="stu-name">${e.apellidos} ${e.nombres}</div><div class="stu-meta">${e.grado} ${e.grupo}</div></div><div class="stu-check">${checked?'✓':''}</div></div>`;
+    return`<div class="stu-item ${checked?'checked':''}" onclick="toggleMulti('${e.id}',this)"><div class="stu-avatar">${ini}</div><div><div class="stu-name">${e.apellidos} ${e.nombres}</div><div class="stu-meta">${e.grado} ${e.grupo}</div></div><div class="stu-check">${checked?'&#10003;':''}</div></div>`;
   }).join('');
   document.getElementById('multiCount').textContent=S.seleccionadosMulti.size+' seleccionados';
 }
 function toggleMulti(id,el){
   if(S.seleccionadosMulti.has(id)){S.seleccionadosMulti.delete(id);el.classList.remove('checked');el.querySelector('.stu-check').textContent=''}
-  else{S.seleccionadosMulti.add(id);el.classList.add('checked');el.querySelector('.stu-check').textContent='✓'}
+  else{S.seleccionadosMulti.add(id);el.classList.add('checked');el.querySelector('.stu-check').textContent='&#10003;'}
   document.getElementById('multiCount').textContent=S.seleccionadosMulti.size+' seleccionados';
 }
 async function seleccionarTodos(){
@@ -925,11 +926,11 @@ async function seleccionarTodos(){
   filtrarEstudiantesMulti();
 }
 
-/* ═══ COORDINATOR QUICK FAULTS ═══ */
+/* COORDINATOR QUICK FAULTS */
 function iniciarFaltaRapida(tipo){
   S.tipoFaltaRapida=tipo;
   S.seleccionadosMulti.clear();
-  document.getElementById('multiTitle').textContent=tipo==='RETARDO'?'⏰ Seleccionar estudiantes con retardo':'👔 Seleccionar sin uniforme';
+  document.getElementById('multiTitle').textContent=tipo==='RETARDO'?'&#9200; Seleccionar estudiantes con retardo':'&#128084; Seleccionar sin uniforme';
   prepararFiltros('multi');
   mostrar('scrSelectMulti');
 }
@@ -940,7 +941,7 @@ async function confirmarFaltaRapida(){
   const label=tipo==='RETARDO'?'retardo':'falta de uniforme';
   
   // Show confirmation in modal
-  abrirModal(`<h3>Confirmar registro</h3><p style="margin-bottom:16px">¿Registrar <b>${label}</b> a <b>${n}</b> estudiante(s)?</p><div style="display:flex;gap:10px"><button class="btn btn-outline" onclick="cerrarModal()" style="flex:1">Cancelar</button><button class="btn btn-accent" onclick="ejecutarFaltaRapida()" style="flex:1">Confirmar</button></div>`);
+  abrirModal(`<h3>Confirmar registro</h3><p style="margin-bottom:16px">&#191;Registrar <b>${label}</b> a <b>${n}</b> estudiante(s)?</p><div style="display:flex;gap:10px"><button class="btn btn-outline" onclick="cerrarModal()" style="flex:1">Cancelar</button><button class="btn btn-accent" onclick="ejecutarFaltaRapida()" style="flex:1">Confirmar</button></div>`);
 }
 async function ejecutarFaltaRapida(){
   cerrarModal();
@@ -959,15 +960,15 @@ async function ejecutarFaltaRapida(){
     } else {
       // Offline: save individual observations
       const tipo=S.tipoFaltaRapida;
-      const config=tipo==='RETARDO'?{tipo:'TIPO_I',cat:'ASISTENCIA',grav:'LEVE',falta:'Retardo',desc:'Retardo registrado por coordinación',med:'Registro en observador'}
-        :{tipo:'TIPO_I',cat:'DESARROLLO',grav:'LEVE',falta:'Falta de uniforme',desc:'Falta de uniforme registrada por coordinación',med:'Registro en observador'};
+      const config=tipo==='RETARDO'?{tipo:'TIPO_I',cat:'ASISTENCIA',grav:'LEVE',falta:'Retardo',desc:'Retardo registrado por coordinaci&#243;n',med:'Registro en observador'}
+        :{tipo:'TIPO_I',cat:'DESARROLLO',grav:'LEVE',falta:'Falta de uniforme',desc:'Falta de uniforme registrada por coordinaci&#243;n',med:'Registro en observador'};
       for(const idEst of S.seleccionadosMulti){
         const idLocal='QF_'+Date.now()+'_'+Math.random().toString(36).substr(2,5);
         await dbPut('observaciones',{
           idLocal,idServidor:null,idEstudiante:idEst,periodo:S.periodoActual,
           tipoSituacion:config.tipo,categoria:config.cat,gravedad:config.grav,
           faltaManual:config.falta,descripcion:config.desc,descargos:'',
-          actividad:'Ingreso/Salida',sitio:'Entrada de la institución',materia:'',
+          actividad:'Ingreso/Salida',sitio:'Entrada de la instituci&#243;n',materia:'',
           idDocente:S.docenteInfo.id,nombreDocente:S.docenteInfo.nombreCompleto,
           contexto:'',medidas:config.med,acudienteNotificado:'NO',
           fechaSuceso:new Date().toISOString().split('T')[0],horaSuceso:new Date().toTimeString().slice(0,5),
@@ -980,7 +981,7 @@ async function ejecutarFaltaRapida(){
   }catch(e){ocultarCarga();toast('Error: '+e.message,'err')}
 }
 
-/* ═══ STUDENT SELECTION ═══ */
+/* STUDENT SELECTION */
 async function selEst(id){
   const est=(await dbGetAll('estudiantes')).find(e=>e.id===id);
   if(!est)return;
@@ -990,7 +991,7 @@ async function selEst(id){
   else if(S.modo==='historial')abrirHistorial(est);
 }
 
-/* ═══ FAULTS ═══ */
+/* FAULTS */
 function prepararFaltasGlobal(cfg){
   const arr=[];
   if(cfg&&typeof cfg==='object'){
@@ -1057,10 +1058,10 @@ function selFalta(i){
   renderFaltas();
 }
 
-/* ═══ OBSERVATION FORM ═══ */
+/* OBSERVATION FORM */
 function abrirFormObs(est){
   document.getElementById('formEstName').textContent=est.apellidos+' '+est.nombres;
-  document.getElementById('formEstMeta').textContent=est.grado+' '+est.grupo+' · '+est.sede;
+  document.getElementById('formEstMeta').textContent=est.grado+' '+est.grupo+' &#183; '+est.sede;
   // Reset
   document.getElementById('t1').checked=true;
   S.faltaSelIdx=-1;S.catActiva='TODAS';S.gravActiva='TODAS';
@@ -1072,7 +1073,7 @@ function abrirFormObs(est){
   const hoy=new Date();
   document.getElementById('fFecha').value=hoy.toISOString().split('T')[0];
   document.getElementById('fHora').value=hoy.toTimeString().slice(0,5);
-  document.getElementById('fActividad').value='Actividad académica';
+  document.getElementById('fActividad').value='Actividad acad&#233;mica';
   document.getElementById('wrapActDet').classList.add('hidden');
   document.getElementById('fSitio').value='Aula de clase';
   document.getElementById('wrapSitioOtro').classList.add('hidden');
@@ -1083,16 +1084,28 @@ function abrirFormObs(est){
   renderCatFilter();renderGravFilter();filtrarFaltas();
   mostrar('scrForm');
 }
+function gradoANivel(grado){
+  const g=String(grado||'').toUpperCase().trim();
+  if(g.includes('CERO')||g.includes('PREESCOLAR')||g.includes('TRANSICI'))return 'PREESCOLAR';
+  const nums=g.replace(/\D/g,'');
+  if(!nums)return 'PRIMARIA';
+  const n=nums.length>=3?parseInt(nums.substring(0,2)):parseInt(nums);
+  if(n>=10)return 'MEDIA';
+  if(n>=6)return 'SECUNDARIA';
+  if(n>=1)return 'PRIMARIA';
+  return 'PREESCOLAR';
+}
 function cargarMaterias(grado){
   const sel=document.getElementById('fMateria');
-  sel.innerHTML='<option value="">— No aplica —</option>';
-  const mats=S.materiasPorNivel[grado]||S.materiasPorNivel['TODOS']||[];
+  sel.innerHTML='<option value="">&#8212; No aplica &#8212;</option>';
+  const nivel=gradoANivel(grado);
+  const mats=S.materiasPorNivel[nivel]||S.materiasPorNivel[grado]||S.materiasPorNivel['TODOS']||[];
   mats.forEach(m=>sel.innerHTML+=`<option value="${m.nombre}">${m.nombre}</option>`);
   actualizarVisibilidadMateria();
 }
 function alCambiarActividad(){
   const v=document.getElementById('fActividad').value;
-  document.getElementById('wrapActDet').classList.toggle('hidden',!['Actividad extracurricular','Actividad institucional','Representación institucional'].includes(v));
+  document.getElementById('wrapActDet').classList.toggle('hidden',!['Actividad extracurricular','Actividad institucional','Representaci&#243;n institucional'].includes(v));
   actualizarVisibilidadMateria();
 }
 function alCambiarSitio(){
@@ -1102,22 +1115,22 @@ function alCambiarSitio(){
 function actualizarVisibilidadMateria(){
   const act=document.getElementById('fActividad').value;
   const sitio=document.getElementById('fSitio').value;
-  const mostrar=act==='Actividad académica'||sitio==='Aula de clase'||sitio==='Salón asignado al docente';
+  const mostrar=act==='Actividad acad&#233;mica'||sitio==='Aula de clase'||sitio==='Sal&#243;n asignado al docente';
   document.getElementById('wrapMateria').classList.toggle('hidden',!mostrar);
 }
 
-/* ═══ ROUTES / PROTOCOL ═══ */
+/* ROUTES / PROTOCOL */
 function verRuta(){
   const tipo=document.querySelector('input[name="tipo"]:checked').value;
   const rutas=S.rutasAtencion;
   let ruta=rutas[tipo]||rutas['TIPO_I']||null;
-  let html='<h3>📋 Ruta de Atención — '+tipo.replace('_',' ')+'</h3>';
+  let html='<h3>&#128203; Ruta de Atenci&#243;n &#8212; '+tipo.replace('_',' ')+'</h3>';
   if(ruta){
-    if(ruta.nombre)html+=`<div class="info blue mb-12"><b>${ruta.nombre}</b>${ruta.articulo?' · '+ruta.articulo:''}</div>`;
+    if(ruta.nombre)html+=`<div class="info blue mb-12"><b>${ruta.nombre}</b>${ruta.articulo?' &#183; '+ruta.articulo:''}</div>`;
     if(ruta.protocolo&&Array.isArray(ruta.protocolo)){
       html+=ruta.protocolo.map((p,i)=>`<div class="protocol-step"><b>Paso ${i+1}:</b> ${p}</div>`).join('');
     }
-    if(ruta.responsable)html+=`<div class="info amber mt-12"><b>Responsable:</b> ${ruta.responsable}${ruta.tiempo?' · <b>Tiempo:</b> '+ruta.tiempo:''}</div>`;
+    if(ruta.responsable)html+=`<div class="info amber mt-12"><b>Responsable:</b> ${ruta.responsable}${ruta.tiempo?' &#183; <b>Tiempo:</b> '+ruta.tiempo:''}</div>`;
     if(ruta.nota)html+=`<div class="info" style="background:#f8fafc;border-color:var(--border);color:var(--text-mid);margin-top:8px"><b>Nota:</b> ${ruta.nota}</div>`;
   } else {
     html+='<div class="info amber">No hay ruta configurada para este tipo. Consulte el Manual de Convivencia.</div>';
@@ -1125,7 +1138,7 @@ function verRuta(){
   abrirModal(html);
 }
 
-/* ═══ SAVE OBSERVATION ═══ */
+/* SAVE OBSERVATION */
 
 async function guardarObs(){
   if(S.permisos.soloLectura||!S.permisos.puedeCrearObservacion){toast('No tiene permisos para registrar observaciones','err');return}
@@ -1133,10 +1146,10 @@ async function guardarObs(){
   const est=S.estudianteActual;if(!est)return;
   const desc=document.getElementById('fDesc').value.trim();
   const medidas=document.getElementById('fMedidas').value.trim();
-  if(!desc||desc.length<10){toast('Descripción muy corta (mín 10 caracteres)','err');return}
+  if(!desc||desc.length<10){toast('Descripci&#243;n muy corta (m&#237;n 10 caracteres)','err');return}
   if(!medidas){toast('Indique las medidas tomadas','err');return}
   
-  S._guardando=true; // ← Bloquear
+  S._guardando=true; // &#8592; Bloquear
   
   const tipo=document.querySelector('input[name="tipo"]:checked').value;
   const falta=S.faltaSelIdx>=0?S.faltasFiltradas[S.faltaSelIdx]:null;
@@ -1144,7 +1157,7 @@ async function guardarObs(){
   if(sitio==='Otro')sitio=document.getElementById('fSitioOtro').value.trim()||'Otro';
   let actividad=document.getElementById('fActividad').value;
   const detAct=document.getElementById('fActDetalle').value.trim();
-  if(detAct)actividad+=' — '+detAct;
+  if(detAct)actividad+=' &#8212; '+detAct;
   const acud=document.querySelector('input[name="acud"]:checked').value;
   
   const idLocal='OBS_'+Date.now()+'_'+Math.random().toString(36).substr(2,5);
@@ -1172,11 +1185,11 @@ async function guardarObs(){
   };
   
   await dbPut('observaciones',obs);
-  toast('Observación guardada ✓','ok');
+  toast('Observaci&#243;n guardada &#10003;','ok');
   
-  // Try immediate sync — AHORA con await para que termine antes de navegar
+  // Try immediate sync &#8212; AHORA con await para que termine antes de navegar
   if(navigator.onLine){try{await subirObs(obs)}catch(e){}}
-  S._guardando=false; // ← Desbloquear
+  S._guardando=false; // &#8592; Desbloquear
   irDashboard();
 }
 
@@ -1198,11 +1211,11 @@ async function subirObs(obs){
   }catch(e){obs.intentosSync=(obs.intentosSync||0)+1;await dbPut('observaciones',obs)}
 }
 
-/* ═══ LOGRO FORM ═══ */
+/* LOGRO FORM */
 function abrirFormLogro(est){
   document.getElementById('logroEstName').textContent=est.apellidos+' '+est.nombres;
   document.getElementById('logroEstMeta').textContent=est.grado+' '+est.grupo;
-  document.getElementById('lTipo').value='Académico';
+  document.getElementById('lTipo').value='Acad&#233;mico';
   document.getElementById('lEspacio').value='';
   document.getElementById('lDesc').value='';
   mostrar('scrLogro');
@@ -1210,7 +1223,7 @@ function abrirFormLogro(est){
 async function guardarLogro(){
   const est=S.estudianteActual;if(!est)return;
   const desc=document.getElementById('lDesc').value.trim();
-  if(!desc||desc.length<5){toast('Descripción muy corta','err');return}
+  if(!desc||desc.length<5){toast('Descripci&#243;n muy corta','err');return}
   
   const idLocal='LOG_'+Date.now()+'_'+Math.random().toString(36).substr(2,5);
   const obs={
@@ -1224,7 +1237,7 @@ async function guardarLogro(){
     estado:'PENDIENTE', timestampCreacion:Date.now(), intentosSync:0
   };
   await dbPut('observaciones',obs);
-  toast('Logro registrado ✓','ok');
+  toast('Logro registrado &#10003;','ok');
   if(navigator.onLine){
     try{
       const r=await api('guardarLogroPWA',{idLocal:obs.idLocal,idEstudiante:est.id,periodo:S.periodoActual,tipoLogro:obs.categoria,espacio:obs.actividad,descripcion:desc,idDocente:S.docenteInfo.id});
@@ -1234,10 +1247,10 @@ async function guardarLogro(){
   irDashboard();
 }
 
-/* ═══ SYNC ═══ */
+/* SYNC */
 async function sincronizarAhora(){
   const obs=(await dbGetAll('observaciones')).filter(o=>o.estado==='PENDIENTE');
-  if(!obs.length){toast('Todo sincronizado ✓','ok');return}
+  if(!obs.length){toast('Todo sincronizado &#10003;','ok');return}
   
   const strip=document.getElementById('syncStrip');
   const fill=document.getElementById('syncFill');
@@ -1250,7 +1263,7 @@ async function sincronizarAhora(){
   for(let i=0;i<obs.length;i++){
     const o=obs[i];
     label.textContent=`Sincronizando ${i+1} de ${obs.length}...`;
-    count.textContent=`${ok} ✓  ${fail} ✗`;
+    count.textContent=`${ok} &#10003;  ${fail} &#10007;`;
     fill.style.width=((i+1)/obs.length*100)+'%';
     
     try{
@@ -1264,17 +1277,17 @@ async function sincronizarAhora(){
     }catch(e){o.intentosSync++;await dbPut('observaciones',o);fail++}
   }
   
-  label.textContent=fail?`Completado: ${ok} ✓, ${fail} con error`:'¡Todo sincronizado!';
+  label.textContent=fail?`Completado: ${ok} &#10003;, ${fail} con error`:'&#161;Todo sincronizado!';
   count.textContent='';
   fill.style.width='100%';
   fill.classList.add(fail?'error':'done');
   setTimeout(()=>{strip.classList.remove('show');actualizarDash()},2500);
 }
 
-/* ═══ HISTORY ═══ */
+/* HISTORY */
 async function abrirHistorial(est){
   document.getElementById('histEstName').textContent=est.apellidos+' '+est.nombres;
-  document.getElementById('histEstMeta').textContent=est.grado+' '+est.grupo+' · '+est.sede;
+  document.getElementById('histEstMeta').textContent=est.grado+' '+est.grupo+' &#183; '+est.sede;
   initHistFilters();
   await calcScore(est.id);
   await cargarHist();
@@ -1286,7 +1299,7 @@ function initHistFilters(){
   };
   mk('filtPeriodo',['P1','P2','P3']);
   mk('filtTipo',['TIPO_I','TIPO_II','TIPO_III','LOGRO'],['Tipo I','Tipo II','Tipo III','Logro']);
-  mk('filtGrav',['LEVE','GRAVE','GRAVISIMA'],['Leve','Grave','Gravísima']);
+  mk('filtGrav',['LEVE','GRAVE','GRAVISIMA'],['Leve','Grave','Grav&#237;sima']);
   mk('filtCat',['ASISTENCIA','APRENDIZAJE','BIENES','DESARROLLO','RELACIONES']);
 }
 function toggleFcheck(el){el.classList.toggle('on');el.querySelector('input').checked=el.classList.contains('on');cargarHist()}
@@ -1322,7 +1335,7 @@ async function cargarHist(){
 
 function renderHist(obs){
   const c=document.getElementById('listaHist');
-  if(!obs.length){c.innerHTML='<div class="empty"><div class="empty-icon">📋</div><div class="empty-text">No hay observaciones con estos filtros</div></div>';return}
+  if(!obs.length){c.innerHTML='<div class="empty"><div class="empty-icon">&#128203;</div><div class="empty-text">No hay observaciones con estos filtros</div></div>';return}
   c.innerHTML=obs.map(o=>{
     const t=o.tipoSituacion||o.tipo||'';
     const tc=t==='TIPO_I'?'t1':t==='TIPO_II'?'t2':t==='TIPO_III'?'t3':t==='LOGRO'?'logro':'';
@@ -1331,7 +1344,7 @@ function renderHist(obs){
     const hora=o.horaSuceso||o.horaRegistro||'';
     const docName=resolverDocente(o.idDocente,o.nombreDocente);
     const gc=o.gravedad==='GRAVE'?'grav-grave':o.gravedad==='GRAVISIMA'?'grav-gravisima':o.gravedad?'grav-leve':'';
-    return`<div class="obs-card ${tc} ${pend?'pend':''}" onclick='verDetalle(${JSON.stringify(o).replace(/'/g,"\\'")})'><div class="obs-date">${fecha} ${hora}</div><div><span class="obs-badge ${tc}">${t.replace('_',' ')}</span>${o.categoria?`<span class="obs-badge cat">${o.categoria}</span>`:''}${o.gravedad?`<span class="obs-badge ${gc}">${o.gravedad}</span>`:''}</div><div class="obs-desc">${o.faltaManual||o.descripcion||''}</div><div class="obs-foot"><span>👤 ${docName}</span>${pend?'<span class="obs-pend-badge">⏳ Pendiente</span>':''}</div></div>`;
+    return`<div class="obs-card ${tc} ${pend?'pend':''}" onclick='verDetalle(${JSON.stringify(o).replace(/'/g,"\\'")})'><div class="obs-date">${fecha} ${hora}</div><div><span class="obs-badge ${tc}">${t.replace('_',' ')}</span>${o.categoria?`<span class="obs-badge cat">${o.categoria}</span>`:''}${o.gravedad?`<span class="obs-badge ${gc}">${o.gravedad}</span>`:''}</div><div class="obs-desc">${o.faltaManual||o.descripcion||''}</div><div class="obs-foot"><span>&#128100; ${docName}</span>${pend?'<span class="obs-pend-badge">&#9203; Pendiente</span>':''}</div></div>`;
   }).join('');
 }
 
@@ -1341,7 +1354,7 @@ function resolverDocente(id,nombre){
   // Search docentes in IndexedDB cache (we can use sync approach since we loaded them)
   // For performance, we'll search from the global state
   const searchId=String(id);
-  // Try to find in the loaded page — we'll use a simple cache
+  // Try to find in the loaded page &#8212; we'll use a simple cache
   if(window._docentesCache){
     for(const d of window._docentesCache){
       if(d.id===searchId||d.documento===searchId||searchId.includes(d.documento)||d.id.includes(searchId)){
@@ -1376,33 +1389,33 @@ async function calcScore(idEst){
   });
   const nota=Math.max(0,500-totalPts);
   let desemp,cls;
-  if(nota>=450){desemp='SUPERIOR';cls='sup'}else if(nota>=400){desemp='ALTO';cls='alt'}else if(nota>=300){desemp='BÁSICO';cls='bas'}else{desemp='BAJO';cls='baj'}
-  document.getElementById('histScore').innerHTML=`<div class="score-num ${cls}">${nota}</div><div class="score-lbl">${desemp}</div><div class="text-sm text-sec mt-8">${faltas} falta(s) · ${totalPts} pts descontados</div>`;
+  if(nota>=450){desemp='SUPERIOR';cls='sup'}else if(nota>=400){desemp='ALTO';cls='alt'}else if(nota>=300){desemp='B&#193;SICO';cls='bas'}else{desemp='BAJO';cls='baj'}
+  document.getElementById('histScore').innerHTML=`<div class="score-num ${cls}">${nota}</div><div class="score-lbl">${desemp}</div><div class="text-sm text-sec mt-8">${faltas} falta(s) &#183; ${totalPts} pts descontados</div>`;
 }
 
-/* ═══ DETAIL MODAL ═══ */
+/* DETAIL MODAL */
 function verDetalle(o){
   const t=o.tipoSituacion||o.tipo||'';
   const docName=resolverDocente(o.idDocente,o.nombreDocente);
-  let html=`<h3>📋 Detalle de Observación</h3>`;
+  let html=`<h3>&#128203; Detalle de Observaci&#243;n</h3>`;
   
   // ID & dates
-  html+=`<div class="det-block id"><b>ID:</b> ${o.id||o.idLocal||'—'}<br><b>📅 Suceso:</b> ${o.fechaSuceso||'—'} ${o.horaSuceso||''}<br><b>📅 Registro:</b> ${o.fechaRegistro||new Date(o.timestampCreacion).toLocaleDateString('es-CO')||'—'} ${o.horaRegistro||''}</div>`;
+  html+=`<div class="det-block id"><b>ID:</b> ${o.id||o.idLocal||'&#8212;'}<br><b>&#128197; Suceso:</b> ${o.fechaSuceso||'&#8212;'} ${o.horaSuceso||''}<br><b>&#128197; Registro:</b> ${o.fechaRegistro||new Date(o.timestampCreacion).toLocaleDateString('es-CO')||'&#8212;'} ${o.horaRegistro||''}</div>`;
   
   // Type info
-  html+=`<div class="det-block tipo"><b>🎯 Tipo:</b> ${t.replace('_',' ')}<br><b>📂 Categoría:</b> ${o.categoria||'—'}<br><b>⚠️ Gravedad:</b> ${o.gravedad||'—'}</div>`;
+  html+=`<div class="det-block tipo"><b>&#127919; Tipo:</b> ${t.replace('_',' ')}<br><b>&#128194; Categor&#237;a:</b> ${o.categoria||'&#8212;'}<br><b>&#9888;&#65039; Gravedad:</b> ${o.gravedad||'&#8212;'}</div>`;
   
   // Fault
-  if(o.faltaManual)html+=`<div class="det-block desc"><div class="det-label">📋 Falta del Manual</div>${o.faltaManual}</div>`;
+  if(o.faltaManual)html+=`<div class="det-block desc"><div class="det-label">&#128203; Falta del Manual</div>${o.faltaManual}</div>`;
   
   // Description
-  html+=`<div class="det-block desc"><div class="det-label">📝 Descripción</div><div style="white-space:pre-wrap">${o.descripcion||'—'}</div></div>`;
+  html+=`<div class="det-block desc"><div class="det-label">&#128221; Descripci&#243;n</div><div style="white-space:pre-wrap">${o.descripcion||'&#8212;'}</div></div>`;
   
   // Descargos
-  if(o.descargos)html+=`<div class="det-block descar"><div class="det-label">⚖️ Descargos del Estudiante</div><div style="white-space:pre-wrap">${o.descargos}</div></div>`;
+  if(o.descargos)html+=`<div class="det-block descar"><div class="det-label">&#9878;&#65039; Descargos del Estudiante</div><div style="white-space:pre-wrap">${o.descargos}</div></div>`;
   
   // Context
-  if(o.contexto)html+=`<div class="det-block desc"><div class="det-label">🔄 Contexto / Antecedentes</div><div style="white-space:pre-wrap">${o.contexto}</div></div>`;
+  if(o.contexto)html+=`<div class="det-block desc"><div class="det-label">&#128260; Contexto / Antecedentes</div><div style="white-space:pre-wrap">${o.contexto}</div></div>`;
   
   // Circumstances grid
   const hasCirc=o.actividad||o.sitio||o.materia;
@@ -1415,29 +1428,29 @@ function verDetalle(o){
   }
   
   // Measures
-  if(o.medidas)html+=`<div class="det-block medidas mt-12"><div class="det-label">✅ Medidas tomadas</div><div style="white-space:pre-wrap">${o.medidas}</div></div>`;
+  if(o.medidas)html+=`<div class="det-block medidas mt-12"><div class="det-label">&#9989; Medidas tomadas</div><div style="white-space:pre-wrap">${o.medidas}</div></div>`;
   
   // Footer
-  html+=`<div class="det-block meta mt-8"><b>👤 Registrada por:</b> ${docName}<br><b>📞 Acudiente notificado:</b> ${o.acudienteNotificado||'—'}</div>`;
+  html+=`<div class="det-block meta mt-8"><b>&#128100; Registrada por:</b> ${docName}<br><b>&#128222; Acudiente notificado:</b> ${o.acudienteNotificado||'&#8212;'}</div>`;
   
-// ✅ DESPUÉS:
-  if(o.estado==='PENDIENTE')html+=`<div class="info amber mt-8">⏳ Esta observación está pendiente de sincronización.</div>`;
+// &#9989; DESPU&#201;S:
+  if(o.estado==='PENDIENTE')html+=`<div class="info amber mt-8">&#9203; Esta observaci&#243;n est&#225; pendiente de sincronizaci&#243;n.</div>`;
   
-  html+=`<button class="btn btn-outline mt-12" onclick="cerrarModal()" style="margin-bottom:8px">← Volver al historial</button>`;
+  html+=`<button class="btn btn-outline mt-12" onclick="cerrarModal()" style="margin-bottom:8px">&#8592; Volver al historial</button>`;
   
   abrirModal(html);
 }
 
-/* ═══ MODAL ═══ */
+/* MODAL */
 function abrirModal(html){document.getElementById('modalContent').innerHTML=html;document.getElementById('modalBg').classList.add('vis')}
 function cerrarModal(){document.getElementById('modalBg').classList.remove('vis')}
 
-/* ═══ TOAST / LOADING ═══ */
+/* TOAST / LOADING */
 function toast(m,t){const e=document.getElementById('toast');e.textContent=m;e.className='toast '+(t||'')+' vis';e.onclick=()=>e.classList.remove('vis');clearTimeout(window._toastTimer);window._toastTimer=setTimeout(()=>e.classList.remove('vis'),2000)}
 function mostrarCarga(t){document.getElementById('loadingTxt').textContent=t||'Cargando...';document.getElementById('loadingOv').classList.add('vis')}
 function ocultarCarga(){document.getElementById('loadingOv').classList.remove('vis')}
 
-/* ═══ AUTO-SYNC ON RECONNECT ═══ */
+/* AUTO-SYNC ON RECONNECT */
 window.addEventListener('online',()=>{
   setTimeout(async()=>{
     const pend=(await dbGetAll('observaciones')).filter(o=>o.estado==='PENDIENTE');
@@ -1445,7 +1458,7 @@ window.addEventListener('online',()=>{
   },1500);
 });
 
-/* ═══ INIT ═══ */
+/* INIT */
 async function init(){
   await abrirDB();
   const saved=await dbGet('sesion','sesion');
