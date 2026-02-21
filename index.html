@@ -520,7 +520,7 @@ textarea{resize:vertical;min-height:80px;line-height:1.5}
 <script>
 /* SIGAT OBSERVADOR DIGITAL */
 
-const API_URL = 'https://script.google.com/macros/s/AKfycbyayz9lDldpIH-ieqJ0MtDqFfDHcqQWEnODUdy9b-knFQDDenCgaSnFDJ4f8Te4wx8j/exec';
+const API_URL = 'https://script.google.com/macros/s/AKfycbzYZ96cAW3bzgbLrgBHWwt1otAxGkxj0i9JOf7X5fZ4TzU6wtVFKyT2Dj4YwfhPyEeq/exec';
 const DB_NAME = 'SIGAT_OBS_V3';
 const DB_VERSION = 2;
 
@@ -542,6 +542,7 @@ const S = {
   tipoUsuario: 'Docente',
   esDocenteYAcudiente: false,
   hijosDelDocente: [],
+  hijosDelAcudiente: [],
   rolActivo: 'Docente',
   estudiantePropio: null
 };
@@ -600,8 +601,16 @@ function irDashboard(){
   }
   mostrar('scrDash');
 }
-function irNuevaObs(){S.modo='obs';document.getElementById('selTitle').textContent='Seleccionar estudiante';prepararFiltros('sel');mostrar('scrSelect')}
-function irNuevoLogro(){S.modo='logro';document.getElementById('selTitle').textContent='Registrar logro de...';prepararFiltros('sel');mostrar('scrSelect')}
+function irNuevaObs(){
+  // &#128274; BLOQUEO DE SEGURIDAD: Acudientes y estudiantes NO pueden crear observaciones
+  if(S.permisos && S.permisos.puedeCrearObservacion===false){toast('Sin permisos para registrar observaciones','err');return;}
+  S.modo='obs';document.getElementById('selTitle').textContent='Seleccionar estudiante';prepararFiltros('sel');mostrar('scrSelect');
+}
+function irNuevoLogro(){
+  // &#128274; BLOQUEO DE SEGURIDAD: Acudientes y estudiantes NO pueden registrar logros
+  if(S.permisos && S.permisos.puedeCrearObservacion===false){toast('Sin permisos para registrar logros','err');return;}
+  S.modo='logro';document.getElementById('selTitle').textContent='Registrar logro de...';prepararFiltros('sel');mostrar('scrSelect');
+}
 function irHistorial(){S.modo='historial';document.getElementById('selTitle').textContent='Ver historial de...';prepararFiltros('sel');mostrar('scrSelect')}
 function volverDeForm(){mostrar('scrSelect')}
 function volverDeHist(){
@@ -655,7 +664,19 @@ async function intentarLogin(){
   document.getElementById('btnLogin').disabled=false;
 }
 function irCambiarPassword(){mostrar('scrPassword')}
-async function cerrarSesion(){await dbClear('sesion');S.sesion=null;S.permisos={puedeCrearObservacion:true,puedeVerTodos:true,soloLectura:false};S.tipoUsuario='Docente';S.esDocenteYAcudiente=false;S.hijosDelDocente=[];S.rolActivo='Docente';S.estudiantePropio=null;mostrar('scrLogin');document.getElementById('loginUser').value='';document.getElementById('loginPass').value=''}
+async function cerrarSesion(){
+  // &#128274; Limpiar TODOS los datos cacheados al cerrar sesi&#243;n (por seguridad)
+  Promise.all([
+    dbClear('sesion'),dbClear('estudiantes'),dbClear('docentes'),
+    dbClear('obs_remotas'),dbClear('observaciones'),dbClear('config')
+  ]).catch(()=>{});
+  S.sesion=null;S.permisos={puedeCrearObservacion:true,puedeVerTodos:true,soloLectura:false};
+  S.tipoUsuario='Docente';S.esDocenteYAcudiente=false;S.hijosDelDocente=[];
+  S.rolActivo='Docente';S.estudiantePropio=null;S.estudianteActual=null;
+  S.hijosDelAcudiente=[];S.docenteInfo={};S.materiasPorNivel={};
+  mostrar('scrLogin');
+  document.getElementById('loginUser').value='';document.getElementById('loginPass').value='';
+}
 async function ejecutarCambioPassword(){
   const actual=document.getElementById('pwdActual').value.trim();
   const nueva=document.getElementById('pwdNueva').value.trim();
@@ -737,11 +758,13 @@ async function descargarDatos(){
     S.tipoUsuario=r.tipoUsuario||r.docenteInfo?.rol||'Docente';
     S.esDocenteYAcudiente=r.esDocenteYAcudiente||false;
     S.hijosDelDocente=r.hijosDelDocente||[];
+    S.hijosDelAcudiente=r.hijosDelAcudiente||[];
     S.estudiantePropio=r.estudiantePropio||null;
     await dbPut('config',{key:'permisos',value:S.permisos});
     await dbPut('config',{key:'tipoUsuario',value:S.tipoUsuario});
     await dbPut('config',{key:'esDocenteYAcudiente',value:S.esDocenteYAcudiente});
     await dbPut('config',{key:'hijosDelDocente',value:S.hijosDelDocente});
+    await dbPut('config',{key:'hijosDelAcudiente',value:S.hijosDelAcudiente});
     if(S.estudiantePropio) await dbPut('config',{key:'estudiantePropio',value:S.estudiantePropio});
     prepararFaltasGlobal(r.configFaltas||{});
     ocultarCarga();toast('Datos actualizados &#10004;','ok');
@@ -762,6 +785,7 @@ async function cargarConfigDB(){
   S.tipoUsuario=await get('tipoUsuario')||'Docente';
   S.esDocenteYAcudiente=await get('esDocenteYAcudiente')||false;
   S.hijosDelDocente=await get('hijosDelDocente')||[];
+  S.hijosDelAcudiente=await get('hijosDelAcudiente')||[];
   S.estudiantePropio=await get('estudiantePropio')||null;
   S.rolActivo=await get('rolActivo')||'Docente';
   const faltas=await get('configFaltas')||{};
@@ -781,9 +805,9 @@ async function actualizarDash(){
   document.getElementById('dashToday').textContent=today;
   document.getElementById('dashPend').textContent=pend;
   document.getElementById('btnSync').style.display=pend>0?'flex':'none';
-  // Show coordinator panel
-  const esCoord=S.docenteInfo.esRolGlobal || ['Coordinador','Rector','COORDINADOR','RECTOR'].some(r=>(S.docenteInfo.rol||'').toUpperCase().includes(r.toUpperCase()));
-  document.getElementById('quickPanel').classList.toggle('hidden',!esCoord||S.permisos.soloLectura);
+  // Show coordinator panel - SOLO Coordinador (no Rector, no Orientador, no Docente)
+  const esCoord=!S.permisos.soloLectura && ['COORDINADOR'].some(r=>(S.docenteInfo.rol||'').toUpperCase().includes(r));
+  document.getElementById('quickPanel').classList.toggle('hidden',!esCoord);
   // &#128274; Ocultar/mostrar botones seg&#250;n permisos
   const btnObs=document.querySelector('[onclick="irNuevaObs()"]');
   const btnLogro=document.querySelector('[onclick="irNuevoLogro()"]');
@@ -982,7 +1006,18 @@ async function ejecutarFaltaRapida(){
 }
 
 /* STUDENT SELECTION */
-async function selEst(id){
+async async function selEst(id){
+  // &#128274; SEGURIDAD: Verificar acceso antes de seleccionar
+  if(S.permisos && S.permisos.soloLectura){
+    // Solo puede ver sus propios estudiantes autorizados
+    const idsPermitidos = (S.hijosDelAcudiente||S.hijosDelDocente||[]);
+    if(S.tipoUsuario==='ACUDIENTE' && idsPermitidos.length>0 && !idsPermitidos.includes(id)){
+      toast('Sin acceso a este estudiante','err');return;
+    }
+    if(S.tipoUsuario==='ESTUDIANTE' && S.estudiantePropio && S.estudiantePropio.id!==id){
+      toast('Solo puede ver su propio historial','err');return;
+    }
+  }
   const est=(await dbGetAll('estudiantes')).find(e=>e.id===id);
   if(!est)return;
   S.estudianteActual=est;
@@ -1089,7 +1124,12 @@ function gradoANivel(grado){
   if(g.includes('CERO')||g.includes('PREESCOLAR')||g.includes('TRANSICI'))return 'PREESCOLAR';
   const nums=g.replace(/\D/g,'');
   if(!nums)return 'PRIMARIA';
-  const n=nums.length>=3?parseInt(nums.substring(0,2)):parseInt(nums);
+  // Los c&#243;digos de grupo son: 3 d&#237;gitos = grade(1-9)+grupo(01-09), 4 d&#237;gitos = grade(10-11)+grupo(01-09)
+  // Ejemplos: "601"=grado6, "1101"=grado11, "11"=grado11, "6"=grado6
+  let n;
+  if(nums.length===4) n=parseInt(nums.substring(0,2));      // 1001->10, 1101->11
+  else if(nums.length===3) n=parseInt(nums.substring(0,1)); // 601->6, 901->9
+  else n=parseInt(nums);                                     // 6->6, 11->11
   if(n>=10)return 'MEDIA';
   if(n>=6)return 'SECUNDARIA';
   if(n>=1)return 'PRIMARIA';
@@ -1099,8 +1139,17 @@ function cargarMaterias(grado){
   const sel=document.getElementById('fMateria');
   sel.innerHTML='<option value="">&#8212; No aplica &#8212;</option>';
   const nivel=gradoANivel(grado);
-  const mats=S.materiasPorNivel[nivel]||S.materiasPorNivel[grado]||S.materiasPorNivel['TODOS']||[];
-  mats.forEach(m=>sel.innerHTML+=`<option value="${m.nombre}">${m.nombre}</option>`);
+  // Buscar con clave exacta, luego insensible a may&#250;sculas, luego 'TODOS'
+  let mats=S.materiasPorNivel[nivel]||S.materiasPorNivel[grado]||null;
+  if(!mats){
+    const key=Object.keys(S.materiasPorNivel||{}).find(k=>k.toUpperCase()===nivel||k.toUpperCase()===String(grado||'').toUpperCase());
+    if(key) mats=S.materiasPorNivel[key];
+  }
+  if(!mats) mats=S.materiasPorNivel['TODOS']||S.materiasPorNivel['todos']||[];
+  (mats||[]).forEach(m=>{
+    const nombre=typeof m==='string'?m:(m.nombre||m.name||String(m));
+    if(nombre) sel.innerHTML+=`<option value="${nombre}">${nombre}</option>`;
+  });
   actualizarVisibilidadMateria();
 }
 function alCambiarActividad(){
