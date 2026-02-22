@@ -571,11 +571,16 @@ function dbGetAll(s){return new Promise((ok,fail)=>{const t=db.transaction(s,'re
 function dbClear(s){return new Promise((ok,fail)=>{const t=db.transaction(s,'readwrite');t.objectStore(s).clear();t.oncomplete=()=>ok();t.onerror=()=>fail(t.error)})}
 function dbDel(s,k){return new Promise((ok,fail)=>{const t=db.transaction(s,'readwrite');t.objectStore(s).delete(k);t.oncomplete=()=>ok();t.onerror=()=>fail(t.error)})}
 
-/* API */
+/* API
+ * Google Apps Script bloquea CORS en POST desde dominios externos.
+ * La solución oficial es usar GET con el payload codificado en la URL.
+ * GAS permite GET cross-origin automáticamente con redirect: 'follow'.
+ */
 async function api(action, datos={}){
   const body={action,...datos};
   if(S.sesion?.token) body.token=S.sesion.token;
-  const r=await fetch(API_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify(body)});
+  const url=API_URL+'?payload='+encodeURIComponent(JSON.stringify(body));
+  const r=await fetch(url,{method:'GET',redirect:'follow'});
   if(!r.ok) throw new Error('HTTP '+r.status);
   return r.json();
 }
@@ -632,7 +637,14 @@ function mostrarConfig(){
   dbGetAll('estudiantes').then(e=>document.getElementById('cfgEst').textContent=e.length);
   document.getElementById('cfgConnSt').textContent=navigator.onLine?'En l\u00ednea':'Sin conexi\u00f3n';
   const btnRolDual=document.getElementById('btnRolDual');
-  if(btnRolDual) btnRolDual.style.display=S.esDocenteYAcudiente?'':'none';
+  if(btnRolDual){
+    btnRolDual.style.display=S.esDocenteYAcudiente?'':'none';
+    if(S.esDocenteYAcudiente){
+      const rolActual=S.rolActivo||'Docente';
+      const rolDestino=rolActual==='Docente'?'Acudiente':'Docente';
+      btnRolDual.innerHTML='&#128260; Cambiar '+rolActual+' \u2192 '+rolDestino;
+    }
+  }
   mostrar('scrConfig');
 }
 
@@ -650,6 +662,9 @@ async function intentarLogin(){
     if(r.exito||r.token){
       S.sesion={token:r.token,usuario:r.usuario||{nombreCompleto:u},credencialOffline:btoa(u+':'+p),fechaLogin:Date.now()};
       await dbPut('sesion',{key:'sesion',...S.sesion});
+      // Siempre arrancar en modo Docente al hacer login
+      S.rolActivo='Docente';
+      await dbPut('config',{key:'rolActivo',value:'Docente'});
       ocultarCarga();
       await descargarDatos();
       irDashboard();
@@ -792,10 +807,26 @@ async function descargarDatos(){
     S.rutasAtencion=r.rutasAtencion||{};
     S.materiasPorNivel=r.materiasPorNivel||{};
     S.periodoActual=r.periodoActual||'P1';
-    // &#128274; NUEVO: Guardar permisos de seguridad
-    S.permisos=r.permisos||{puedeCrearObservacion:true,puedeVerTodos:true,soloLectura:false};
-    S.tipoUsuario=r.tipoUsuario||r.docenteInfo?.rol||'Docente';
-    S.esDocenteYAcudiente=r.esDocenteYAcudiente||false;
+    // Permisos: si el usuario es dual y está en modo Docente, forzar permisos de docente
+    // independientemente de lo que devuelva el servidor (el servidor puede retornar
+    // permisos ambiguos para usuarios duales)
+    const permisosServidor=r.permisos||{puedeCrearObservacion:true,puedeVerTodos:true,soloLectura:false};
+    const esDocenteYAcudiente_=r.esDocenteYAcudiente||false;
+    const rolActivoActual=S.rolActivo||'Docente';
+    if(esDocenteYAcudiente_ && rolActivoActual==='Docente'){
+      // Usuario dual en modo Docente → siempre permisos completos
+      S.permisos={puedeCrearObservacion:true,puedeVerTodos:true,soloLectura:false};
+      S.tipoUsuario='Docente';
+    } else if(esDocenteYAcudiente_ && rolActivoActual==='Acudiente'){
+      // Usuario dual en modo Acudiente → permisos restringidos
+      S.permisos={puedeCrearObservacion:false,puedeVerTodos:false,soloLectura:true};
+      S.tipoUsuario='ACUDIENTE';
+    } else {
+      // Usuario simple → confiar en el servidor
+      S.permisos=permisosServidor;
+      S.tipoUsuario=r.tipoUsuario||r.docenteInfo?.rol||'Docente';
+    }
+    S.esDocenteYAcudiente=esDocenteYAcudiente_;
     S.hijosDelDocente=r.hijosDelDocente||[];
     S.hijosDelAcudiente=r.hijosDelAcudiente||[];
     S.estudiantePropio=r.estudiantePropio||null;
@@ -828,6 +859,18 @@ async function cargarConfigDB(){
   S.hijosDelAcudiente=await get('hijosDelAcudiente')||[];
   S.estudiantePropio=await get('estudiantePropio')||null;
   S.rolActivo=await get('rolActivo')||'Docente';
+  // Si es usuario dual y no hay un rolActivo explícito guardado, arrancar como Docente
+  if(S.esDocenteYAcudiente && !await get('rolActivo')) S.rolActivo='Docente';
+  // Aplicar permisos coherentes con el rol activo restaurado
+  if(S.esDocenteYAcudiente){
+    if(S.rolActivo==='Docente'){
+      S.permisos={puedeCrearObservacion:true,puedeVerTodos:true,soloLectura:false};
+      S.tipoUsuario='Docente';
+    } else {
+      S.permisos={puedeCrearObservacion:false,puedeVerTodos:false,soloLectura:true};
+      S.tipoUsuario='ACUDIENTE';
+    }
+  }
   const faltas=await get('configFaltas')||{};
   prepararFaltasGlobal(faltas);
 }
