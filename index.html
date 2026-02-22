@@ -523,7 +523,7 @@ textarea{resize:vertical;min-height:80px;line-height:1.5}
 <script>
 /* SIGAT OBSERVADOR DIGITAL */
 
-const API_URL = 'https://script.google.com/macros/s/AKfycbwaMAmZg4rogaQ3g5E6NItKiHLIa0POPi8LXU7hftkuqtxiLzPnlSFCgB7XPV2MkjpL/exec';
+const API_URL = 'https://script.google.com/macros/s/AKfycbzYZ96cAW3bzgbLrgBHWwt1otAxGkxj0i9JOf7X5fZ4TzU6wtVFKyT2Dj4YwfhPyEeq/exec';
 const DB_NAME = 'SIGAT_OBS_V3';
 const DB_VERSION = 2;
 
@@ -712,27 +712,55 @@ async function cambiarRolDual(){
   const nuevoRol=(S.rolActivo||'Docente')==='Docente'?'Acudiente':'Docente';
   S.rolActivo=nuevoRol;
   await dbPut('config',{key:'rolActivo',value:nuevoRol});
+
   if(nuevoRol==='Acudiente'){
+    // Guardar snapshot de los estudiantes docentes antes de limpiar
+    const todosEst=await dbGetAll('estudiantes');
+    // Guardar snapshot en config para restaurar luego (sin ir al servidor)
+    await dbPut('config',{key:'estudiantesDocente',value:todosEst});
+    const hijos=todosEst.filter(e=>S.hijosDelDocente.includes(e.id));
+    await dbClear('estudiantes');
+    for(const h of hijos) await dbPut('estudiantes',h);
     S.permisos={puedeCrearObservacion:false,puedeVerTodos:false,soloLectura:true};
     S.tipoUsuario='ACUDIENTE';
-    const todosEst=await dbGetAll('estudiantes');
-    const hijos=todosEst.filter(e=>S.hijosDelDocente.includes(e.id));
-    await dbClear('estudiantes');for(const h of hijos) await dbPut('estudiantes',h);
     toast('Modo Acudiente activado &#128104;&#8205;&#128103;&#8205;&#128102;','ok');
+
   }else{
-    // Descargamos datos frescos del servidor
-    await descargarDatos();
-    // IMPORTANTE: descargarDatos() puede sobrescribir S.permisos/tipoUsuario con el
-    // valor base del servidor. Lo re-aplicamos manualmente para garantizar modo Docente.
+    // Intentar restaurar desde snapshot local primero (rápido, sin red)
+    const snapshotConfig=await dbGet('config','estudiantesDocente');
+    if(snapshotConfig&&snapshotConfig.value&&snapshotConfig.value.length>0){
+      await dbClear('estudiantes');
+      for(const e of snapshotConfig.value) await dbPut('estudiantes',e);
+    }
+    // Restaurar permisos docente ANTES de descargar (por si falla la red)
     S.permisos={puedeCrearObservacion:true,puedeVerTodos:true,soloLectura:false};
     S.tipoUsuario='Docente';
     S.rolActivo='Docente';
+    // Forzar esRolGlobal según el rol guardado en docenteInfo
+    // (el backend puede no enviarlo en todas las respuestas)
+    S.docenteInfo=await (async()=>{const c=await dbGet('config','docenteInfo');return c?.value||S.docenteInfo||{}})();
+    aplicarEsRolGlobal();
+    // Actualizar en DB
     await dbPut('config',{key:'permisos',value:S.permisos});
     await dbPut('config',{key:'tipoUsuario',value:'Docente'});
     await dbPut('config',{key:'rolActivo',value:'Docente'});
     toast('Modo Docente activado &#128104;&#8205;&#127979;','ok');
+    // Actualizar datos en background si hay red
+    if(navigator.onLine) descargarDatos().catch(()=>{});
   }
   irDashboard();
+}
+
+/**
+ * Garantiza que S.docenteInfo.esRolGlobal sea correcto según el rol.
+ * Coordinadores, rectores y orientadores tienen acceso global a todas las sedes.
+ * Se llama después de restaurar docenteInfo para asegurar coherencia.
+ */
+function aplicarEsRolGlobal(){
+  const rol=(S.docenteInfo.rol||'').toUpperCase();
+  const ROLES_GLOBALES=['COORDINADOR','RECTOR','ORIENTADOR','ADMIN','DOCENTE_ORIENTADOR'];
+  const esGlobal=ROLES_GLOBALES.some(r=>rol.includes(r));
+  if(esGlobal) S.docenteInfo.esRolGlobal=true;
 }
 /* DATA DOWNLOAD */
 async function descargarDatos(){
@@ -757,6 +785,7 @@ async function descargarDatos(){
     await dbPut('config',{key:'docenteInfo',value:r.docenteInfo||{}});
     // Load into state
     S.docenteInfo=r.docenteInfo||{};
+    aplicarEsRolGlobal();
     S.configGrupos=r.configGrupos||[];
     S.sedes=r.sedes||[];
     S.configPuntos=r.configPuntos||{};
@@ -790,6 +819,7 @@ async function cargarConfigDB(){
   S.materiasPorNivel=await get('materiasPorNivel')||{};
   S.periodoActual=await get('periodoActual')||'P1';
   S.docenteInfo=await get('docenteInfo')||{};
+  aplicarEsRolGlobal();
   // &#128274; NUEVO: Restaurar permisos
   S.permisos=await get('permisos')||{puedeCrearObservacion:true,puedeVerTodos:true,soloLectura:false};
   S.tipoUsuario=await get('tipoUsuario')||'Docente';
@@ -815,8 +845,8 @@ async function actualizarDash(){
   document.getElementById('dashToday').textContent=today;
   document.getElementById('dashPend').textContent=pend;
   document.getElementById('btnSync').style.display=pend>0?'flex':'none';
-  // Show coordinator panel - SOLO Coordinador (no Rector, no Orientador, no Docente)
-  const esCoord=!S.permisos.soloLectura && ['COORDINADOR'].some(r=>(S.docenteInfo.rol||'').toUpperCase().includes(r));
+  // Mostrar panel r\u00e1pido para Coordinador y Rector (roles con acceso global)
+  const esCoord=!S.permisos.soloLectura && ['COORDINADOR','RECTOR'].some(r=>(S.docenteInfo.rol||'').toUpperCase().includes(r));
   document.getElementById('quickPanel').classList.toggle('hidden',!esCoord);
   // &#128274; Ocultar/mostrar botones seg\u00fan permisos
   const btnObs=document.querySelector('[onclick="irNuevaObs()"]');
@@ -1505,7 +1535,7 @@ function abrirModal(html){document.getElementById('modalContent').innerHTML=html
 function cerrarModal(){document.getElementById('modalBg').classList.remove('vis')}
 
 /* TOAST / LOADING */
-function toast(m,t){const e=document.getElementById('toast');e.textContent=m;e.className='toast '+(t||'')+' vis';e.onclick=()=>e.classList.remove('vis');clearTimeout(window._toastTimer);window._toastTimer=setTimeout(()=>e.classList.remove('vis'),2000)}
+function toast(m,t){const e=document.getElementById('toast');e.innerHTML=m;e.className='toast '+(t||'')+' vis';e.onclick=()=>e.classList.remove('vis');clearTimeout(window._toastTimer);window._toastTimer=setTimeout(()=>e.classList.remove('vis'),2800)}
 function mostrarCarga(t){document.getElementById('loadingTxt').textContent=t||'Cargando...';document.getElementById('loadingOv').classList.add('vis')}
 function ocultarCarga(){document.getElementById('loadingOv').classList.remove('vis')}
 
