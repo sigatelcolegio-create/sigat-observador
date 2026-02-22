@@ -388,15 +388,17 @@ textarea{resize:vertical;min-height:80px;line-height:1.5}
         <div class="form-group hidden" id="wrapActDet"><label class="form-label">Especificar actividad</label><input type="text" id="fActDetalle" placeholder="&#191;Cu&#225;l actividad?"></div>
         <div class="form-group"><label class="form-label">Sitio</label>
           <select id="fSitio" onchange="alCambiarSitio()">
-            <option value="Aula de clase">Aula de clase</option>
-            <option value="Patio / Cancha">Patio / Cancha</option>
+            <option value="Sal&#243;n de clase">Sal&#243;n de clase</option>
+            <option value="Cancha">Cancha</option>
+            <option value="Parque">Parque</option>
             <option value="Ba&#241;os">Ba&#241;os</option>
             <option value="Pasillos">Pasillos</option>
-            <option value="Sala de profesores">Sala de profesores</option>
+            <option value="Sala de ping pong">Sala de ping pong</option>
             <option value="Biblioteca">Biblioteca</option>
-            <option value="Sal&#243;n asignado al docente">Sal&#243;n asignado al docente</option>
             <option value="Laboratorio">Laboratorio</option>
-            <option value="Comedor / Tienda escolar">Comedor / Tienda escolar</option>
+            <option value="Aula m&#250;ltiple">Aula m&#250;ltiple</option>
+            <option value="Restaurante">Restaurante</option>
+            <option value="Tienda escolar">Tienda escolar</option>
             <option value="Entrada de la instituci&#243;n">Entrada de la instituci&#243;n</option>
             <option value="Fuera de la instituci&#243;n portando uniforme">Fuera de la instituci&#243;n portando uniforme</option>
             <option value="Otro">Otro</option>
@@ -521,7 +523,7 @@ textarea{resize:vertical;min-height:80px;line-height:1.5}
 <script>
 /* SIGAT OBSERVADOR DIGITAL */
 
-const API_URL = 'https://script.google.com/macros/s/AKfycbzSO6n2dggQowXtPgMtIe6agnkiyV9t0wAm-vXaOQsi9sjShw9QsnwP593bb8aQfCY/exec';
+const API_URL = 'https://script.google.com/macros/s/AKfycbwaMAmZg4rogaQ3g5E6NItKiHLIa0POPi8LXU7hftkuqtxiLzPnlSFCgB7XPV2MkjpL/exec';
 const DB_NAME = 'SIGAT_OBS_V3';
 const DB_VERSION = 2;
 
@@ -588,11 +590,11 @@ function irDashboard(){
     S.modo='historial';
     initHistFilters();cargarHist();calcScore(S.estudiantePropio.id);
     document.getElementById('histEstName').textContent=S.estudiantePropio.apellidos+' '+S.estudiantePropio.nombres;
-    document.getElementById('histEstMeta').textContent=S.estudiantePropio.grado+'&#176; '+S.estudiantePropio.grupo+' &#183; '+S.estudiantePropio.sede;
+    document.getElementById('histEstMeta').textContent=S.estudiantePropio.grado+'\u00b0 '+S.estudiantePropio.grupo+' \u00b7 '+S.estudiantePropio.sede;
     mostrar('scrHist');
     return;
   }
-  // &#128274; ACUDIENTE: Ir directo a selecci&#243;n de hijos
+  // &#128274; ACUDIENTE: Ir directo a selecci\u00f3n de hijos
   if(S.permisos.soloLectura && S.tipoUsuario==='ACUDIENTE'){
     S.modo='historial';
     prepararFiltros('sel');
@@ -621,14 +623,14 @@ function volverDeHist(){
 }
 function mostrarConfig(){
   const s=S.sesion, d=S.docenteInfo;
-  document.getElementById('cfgDoc').textContent=d.nombreCompleto||s?.usuario?.nombreCompleto||'&#8212;';
+  document.getElementById('cfgDoc').textContent=d.nombreCompleto||s?.usuario?.nombreCompleto||'\u2014';
   let rolText=d.rol||d.area||S.tipoUsuario||'Docente';
-  if(S.esDocenteYAcudiente){rolText=(S.rolActivo||'Docente')+' (tambi&#233;n '+(S.rolActivo==='Docente'?'Acudiente':'Docente')+')';}
+  if(S.esDocenteYAcudiente){rolText=(S.rolActivo||'Docente')+' (tambi\u00e9n '+(S.rolActivo==='Docente'?'Acudiente':'Docente')+')';}
   document.getElementById('cfgRol').textContent=rolText;
-  document.getElementById('cfgSede').textContent=d.sede||'&#8212;';
+  document.getElementById('cfgSede').textContent=d.sede||'\u2014';
   document.getElementById('cfgPer').textContent=S.periodoActual;
   dbGetAll('estudiantes').then(e=>document.getElementById('cfgEst').textContent=e.length);
-  document.getElementById('cfgConnSt').textContent=navigator.onLine?'En l&#237;nea':'Sin conexi&#243;n';
+  document.getElementById('cfgConnSt').textContent=navigator.onLine?'En l\u00ednea':'Sin conexi\u00f3n';
   const btnRolDual=document.getElementById('btnRolDual');
   if(btnRolDual) btnRolDual.style.display=S.esDocenteYAcudiente?'':'none';
   mostrar('scrConfig');
@@ -639,7 +641,7 @@ async function intentarLogin(){
   const u=document.getElementById('loginUser').value.trim();
   const p=document.getElementById('loginPass').value.trim();
   const errEl=document.getElementById('loginErr');
-  if(!u||!p){errEl.textContent='Ingrese c&#233;dula y contrase&#241;a';errEl.classList.add('vis');return}
+  if(!u||!p){errEl.textContent='Ingrese c\u00e9dula y contrase\u00f1a';errEl.classList.add('vis');return}
   errEl.classList.remove('vis');
   document.getElementById('btnLogin').disabled=true;
   mostrarCarga('Verificando credenciales...');
@@ -659,14 +661,14 @@ async function intentarLogin(){
     const saved=await dbGet('sesion','sesion');
     if(saved&&saved.credencialOffline===btoa(u+':'+p)){
       S.sesion=saved;await cargarConfigDB();ocultarCarga();irDashboard();
-      toast('Modo sin conexi&#243;n','');
-    } else {ocultarCarga();errEl.textContent='Sin conexi&#243;n y sin sesi&#243;n guardada';errEl.classList.add('vis')}
+      toast('Modo sin conexi\u00f3n','');
+    } else {ocultarCarga();errEl.textContent='Sin conexi\u00f3n y sin sesi\u00f3n guardada';errEl.classList.add('vis')}
   }
   document.getElementById('btnLogin').disabled=false;
 }
 function irCambiarPassword(){mostrar('scrPassword')}
 async function cerrarSesion(){
-  // &#128274; Limpiar TODOS los datos cacheados al cerrar sesi&#243;n (por seguridad)
+  // &#128274; Limpiar TODOS los datos cacheados al cerrar sesi\u00f3n (por seguridad)
   Promise.all([
     dbClear('sesion'),dbClear('estudiantes'),dbClear('docentes'),
     dbClear('obs_remotas'),dbClear('observaciones'),dbClear('config')
@@ -685,26 +687,26 @@ async function ejecutarCambioPassword(){
   const errEl=document.getElementById('pwdErr');
   const okEl=document.getElementById('pwdOk');
   errEl.classList.remove('vis');okEl.style.display='none';
-  if(!actual){errEl.textContent='Ingrese su contrase&#241;a actual';errEl.classList.add('vis');return}
-  if(!nueva){errEl.textContent='Ingrese la nueva contrase&#241;a';errEl.classList.add('vis');return}
-  if(nueva.length<4){errEl.textContent='La nueva contrase&#241;a debe tener al menos 4 caracteres';errEl.classList.add('vis');return}
-  if(nueva!==confirmar){errEl.textContent='Las contrase&#241;as nuevas no coinciden';errEl.classList.add('vis');return}
-  if(actual===nueva){errEl.textContent='La nueva contrase&#241;a debe ser diferente a la actual';errEl.classList.add('vis');return}
-  mostrarCarga('Cambiando contrase&#241;a...');
+  if(!actual){errEl.textContent='Ingrese su contrase\u00f1a actual';errEl.classList.add('vis');return}
+  if(!nueva){errEl.textContent='Ingrese la nueva contrase\u00f1a';errEl.classList.add('vis');return}
+  if(nueva.length<4){errEl.textContent='La nueva contrase\u00f1a debe tener al menos 4 caracteres';errEl.classList.add('vis');return}
+  if(nueva!==confirmar){errEl.textContent='Las contrase\u00f1as nuevas no coinciden';errEl.classList.add('vis');return}
+  if(actual===nueva){errEl.textContent='La nueva contrase\u00f1a debe ser diferente a la actual';errEl.classList.add('vis');return}
+  mostrarCarga('Cambiando contrase\u00f1a...');
   try{
     const r=await api('cambiarPasswordPWA',{passwordActual:actual,passwordNueva:nueva});
     ocultarCarga();
     if(r.exito){
-      okEl.textContent='&#9989; Contrase&#241;a actualizada correctamente';okEl.style.display='block';
+      okEl.textContent='\u2705 Contrase\u00f1a actualizada correctamente';okEl.style.display='block';
       document.getElementById('pwdActual').value='';document.getElementById('pwdNueva').value='';document.getElementById('pwdConfirmar').value='';
       const usuario=S.sesion?.usuario?.idPersona||document.getElementById('loginUser').value;
       S.sesion.credencialOffline=btoa(usuario+':'+nueva);
       await dbPut('sesion',{key:'sesion',...S.sesion});
-    }else{errEl.textContent=r.mensaje||'Error al cambiar contrase&#241;a';errEl.classList.add('vis')}
-  }catch(e){ocultarCarga();errEl.textContent='Error de conexi&#243;n: '+e.message;errEl.classList.add('vis')}
+    }else{errEl.textContent=r.mensaje||'Error al cambiar contrase\u00f1a';errEl.classList.add('vis')}
+  }catch(e){ocultarCarga();errEl.textContent='Error de conexi\u00f3n: '+e.message;errEl.classList.add('vis')}
 }
 
-// &#128260; CAMBIO DE ROL DUAL (Docente &#8596; Acudiente)
+// &#128260; CAMBIO DE ROL DUAL (Docente ↔ Acudiente)
 async function cambiarRolDual(){
   if(!S.esDocenteYAcudiente) return;
   const nuevoRol=(S.rolActivo||'Docente')==='Docente'?'Acudiente':'Docente';
@@ -718,9 +720,16 @@ async function cambiarRolDual(){
     await dbClear('estudiantes');for(const h of hijos) await dbPut('estudiantes',h);
     toast('Modo Acudiente activado &#128104;&#8205;&#128103;&#8205;&#128102;','ok');
   }else{
+    // Descargamos datos frescos del servidor
+    await descargarDatos();
+    // IMPORTANTE: descargarDatos() puede sobrescribir S.permisos/tipoUsuario con el
+    // valor base del servidor. Lo re-aplicamos manualmente para garantizar modo Docente.
     S.permisos={puedeCrearObservacion:true,puedeVerTodos:true,soloLectura:false};
     S.tipoUsuario='Docente';
-    await descargarDatos();
+    S.rolActivo='Docente';
+    await dbPut('config',{key:'permisos',value:S.permisos});
+    await dbPut('config',{key:'tipoUsuario',value:'Docente'});
+    await dbPut('config',{key:'rolActivo',value:'Docente'});
     toast('Modo Docente activado &#128104;&#8205;&#127979;','ok');
   }
   irDashboard();
@@ -797,7 +806,7 @@ async function cargarConfigDB(){
 async function actualizarDash(){
   const nombre=(S.docenteInfo.nombreCompleto||S.sesion?.usuario?.nombreCompleto||'Docente').split(' ')[0];
   document.getElementById('dashGreet').textContent='Hola, '+nombre;
-  document.getElementById('dashSub').textContent=(S.docenteInfo.sede||'')+(S.docenteInfo.sede?' &#183; ':'')+S.periodoActual;
+  document.getElementById('dashSub').textContent=(S.docenteInfo.sede||'')+(S.docenteInfo.sede?' \u00b7 ':'')+S.periodoActual;
   // Counts
   const obs=await dbGetAll('observaciones');
   const hoy=new Date().toLocaleDateString('es-CO');
@@ -809,7 +818,7 @@ async function actualizarDash(){
   // Show coordinator panel - SOLO Coordinador (no Rector, no Orientador, no Docente)
   const esCoord=!S.permisos.soloLectura && ['COORDINADOR'].some(r=>(S.docenteInfo.rol||'').toUpperCase().includes(r));
   document.getElementById('quickPanel').classList.toggle('hidden',!esCoord);
-  // &#128274; Ocultar/mostrar botones seg&#250;n permisos
+  // &#128274; Ocultar/mostrar botones seg\u00fan permisos
   const btnObs=document.querySelector('[onclick="irNuevaObs()"]');
   const btnLogro=document.querySelector('[onclick="irNuevoLogro()"]');
   if(btnObs) btnObs.closest('.card')? btnObs.closest('.card').style.display=S.permisos.soloLectura?'none':'': btnObs.style.display=S.permisos.soloLectura?'none':'';
@@ -892,7 +901,7 @@ function renderEstudiantes(lista){
   if(!lista.length){c.innerHTML='<div class="empty"><div class="empty-icon">&#128269;</div><div class="empty-text">No se encontraron estudiantes</div></div>';return}
   c.innerHTML=lista.map(e=>{
     const ini=((e.nombres?.[0]||'')+(e.apellidos?.[0]||'')).toUpperCase();
-    return`<div class="stu-item" onclick="selEst('${e.id}')"><div class="stu-avatar">${ini}</div><div><div class="stu-name">${e.apellidos} ${e.nombres}</div><div class="stu-meta">${e.grado} ${e.grupo} &#183; ${e.sede||''}</div></div></div>`;
+    return`<div class="stu-item" onclick="selEst('${e.id}')"><div class="stu-avatar">${ini}</div><div><div class="stu-name">${e.apellidos} ${e.nombres}</div><div class="stu-meta">${e.grado} ${e.grupo} \u00b7 ${e.sede||''}</div></div></div>`;
   }).join('');
 }
 
@@ -929,13 +938,13 @@ function renderEstMulti(lista){
   c.innerHTML=lista.map(e=>{
     const ini=((e.nombres?.[0]||'')+(e.apellidos?.[0]||'')).toUpperCase();
     const checked=S.seleccionadosMulti.has(e.id);
-    return`<div class="stu-item ${checked?'checked':''}" onclick="toggleMulti('${e.id}',this)"><div class="stu-avatar">${ini}</div><div><div class="stu-name">${e.apellidos} ${e.nombres}</div><div class="stu-meta">${e.grado} ${e.grupo}</div></div><div class="stu-check">${checked?'&#10003;':''}</div></div>`;
+    return`<div class="stu-item ${checked?'checked':''}" onclick="toggleMulti('${e.id}',this)"><div class="stu-avatar">${ini}</div><div><div class="stu-name">${e.apellidos} ${e.nombres}</div><div class="stu-meta">${e.grado} ${e.grupo}</div></div><div class="stu-check">${checked?'\u2713':''}</div></div>`;
   }).join('');
   document.getElementById('multiCount').textContent=S.seleccionadosMulti.size+' seleccionados';
 }
 function toggleMulti(id,el){
   if(S.seleccionadosMulti.has(id)){S.seleccionadosMulti.delete(id);el.classList.remove('checked');el.querySelector('.stu-check').textContent=''}
-  else{S.seleccionadosMulti.add(id);el.classList.add('checked');el.querySelector('.stu-check').textContent='&#10003;'}
+  else{S.seleccionadosMulti.add(id);el.classList.add('checked');el.querySelector('.stu-check').textContent='\u2713'}
   document.getElementById('multiCount').textContent=S.seleccionadosMulti.size+' seleccionados';
 }
 async function seleccionarTodos(){
@@ -966,7 +975,7 @@ async function confirmarFaltaRapida(){
   const label=tipo==='RETARDO'?'retardo':'falta de uniforme';
   
   // Show confirmation in modal
-  abrirModal(`<h3>Confirmar registro</h3><p style="margin-bottom:16px">&#191;Registrar <b>${label}</b> a <b>${n}</b> estudiante(s)?</p><div style="display:flex;gap:10px"><button class="btn btn-outline" onclick="cerrarModal()" style="flex:1">Cancelar</button><button class="btn btn-accent" onclick="ejecutarFaltaRapida()" style="flex:1">Confirmar</button></div>`);
+  abrirModal(`<h3>Confirmar registro</h3><p style="margin-bottom:16px">\u00bfRegistrar <b>${label}</b> a <b>${n}</b> estudiante(s)?</p><div style="display:flex;gap:10px"><button class="btn btn-outline" onclick="cerrarModal()" style="flex:1">Cancelar</button><button class="btn btn-accent" onclick="ejecutarFaltaRapida()" style="flex:1">Confirmar</button></div>`);
 }
 async function ejecutarFaltaRapida(){
   cerrarModal();
@@ -985,15 +994,15 @@ async function ejecutarFaltaRapida(){
     } else {
       // Offline: save individual observations
       const tipo=S.tipoFaltaRapida;
-      const config=tipo==='RETARDO'?{tipo:'TIPO_I',cat:'ASISTENCIA',grav:'LEVE',falta:'Retardo',desc:'Retardo registrado por coordinaci&#243;n',med:'Registro en observador'}
-        :{tipo:'TIPO_I',cat:'DESARROLLO',grav:'LEVE',falta:'Falta de uniforme',desc:'Falta de uniforme registrada por coordinaci&#243;n',med:'Registro en observador'};
+      const config=tipo==='RETARDO'?{tipo:'TIPO_I',cat:'ASISTENCIA',grav:'LEVE',falta:'Retardo',desc:'Retardo registrado por coordinaci\u00f3n',med:'Registro en observador'}
+        :{tipo:'TIPO_I',cat:'DESARROLLO',grav:'LEVE',falta:'Falta de uniforme',desc:'Falta de uniforme registrada por coordinaci\u00f3n',med:'Registro en observador'};
       for(const idEst of S.seleccionadosMulti){
         const idLocal='QF_'+Date.now()+'_'+Math.random().toString(36).substr(2,5);
         await dbPut('observaciones',{
           idLocal,idServidor:null,idEstudiante:idEst,periodo:S.periodoActual,
           tipoSituacion:config.tipo,categoria:config.cat,gravedad:config.grav,
           faltaManual:config.falta,descripcion:config.desc,descargos:'',
-          actividad:'Ingreso/Salida',sitio:'Entrada de la instituci&#243;n',materia:'',
+          actividad:'Ingreso/Salida',sitio:'Entrada de la instituci\u00f3n',materia:'',
           idDocente:S.docenteInfo.id,nombreDocente:S.docenteInfo.nombreCompleto,
           contexto:'',medidas:config.med,acudienteNotificado:'NO',
           fechaSuceso:new Date().toISOString().split('T')[0],horaSuceso:new Date().toTimeString().slice(0,5),
@@ -1097,7 +1106,7 @@ function selFalta(i){
 /* OBSERVATION FORM */
 function abrirFormObs(est){
   document.getElementById('formEstName').textContent=est.apellidos+' '+est.nombres;
-  document.getElementById('formEstMeta').textContent=est.grado+' '+est.grupo+' &#183; '+est.sede;
+  document.getElementById('formEstMeta').textContent=est.grado+' '+est.grupo+' \u00b7 '+est.sede;
   // Reset
   document.getElementById('t1').checked=true;
   S.faltaSelIdx=-1;S.catActiva='TODAS';S.gravActiva='TODAS';
@@ -1109,7 +1118,7 @@ function abrirFormObs(est){
   const hoy=new Date();
   document.getElementById('fFecha').value=hoy.toISOString().split('T')[0];
   document.getElementById('fHora').value=hoy.toTimeString().slice(0,5);
-  document.getElementById('fActividad').value='Actividad acad&#233;mica';
+  document.getElementById('fActividad').value='Actividad acad\u00e9mica';
   document.getElementById('wrapActDet').classList.add('hidden');
   document.getElementById('fSitio').value='Aula de clase';
   document.getElementById('wrapSitioOtro').classList.add('hidden');
@@ -1125,7 +1134,7 @@ function gradoANivel(grado){
   if(g.includes('CERO')||g.includes('PREESCOLAR')||g.includes('TRANSICI'))return 'PREESCOLAR';
   const nums=g.replace(/\D/g,'');
   if(!nums)return 'PRIMARIA';
-  // Los c&#243;digos de grupo son: 3 d&#237;gitos = grade(1-9)+grupo(01-09), 4 d&#237;gitos = grade(10-11)+grupo(01-09)
+  // Los c\u00f3digos de grupo son: 3 d\u00edgitos = grade(1-9)+grupo(01-09), 4 d\u00edgitos = grade(10-11)+grupo(01-09)
   // Ejemplos: "601"=grado6, "1101"=grado11, "11"=grado11, "6"=grado6
   let n;
   if(nums.length===4) n=parseInt(nums.substring(0,2));      // 1001->10, 1101->11
@@ -1138,9 +1147,9 @@ function gradoANivel(grado){
 }
 function cargarMaterias(grado){
   const sel=document.getElementById('fMateria');
-  sel.innerHTML='<option value="">&#8212; No aplica &#8212;</option>';
+  sel.innerHTML='<option value="">\u2014 No aplica \u2014</option>';
   const nivel=gradoANivel(grado);
-  // Buscar con clave exacta, luego insensible a may&#250;sculas, luego 'TODOS'
+  // Buscar con clave exacta, luego insensible a may\u00fasculas, luego 'TODOS'
   let mats=S.materiasPorNivel[nivel]||S.materiasPorNivel[grado]||null;
   if(!mats){
     const key=Object.keys(S.materiasPorNivel||{}).find(k=>k.toUpperCase()===nivel||k.toUpperCase()===String(grado||'').toUpperCase());
@@ -1155,7 +1164,7 @@ function cargarMaterias(grado){
 }
 function alCambiarActividad(){
   const v=document.getElementById('fActividad').value;
-  document.getElementById('wrapActDet').classList.toggle('hidden',!['Actividad extracurricular','Actividad institucional','Representaci&#243;n institucional'].includes(v));
+  document.getElementById('wrapActDet').classList.toggle('hidden',!['Actividad extracurricular','Actividad institucional','Representaci\u00f3n institucional'].includes(v));
   actualizarVisibilidadMateria();
 }
 function alCambiarSitio(){
@@ -1165,7 +1174,7 @@ function alCambiarSitio(){
 function actualizarVisibilidadMateria(){
   const act=document.getElementById('fActividad').value;
   const sitio=document.getElementById('fSitio').value;
-  const mostrar=act==='Actividad acad&#233;mica'||sitio==='Aula de clase'||sitio==='Sal&#243;n asignado al docente';
+  const mostrar=act==='Actividad acad\u00e9mica'||sitio==='Sal\u00f3n de clase'||sitio==='Laboratorio'||sitio==='Aula m\u00faltiple';
   document.getElementById('wrapMateria').classList.toggle('hidden',!mostrar);
 }
 
@@ -1174,13 +1183,13 @@ function verRuta(){
   const tipo=document.querySelector('input[name="tipo"]:checked').value;
   const rutas=S.rutasAtencion;
   let ruta=rutas[tipo]||rutas['TIPO_I']||null;
-  let html='<h3>&#128203; Ruta de Atenci&#243;n &#8212; '+tipo.replace('_',' ')+'</h3>';
+  let html='<h3>&#128203; Ruta de Atenci\u00f3n \u2014 '+tipo.replace('_',' ')+'</h3>';
   if(ruta){
-    if(ruta.nombre)html+=`<div class="info blue mb-12"><b>${ruta.nombre}</b>${ruta.articulo?' &#183; '+ruta.articulo:''}</div>`;
+    if(ruta.nombre)html+=`<div class="info blue mb-12"><b>${ruta.nombre}</b>${ruta.articulo?' \u00b7 '+ruta.articulo:''}</div>`;
     if(ruta.protocolo&&Array.isArray(ruta.protocolo)){
       html+=ruta.protocolo.map((p,i)=>`<div class="protocol-step"><b>Paso ${i+1}:</b> ${p}</div>`).join('');
     }
-    if(ruta.responsable)html+=`<div class="info amber mt-12"><b>Responsable:</b> ${ruta.responsable}${ruta.tiempo?' &#183; <b>Tiempo:</b> '+ruta.tiempo:''}</div>`;
+    if(ruta.responsable)html+=`<div class="info amber mt-12"><b>Responsable:</b> ${ruta.responsable}${ruta.tiempo?' \u00b7 <b>Tiempo:</b> '+ruta.tiempo:''}</div>`;
     if(ruta.nota)html+=`<div class="info" style="background:#f8fafc;border-color:var(--border);color:var(--text-mid);margin-top:8px"><b>Nota:</b> ${ruta.nota}</div>`;
   } else {
     html+='<div class="info amber">No hay ruta configurada para este tipo. Consulte el Manual de Convivencia.</div>';
@@ -1196,10 +1205,10 @@ async function guardarObs(){
   const est=S.estudianteActual;if(!est)return;
   const desc=document.getElementById('fDesc').value.trim();
   const medidas=document.getElementById('fMedidas').value.trim();
-  if(!desc||desc.length<10){toast('Descripci&#243;n muy corta (m&#237;n 10 caracteres)','err');return}
+  if(!desc||desc.length<10){toast('Descripci\u00f3n muy corta (m\u00edn 10 caracteres)','err');return}
   if(!medidas){toast('Indique las medidas tomadas','err');return}
   
-  S._guardando=true; // &#8592; Bloquear
+  S._guardando=true; // ← Bloquear
   
   const tipo=document.querySelector('input[name="tipo"]:checked').value;
   const falta=S.faltaSelIdx>=0?S.faltasFiltradas[S.faltaSelIdx]:null;
@@ -1207,7 +1216,7 @@ async function guardarObs(){
   if(sitio==='Otro')sitio=document.getElementById('fSitioOtro').value.trim()||'Otro';
   let actividad=document.getElementById('fActividad').value;
   const detAct=document.getElementById('fActDetalle').value.trim();
-  if(detAct)actividad+=' &#8212; '+detAct;
+  if(detAct)actividad+=' \u2014 '+detAct;
   const acud=document.querySelector('input[name="acud"]:checked').value;
   
   const idLocal='OBS_'+Date.now()+'_'+Math.random().toString(36).substr(2,5);
@@ -1235,11 +1244,11 @@ async function guardarObs(){
   };
   
   await dbPut('observaciones',obs);
-  toast('Observaci&#243;n guardada &#10003;','ok');
+  toast('Observaci\u00f3n guardada \u2713','ok');
   
-  // Try immediate sync &#8212; AHORA con await para que termine antes de navegar
+  // Try immediate sync \u2014 AHORA con await para que termine antes de navegar
   if(navigator.onLine){try{await subirObs(obs)}catch(e){}}
-  S._guardando=false; // &#8592; Desbloquear
+  S._guardando=false; // ← Desbloquear
   irDashboard();
 }
 
@@ -1265,7 +1274,7 @@ async function subirObs(obs){
 function abrirFormLogro(est){
   document.getElementById('logroEstName').textContent=est.apellidos+' '+est.nombres;
   document.getElementById('logroEstMeta').textContent=est.grado+' '+est.grupo;
-  document.getElementById('lTipo').value='Acad&#233;mico';
+  document.getElementById('lTipo').value='Acad\u00e9mico';
   document.getElementById('lEspacio').value='';
   document.getElementById('lDesc').value='';
   mostrar('scrLogro');
@@ -1273,7 +1282,7 @@ function abrirFormLogro(est){
 async function guardarLogro(){
   const est=S.estudianteActual;if(!est)return;
   const desc=document.getElementById('lDesc').value.trim();
-  if(!desc||desc.length<5){toast('Descripci&#243;n muy corta','err');return}
+  if(!desc||desc.length<5){toast('Descripci\u00f3n muy corta','err');return}
   
   const idLocal='LOG_'+Date.now()+'_'+Math.random().toString(36).substr(2,5);
   const obs={
@@ -1287,7 +1296,7 @@ async function guardarLogro(){
     estado:'PENDIENTE', timestampCreacion:Date.now(), intentosSync:0
   };
   await dbPut('observaciones',obs);
-  toast('Logro registrado &#10003;','ok');
+  toast('Logro registrado \u2713','ok');
   if(navigator.onLine){
     try{
       const r=await api('guardarLogroPWA',{idLocal:obs.idLocal,idEstudiante:est.id,periodo:S.periodoActual,tipoLogro:obs.categoria,espacio:obs.actividad,descripcion:desc,idDocente:S.docenteInfo.id});
@@ -1300,7 +1309,7 @@ async function guardarLogro(){
 /* SYNC */
 async function sincronizarAhora(){
   const obs=(await dbGetAll('observaciones')).filter(o=>o.estado==='PENDIENTE');
-  if(!obs.length){toast('Todo sincronizado &#10003;','ok');return}
+  if(!obs.length){toast('Todo sincronizado \u2713','ok');return}
   
   const strip=document.getElementById('syncStrip');
   const fill=document.getElementById('syncFill');
@@ -1313,7 +1322,7 @@ async function sincronizarAhora(){
   for(let i=0;i<obs.length;i++){
     const o=obs[i];
     label.textContent=`Sincronizando ${i+1} de ${obs.length}...`;
-    count.textContent=`${ok} &#10003;  ${fail} &#10007;`;
+    count.textContent=`${ok} \u2713  ${fail} \u2717`;
     fill.style.width=((i+1)/obs.length*100)+'%';
     
     try{
@@ -1327,7 +1336,7 @@ async function sincronizarAhora(){
     }catch(e){o.intentosSync++;await dbPut('observaciones',o);fail++}
   }
   
-  label.textContent=fail?`Completado: ${ok} &#10003;, ${fail} con error`:'&#161;Todo sincronizado!';
+  label.textContent=fail?`Completado: ${ok} \u2713, ${fail} con error`:'\u00a1Todo sincronizado!';
   count.textContent='';
   fill.style.width='100%';
   fill.classList.add(fail?'error':'done');
@@ -1337,7 +1346,7 @@ async function sincronizarAhora(){
 /* HISTORY */
 async function abrirHistorial(est){
   document.getElementById('histEstName').textContent=est.apellidos+' '+est.nombres;
-  document.getElementById('histEstMeta').textContent=est.grado+' '+est.grupo+' &#183; '+est.sede;
+  document.getElementById('histEstMeta').textContent=est.grado+' '+est.grupo+' \u00b7 '+est.sede;
   initHistFilters();
   await calcScore(est.id);
   await cargarHist();
@@ -1349,7 +1358,7 @@ function initHistFilters(){
   };
   mk('filtPeriodo',['P1','P2','P3']);
   mk('filtTipo',['TIPO_I','TIPO_II','TIPO_III','LOGRO'],['Tipo I','Tipo II','Tipo III','Logro']);
-  mk('filtGrav',['LEVE','GRAVE','GRAVISIMA'],['Leve','Grave','Grav&#237;sima']);
+  mk('filtGrav',['LEVE','GRAVE','GRAVISIMA'],['Leve','Grave','Grav\u00edsima']);
   mk('filtCat',['ASISTENCIA','APRENDIZAJE','BIENES','DESARROLLO','RELACIONES']);
 }
 function toggleFcheck(el){el.classList.toggle('on');el.querySelector('input').checked=el.classList.contains('on');cargarHist()}
@@ -1404,7 +1413,7 @@ function resolverDocente(id,nombre){
   // Search docentes in IndexedDB cache (we can use sync approach since we loaded them)
   // For performance, we'll search from the global state
   const searchId=String(id);
-  // Try to find in the loaded page &#8212; we'll use a simple cache
+  // Try to find in the loaded page \u2014 we'll use a simple cache
   if(window._docentesCache){
     for(const d of window._docentesCache){
       if(d.id===searchId||d.documento===searchId||searchId.includes(d.documento)||d.id.includes(searchId)){
@@ -1439,27 +1448,27 @@ async function calcScore(idEst){
   });
   const nota=Math.max(0,500-totalPts);
   let desemp,cls;
-  if(nota>=450){desemp='SUPERIOR';cls='sup'}else if(nota>=400){desemp='ALTO';cls='alt'}else if(nota>=300){desemp='B&#193;SICO';cls='bas'}else{desemp='BAJO';cls='baj'}
-  document.getElementById('histScore').innerHTML=`<div class="score-num ${cls}">${nota}</div><div class="score-lbl">${desemp}</div><div class="text-sm text-sec mt-8">${faltas} falta(s) &#183; ${totalPts} pts descontados</div>`;
+  if(nota>=450){desemp='SUPERIOR';cls='sup'}else if(nota>=400){desemp='ALTO';cls='alt'}else if(nota>=300){desemp='BÁSICO';cls='bas'}else{desemp='BAJO';cls='baj'}
+  document.getElementById('histScore').innerHTML=`<div class="score-num ${cls}">${nota}</div><div class="score-lbl">${desemp}</div><div class="text-sm text-sec mt-8">${faltas} falta(s) \u00b7 ${totalPts} pts descontados</div>`;
 }
 
 /* DETAIL MODAL */
 function verDetalle(o){
   const t=o.tipoSituacion||o.tipo||'';
   const docName=resolverDocente(o.idDocente,o.nombreDocente);
-  let html=`<h3>&#128203; Detalle de Observaci&#243;n</h3>`;
+  let html=`<h3>&#128203; Detalle de Observaci\u00f3n</h3>`;
   
   // ID & dates
-  html+=`<div class="det-block id"><b>ID:</b> ${o.id||o.idLocal||'&#8212;'}<br><b>&#128197; Suceso:</b> ${o.fechaSuceso||'&#8212;'} ${o.horaSuceso||''}<br><b>&#128197; Registro:</b> ${o.fechaRegistro||new Date(o.timestampCreacion).toLocaleDateString('es-CO')||'&#8212;'} ${o.horaRegistro||''}</div>`;
+  html+=`<div class="det-block id"><b>ID:</b> ${o.id||o.idLocal||'\u2014'}<br><b>&#128197; Suceso:</b> ${o.fechaSuceso||'\u2014'} ${o.horaSuceso||''}<br><b>&#128197; Registro:</b> ${o.fechaRegistro||new Date(o.timestampCreacion).toLocaleDateString('es-CO')||'\u2014'} ${o.horaRegistro||''}</div>`;
   
   // Type info
-  html+=`<div class="det-block tipo"><b>&#127919; Tipo:</b> ${t.replace('_',' ')}<br><b>&#128194; Categor&#237;a:</b> ${o.categoria||'&#8212;'}<br><b>&#9888;&#65039; Gravedad:</b> ${o.gravedad||'&#8212;'}</div>`;
+  html+=`<div class="det-block tipo"><b>&#127919; Tipo:</b> ${t.replace('_',' ')}<br><b>&#128194; Categor\u00eda:</b> ${o.categoria||'\u2014'}<br><b>&#9888;&#65039; Gravedad:</b> ${o.gravedad||'\u2014'}</div>`;
   
   // Fault
   if(o.faltaManual)html+=`<div class="det-block desc"><div class="det-label">&#128203; Falta del Manual</div>${o.faltaManual}</div>`;
   
   // Description
-  html+=`<div class="det-block desc"><div class="det-label">&#128221; Descripci&#243;n</div><div style="white-space:pre-wrap">${o.descripcion||'&#8212;'}</div></div>`;
+  html+=`<div class="det-block desc"><div class="det-label">&#128221; Descripci\u00f3n</div><div style="white-space:pre-wrap">${o.descripcion||'\u2014'}</div></div>`;
   
   // Descargos
   if(o.descargos)html+=`<div class="det-block descar"><div class="det-label">&#9878;&#65039; Descargos del Estudiante</div><div style="white-space:pre-wrap">${o.descargos}</div></div>`;
@@ -1478,15 +1487,15 @@ function verDetalle(o){
   }
   
   // Measures
-  if(o.medidas)html+=`<div class="det-block medidas mt-12"><div class="det-label">&#9989; Medidas tomadas</div><div style="white-space:pre-wrap">${o.medidas}</div></div>`;
+  if(o.medidas)html+=`<div class="det-block medidas mt-12"><div class="det-label">\u2705 Medidas tomadas</div><div style="white-space:pre-wrap">${o.medidas}</div></div>`;
   
   // Footer
-  html+=`<div class="det-block meta mt-8"><b>&#128100; Registrada por:</b> ${docName}<br><b>&#128222; Acudiente notificado:</b> ${o.acudienteNotificado||'&#8212;'}</div>`;
+  html+=`<div class="det-block meta mt-8"><b>&#128100; Registrada por:</b> ${docName}<br><b>&#128222; Acudiente notificado:</b> ${o.acudienteNotificado||'\u2014'}</div>`;
   
-// &#9989; DESPU&#201;S:
-  if(o.estado==='PENDIENTE')html+=`<div class="info amber mt-8">&#9203; Esta observaci&#243;n est&#225; pendiente de sincronizaci&#243;n.</div>`;
+// \u2705 DESPUÉS:
+  if(o.estado==='PENDIENTE')html+=`<div class="info amber mt-8">&#9203; Esta observaci\u00f3n est\u00e1 pendiente de sincronizaci\u00f3n.</div>`;
   
-  html+=`<button class="btn btn-outline mt-12" onclick="cerrarModal()" style="margin-bottom:8px">&#8592; Volver al historial</button>`;
+  html+=`<button class="btn btn-outline mt-12" onclick="cerrarModal()" style="margin-bottom:8px">← Volver al historial</button>`;
   
   abrirModal(html);
 }
