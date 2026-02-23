@@ -523,7 +523,7 @@ textarea{resize:vertical;min-height:80px;line-height:1.5}
 <script>
 /* SIGAT OBSERVADOR DIGITAL */
 
-const API_URL = 'https://script.google.com/macros/s/AKfycbxY5lUcqEDLaukVOEYFUklFfozyITifkyRxb4PDBJjf2_9fMh3lKyTjcjpHgty3vhcO/exec';
+const API_URL = 'https://script.google.com/macros/s/AKfycbxsI666WcPT0uif8E8O7FJhzf7wEh-6y0qcQc_H8vDD1p6gQUMz9N5tHvdeY0gfyzcD/exec';
 const DB_NAME = 'SIGAT_OBS_V3';
 const DB_VERSION = 2;
 
@@ -741,27 +741,43 @@ async function cambiarRolDual(){
     toast('Modo Acudiente activado &#128104;&#8205;&#128103;&#8205;&#128102;','ok');
 
   }else{
-    // Intentar restaurar desde snapshot local primero (rápido, sin red)
-    const snapshotConfig=await dbGet('config','estudiantesDocente');
-    if(snapshotConfig&&snapshotConfig.value&&snapshotConfig.value.length>0){
-      await dbClear('estudiantes');
-      for(const e of snapshotConfig.value) await dbPut('estudiantes',e);
-    }
     // Restaurar permisos docente ANTES de descargar (por si falla la red)
     S.permisos={puedeCrearObservacion:true,puedeVerTodos:true,soloLectura:false};
     S.tipoUsuario='Docente';
     S.rolActivo='Docente';
-    // Forzar esRolGlobal según el rol guardado en docenteInfo
-    // (el backend puede no enviarlo en todas las respuestas)
-    S.docenteInfo=await (async()=>{const c=await dbGet('config','docenteInfo');return c?.value||S.docenteInfo||{}})();
+
+    // Restaurar docenteInfo del docente.
+    // Prioridad: docenteInfoReal (info del docente guardada cuando llegó como acudiente dual)
+    // Fallback: docenteInfo guardado en DB
+    const docenteInfoDB=await (async()=>{const c=await dbGet('config','docenteInfo');return c?.value||null})();
+    if(docenteInfoDB){
+      // Si hay docenteInfoReal (caso dual Caso-B), usarlo como docenteInfo principal
+      if(docenteInfoDB.docenteInfoReal){
+        S.docenteInfo={...docenteInfoDB.docenteInfoReal};
+      } else {
+        S.docenteInfo=docenteInfoDB;
+      }
+    }
     aplicarEsRolGlobal();
+
     // Actualizar en DB
     await dbPut('config',{key:'permisos',value:S.permisos});
     await dbPut('config',{key:'tipoUsuario',value:'Docente'});
     await dbPut('config',{key:'rolActivo',value:'Docente'});
     toast('Modo Docente activado &#128104;&#8205;&#127979;','ok');
-    // Actualizar datos en background si hay red
-    if(navigator.onLine) descargarDatos().catch(()=>{});
+
+    // Descargar datos del servidor (await para que el dashboard vea los datos completos)
+    // El servidor ahora devuelve todos los estudiantes (por override 1E del backend)
+    if(navigator.onLine){
+      try{ await descargarDatos(); }catch(e){ /* sin red: se usa snapshot */ }
+    } else {
+      // Sin red: intentar restaurar snapshot local
+      const snapshotConfig=await dbGet('config','estudiantesDocente');
+      if(snapshotConfig&&snapshotConfig.value&&snapshotConfig.value.length>0){
+        await dbClear('estudiantes');
+        for(const e of snapshotConfig.value) await dbPut('estudiantes',e);
+      }
+    }
   }
   irDashboard();
 }
@@ -785,6 +801,11 @@ async function descargarDatos(){
     if(!r.exito){ocultarCarga();toast(r.mensaje||'Error descargando datos','err');return}
     // Save estudiantes
     await dbClear('estudiantes');for(const e of r.estudiantes) await dbPut('estudiantes',e);
+    // Si es usuario dual en modo Docente, guardar snapshot de todos los estudiantes
+    // para que el cambio offline a modo Acudiente funcione correctamente
+    if((r.esDocenteYAcudiente||S.esDocenteYAcudiente) && (S.rolActivo||'Docente')==='Docente' && r.estudiantes&&r.estudiantes.length>0){
+      await dbPut('config',{key:'estudiantesDocente',value:r.estudiantes});
+    }
     // Save docentes
     await dbClear('docentes');for(const d of r.docentes) await dbPut('docentes',{key:d.id,...d});
     // Save remote observations
@@ -889,7 +910,16 @@ async function actualizarDash(){
   document.getElementById('dashPend').textContent=pend;
   document.getElementById('btnSync').style.display=pend>0?'flex':'none';
   // Mostrar panel r\u00e1pido para Coordinador y Rector (roles con acceso global)
-  const esCoord=!S.permisos.soloLectura && ['COORDINADOR','RECTOR'].some(r=>(S.docenteInfo.rol||'').toUpperCase().includes(r));
+  // Verificar de 3 formas para cubrir todos los escenarios posibles:
+  // 1. El rol en docenteInfo dice COORDINADOR o RECTOR
+  // 2. El docenteInfo.esRolGlobal viene como true del servidor (mismo significado)
+  // 3. No está en modo Acudiente (rolActivo)
+  const rolParaCheck=(S.docenteInfo.rol||S.docenteInfo.area||'').toUpperCase();
+  const esCoord= S.rolActivo!=='Acudiente' &&
+    !S.permisos.soloLectura && (
+      ['COORDINADOR','RECTOR'].some(r=>rolParaCheck.includes(r)) ||
+      S.docenteInfo.esRolGlobal===true
+    );
   document.getElementById('quickPanel').classList.toggle('hidden',!esCoord);
   // &#128274; Ocultar/mostrar botones seg\u00fan permisos
   const btnObs=document.querySelector('[onclick="irNuevaObs()"]');
