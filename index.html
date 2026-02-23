@@ -909,17 +909,13 @@ async function actualizarDash(){
   document.getElementById('dashToday').textContent=today;
   document.getElementById('dashPend').textContent=pend;
   document.getElementById('btnSync').style.display=pend>0?'flex':'none';
-  // Mostrar panel r\u00e1pido para Coordinador y Rector (roles con acceso global)
-  // Verificar de 3 formas para cubrir todos los escenarios posibles:
-  // 1. El rol en docenteInfo dice COORDINADOR o RECTOR
-  // 2. El docenteInfo.esRolGlobal viene como true del servidor (mismo significado)
-  // 3. No está en modo Acudiente (rolActivo)
+  // Mostrar panel r\u00e1pido SOLO para Coordinador (no Rector ni Orientador, no está dentro de sus funciones)
   const rolParaCheck=(S.docenteInfo.rol||S.docenteInfo.area||'').toUpperCase();
   const esCoord= S.rolActivo!=='Acudiente' &&
-    !S.permisos.soloLectura && (
-      ['COORDINADOR','RECTOR'].some(r=>rolParaCheck.includes(r)) ||
-      S.docenteInfo.esRolGlobal===true
-    );
+    !S.permisos.soloLectura &&
+    rolParaCheck.includes('COORDINADOR') &&
+    !rolParaCheck.includes('RECTOR') &&
+    !rolParaCheck.includes('ORIENTADOR');
   document.getElementById('quickPanel').classList.toggle('hidden',!esCoord);
   // &#128274; Ocultar/mostrar botones seg\u00fan permisos
   const btnObs=document.querySelector('[onclick="irNuevaObs()"]');
@@ -939,7 +935,23 @@ function prepararFiltros(prefix){
   
   // Determine sedes from CONFIG_GRUPOS
   const sedesDisp = [...new Set(S.configGrupos.map(g=>g.sede))].sort();
-  
+
+  // ─── CASO ACUDIENTE: mostrar solo las sedes donde están sus hijos ───
+  // Si el acudiente tiene hijos en varias sedes, puede seleccionar.
+  // Si solo hay una, se bloquea igual que un docente de sede fija.
+  const esAcudiente = S.tipoUsuario==='ACUDIENTE' || S.rolActivo==='Acudiente';
+  if(esAcudiente){
+    // Obtener los IDs de hijos del acudiente
+    const idsHijos = S.hijosDelAcudiente || S.hijosDelDocente || [];
+    // Necesitamos las sedes de esos hijos — están en IndexedDB, pero
+    // como dbGetAll es async y prepararFiltros es sync, usamos
+    // configGrupos + estudiantes cacheados en S si existen,
+    // o simplemente las sedes de todos los estudiantes visibles en DB.
+    // Usamos un helper async que luego llama a la continuación de preparación.
+    _prepararFiltrosAcudiente(prefix, selSede, sedeWrap, sedeLocked, idsHijos, isMulti);
+    return;
+  }
+
   if(!S.docenteInfo.esRolGlobal && S.docenteInfo.sede){
     // DOCENTE: sede locked
     if(!isMulti){
@@ -964,6 +976,48 @@ function prepararFiltros(prefix){
   }
   
   // Populate grados
+  if(isMulti) alCambiarSedeMulti(); else alCambiarSede();
+}
+
+// Helper async para acudientes: detecta sedes de sus hijos y configura el filtro
+async function _prepararFiltrosAcudiente(prefix, selSede, sedeWrap, sedeLocked, idsHijos, isMulti){
+  // Leer estudiantes de IndexedDB para obtener sus sedes reales
+  const todos = await dbGetAll('estudiantes');
+  const hijos = idsHijos.length > 0
+    ? todos.filter(e => idsHijos.includes(e.id))
+    : todos; // fallback: todos los que tiene acceso
+  
+  const sedesHijos = [...new Set(hijos.map(e=>e.sede).filter(Boolean))].sort();
+  
+  if(sedesHijos.length === 0){
+    // Sin datos de sede: mostrar todas (fallback seguro)
+    selSede.disabled=false;
+    selSede.innerHTML='<option value="">Todas las sedes</option>';
+  } else if(sedesHijos.length === 1){
+    // Una sola sede → bloquear igual que docente de sede fija
+    const sede = sedesHijos[0];
+    if(!isMulti){
+      sedeWrap && sedeWrap.classList.add('hidden');
+      sedeLocked && sedeLocked.classList.remove('hidden');
+      const lockedName = document.getElementById('sedeLockedName');
+      if(lockedName) lockedName.textContent = 'Sede: '+sede;
+    }
+    selSede.innerHTML=`<option value="${sede}">${sede}</option>`;
+    selSede.value=sede;
+    selSede.disabled=true;
+  } else {
+    // Varias sedes → mostrar solo las sedes donde tiene hijos (selector libre)
+    if(!isMulti){
+      sedeWrap && sedeWrap.classList.remove('hidden');
+      sedeLocked && sedeLocked.classList.add('hidden');
+    }
+    selSede.disabled=false;
+    // Primera opción vacía para "todas las sedes del acudiente"
+    selSede.innerHTML='<option value="">Todas mis sedes</option>'+
+      sedesHijos.map(s=>`<option value="${s}">${s}</option>`).join('');
+  }
+  
+  // Continuar con grados
   if(isMulti) alCambiarSedeMulti(); else alCambiarSede();
 }
 
@@ -992,6 +1046,12 @@ async function filtrarEstudiantes(){
   const grupo=document.getElementById('selGrupo').value;
   const busq=document.getElementById('busqEst').value.toLowerCase().trim();
   let est=await dbGetAll('estudiantes');
+  // Si es acudiente y tiene hijos registrados, restringir a solo sus hijos
+  const esAcudiente = S.tipoUsuario==='ACUDIENTE' || S.rolActivo==='Acudiente';
+  const idsHijos = S.hijosDelAcudiente || [];
+  if(esAcudiente && idsHijos.length>0){
+    est=est.filter(e=>idsHijos.includes(e.id));
+  }
   if(sede)est=est.filter(e=>e.sede===sede);
   if(grado)est=est.filter(e=>e.grado===grado);
   if(grupo)est=est.filter(e=>e.grupo===grupo);
@@ -1067,7 +1127,7 @@ async function seleccionarTodos(){
 function iniciarFaltaRapida(tipo){
   S.tipoFaltaRapida=tipo;
   S.seleccionadosMulti.clear();
-  document.getElementById('multiTitle').textContent=tipo==='RETARDO'?'&#9200; Seleccionar estudiantes con retardo':'&#128084; Seleccionar sin uniforme';
+  document.getElementById('multiTitle').innerHTML=tipo==='RETARDO'?'&#9200; Seleccionar estudiantes con retardo':'&#128084; Seleccionar sin uniforme';
   prepararFiltros('multi');
   mostrar('scrSelectMulti');
 }
